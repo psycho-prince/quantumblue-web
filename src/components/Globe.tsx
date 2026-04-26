@@ -30,11 +30,11 @@ export function Globe({ className }: { className?: string }) {
         { location: [19.076, 72.8777], size: 0.05 },
         { location: [35.6762, 139.6503], size: 0.08 },
       ],
-      onRender: (state) => {
+      onRender: (state: any) => {
         state.phi = phi;
         phi += 0.01;
       },
-    });
+    } as any);
 
     return () => {
       globe.destroy();
