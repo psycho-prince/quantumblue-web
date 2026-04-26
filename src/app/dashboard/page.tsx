@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Terminal, Send, Sparkles, Globe as GlobeIcon, Zap, Menu, X, ArrowRight } from "lucide-react";
+import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Terminal, Send, Sparkles, Globe as GlobeIcon, Zap, Menu, X, ArrowRight, Activity, Cpu, ShieldAlert } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe } from "@/components/Globe";
 import { EncryptedText } from "@/components/EncryptedText";
@@ -33,7 +33,7 @@ export default function Dashboard() {
   
   // AI Agent State
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([
-    { role: "assistant", content: "SYSTEM_ID: SOVEREIGN. STATUS: STARK. OPS: NOMINAL." }
+    { role: "assistant", content: "Executive Intelligence active. How can I assist with your security posture today?" }
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -105,11 +105,11 @@ export default function Dashboard() {
     setIsTyping(true);
 
     setTimeout(() => {
-      let response = "LATTICE_GEOMETRY_ANALYSIS_COMPLETE. INTEGRITY: 1.0. VERIFIED.";
+      let response = "Security audit complete. Asset integrity verified at 100%. No vulnerabilities detected.";
       if (userMsg.toLowerCase().includes("risk")) {
-        response = "THREAT_INTEL: SECTOR_STABLE. VOLATILITY_THRESHOLD: MINIMAL. EXPOSURE: NOMINAL.";
+        response = "Market Analysis: Predictive models show stable asset performance. Institutional exposure is within secure thresholds.";
       } else if (userMsg.toLowerCase().includes("seal")) {
-        response = "INITIALIZING_SEAL_PROTOCOL. ML_DSA_87_NOTARIZATION_IN_PROGRESS.";
+        response = "Advanced protection protocol initiated. Notarizing asset registry.";
       }
       setMessages(prev => [...prev, { role: "assistant", content: response }]);
       setIsTyping(false);
@@ -117,203 +117,217 @@ export default function Dashboard() {
   };
 
   if (!user || loading) return (
-    <div className="min-h-screen bg-black flex items-center justify-center border-t border-l border-[#333]">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border border-white flex items-center justify-center">
-          <ShieldCheck className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-[#020617] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-6">
+        <div className="w-16 h-16 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center animate-pulse">
+          <ShieldCheck className="w-8 h-8 text-sky-400" />
         </div>
-        <span className="label-mono">SYNCHRONIZING_CORE</span>
+        <span className="text-sm font-semibold tracking-wider text-slate-400">Loading Secure Workspace...</span>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col md:flex-row relative selection:bg-white selection:text-black">
+    <div className="min-h-screen bg-[#020617] text-slate-50 flex flex-col md:flex-row relative selection:bg-sky-500/30">
       
-      {/* Sidebar - Stark Wireframe */}
+      {/* Sidebar - Executive Navigation */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 z-50 w-72 bg-black border-r border-[#333] transition-transform duration-200 ease-in-out md:relative md:translate-x-0",
+        "fixed inset-y-0 left-0 z-50 w-72 bg-[#020617] border-r border-white/5 transition-transform duration-300 md:relative md:translate-x-0",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="flex flex-col h-full">
-          <div className="p-8 border-b border-[#333] flex items-center justify-between">
-            <span className="text-xl font-black tracking-tighter uppercase font-['Plus_Jakarta_Sans']">SOVEREIGN</span>
-            <button onClick={() => setSidebarOpen(false)} className="md:hidden text-white">
-              <X className="w-5 h-5" />
+        <div className="flex flex-col h-full p-8">
+          <div className="flex items-center justify-between mb-12">
+            <span className="text-xl font-bold tracking-tight text-white font-['Plus_Jakarta_Sans']">QuantumBlue</span>
+            <button onClick={() => setSidebarOpen(false)} className="md:hidden text-slate-400">
+              <X className="w-6 h-6" />
             </button>
           </div>
 
-          <nav className="flex-1">
-            {["overview", "notary", "keys", "intelligence"].map((item) => (
+          <nav className="flex-1 space-y-2">
+            {[
+              { id: "overview", label: "Overview", icon: Activity },
+              { id: "notary", label: "Digital Notary", icon: FileText },
+              { id: "keys", label: "Access Keys", icon: Key },
+              { id: "intelligence", label: "Intelligence", icon: Cpu },
+            ].map((item) => (
               <button
-                key={item}
+                key={item.id}
                 onClick={() => {
-                  setActiveTab(item);
+                  setActiveTab(item.id);
                   setSidebarOpen(false);
                 }}
                 className={cn(
-                  "w-full text-left p-8 text-[10px] font-bold uppercase tracking-[0.4em] transition-all border-b border-[#333] font-mono",
-                  activeTab === item ? "bg-white text-black" : "text-[#888] hover:text-white"
+                  "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all",
+                  activeTab === item.id 
+                    ? "bg-sky-500/10 text-sky-400 border border-sky-500/20" 
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
                 )}
               >
-                {item}
+                <item.icon className="w-4 h-4" />
+                {item.label}
               </button>
             ))}
           </nav>
 
-          <div className="p-8 border-t border-[#333] flex items-center gap-4">
+          <div className="pt-8 border-t border-white/5 flex items-center gap-4">
             <UserButton />
             <div className="flex flex-col overflow-hidden">
-              <span className="label-mono text-[8px] tracking-[0.2em]">OPERATOR_ID</span>
-              <span className="text-[10px] font-bold truncate font-mono">{user.emailAddresses[0].emailAddress}</span>
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Authorized Account</span>
+              <span className="text-xs font-semibold truncate text-slate-300">{user.emailAddresses[0].emailAddress}</span>
             </div>
           </div>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto scrollbar-hide">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
         
         {/* Mobile Header */}
-        <header className="md:hidden flex items-center justify-between p-6 border-b border-[#333] sticky top-0 bg-black z-40">
-          <span className="text-lg font-black tracking-tighter uppercase">QUANTUM_BLUE</span>
-          <button onClick={() => setSidebarOpen(true)} className="text-white">
+        <header className="md:hidden flex items-center justify-between p-6 border-b border-white/5 sticky top-0 bg-[#020617]/80 backdrop-blur-xl z-40">
+          <span className="text-lg font-bold tracking-tight">QuantumBlue</span>
+          <button onClick={() => setSidebarOpen(true)} className="p-2 text-slate-400">
             <Menu className="w-6 h-6" />
           </button>
         </header>
 
-        <main className="flex-1 flex flex-col">
+        <main className="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full space-y-10">
           
-          {/* Header Section */}
-          <div className="p-8 md:p-12 border-b border-[#333] flex flex-col md:flex-row md:items-end justify-between gap-8">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 label-mono">
+          {/* Executive Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-white/5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 label-fintech">
                 <div className="pulse-dot" />
-                STATUS: OPTIMAL
+                NETWORK STATUS: OPTIMAL
               </div>
-              <h1 className="text-fluid-h1 font-black">
-                STARK <br /> <span className="text-[#333]">INTELLIGENCE.</span>
+              <h1 className="text-fluid-h2 font-bold tracking-tight">
+                Enterprise <span className="text-sky-400 italic font-semibold">Intelligence.</span>
               </h1>
             </div>
-            <div className="label-mono border border-[#333] p-4 text-[8px]">
-              V2.6.4 / CORE_PROTOCOL
+            <div className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[10px] font-bold text-slate-500 tracking-wider">
+              LAST UPDATED: {new Date().toLocaleTimeString()}
             </div>
           </div>
 
-          {/* Wireframe Bento Grid */}
+          {/* Fintech Bento Grid */}
           <div className="bento-grid">
             
-            {/* Global Flow - Span 8 */}
+            {/* Main Visualizer - Span 8 */}
             <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="md:col-span-8 card-stark flex flex-col justify-between"
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              className="md:col-span-8 card-fintech relative overflow-hidden flex flex-col"
             >
-              <div>
-                <span className="label-mono mb-4 block">GEOSPATIAL_FLOW_MATRIX</span>
-                <h3 className="text-fluid-h2">REAL-TIME <br />TRAFFIC</h3>
+              <div className="mb-8">
+                <span className="label-fintech mb-1 block">Global Network Monitoring</span>
+                <h3 className="text-2xl font-bold tracking-tight">Security Flow Analysis</h3>
               </div>
               
-              <div className="flex-1 flex items-center justify-center p-12">
-                <div className="w-full max-w-sm aspect-square border border-[#222] flex items-center justify-center relative">
-                   <div className="absolute inset-0 opacity-10">
-                     <Globe />
+              <div className="flex-1 min-h-[300px] flex items-center justify-center relative">
+                <div className="absolute inset-0 opacity-10 blur-[1px]">
+                  <Globe />
+                </div>
+                <div className="relative z-10 flex flex-col items-center gap-4 text-center">
+                   <div className="w-16 h-16 rounded-full bg-sky-500/10 flex items-center justify-center border border-sky-500/20">
+                      <ShieldAlert className="w-8 h-8 text-sky-400" />
                    </div>
-                   <div className="label-mono text-[8px]">RENDERING_LATTICE...</div>
+                   <p className="text-sm font-semibold text-slate-400 max-w-xs uppercase tracking-widest">
+                      Live visualization of cryptographic traffic across secured endpoints.
+                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 border-t border-[#333] -mx-8 -mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/5">
                  {[
-                   { label: "NODES", value: "1,248" },
-                   { label: "LATENCY", value: "12MS" },
-                   { label: "INTEGRITY", value: "100%" }
-                 ].map((stat, i) => (
-                   <div key={stat.label} className={cn("p-8", i !== 2 && "border-r border-[#333]")}>
-                      <p className="label-mono text-[8px]">{stat.label}</p>
-                      <p className="text-2xl font-black font-mono mt-2 tracking-tight">{stat.value}</p>
+                   { label: "Secured Nodes", value: "1,248" },
+                   { label: "Active Latency", value: "12ms" },
+                   { label: "Data Integrity", value: "100%" }
+                 ].map(stat => (
+                   <div key={stat.label} className="p-4 rounded-xl bg-white/5 border border-white/5">
+                      <p className="label-fintech text-[9px] mb-1">{stat.label}</p>
+                      <p className="text-lg font-bold text-white">{stat.value}</p>
                    </div>
                  ))}
               </div>
             </motion.div>
 
-            {/* AI Agent - Span 4 */}
+            {/* AI Assistant - Span 4 */}
             <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
-              className="md:col-span-4 card-stark flex flex-col gap-8"
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+              className="md:col-span-4 card-fintech flex flex-col h-full"
             >
-              <div className="flex items-center justify-between">
-                <h3 className="text-fluid-h2 flex items-center gap-4">
-                  <Sparkles className="w-6 h-6" /> INTEL
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-sky-400" /> Executive Assistant
                 </h3>
-                <div className="label-mono border border-[#333] px-2 py-1">G_3.1</div>
               </div>
 
-              <div ref={scrollRef} className="flex-1 space-y-6 overflow-y-auto font-mono text-[10px] leading-relaxed pr-2">
+              <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto pr-2 text-sm leading-relaxed mb-6">
                 <AnimatePresence>
                   {messages.map((m, i) => (
                     <motion.div 
-                      key={i} initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }}
-                      className={cn("p-4 border", m.role === "assistant" ? "border-[#333] text-[#888]" : "border-white text-white")}
+                      key={i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                      className={cn("p-4 rounded-2xl", m.role === "assistant" ? "bg-white/5 text-slate-300 mr-8" : "bg-sky-500/10 text-white ml-8 border border-sky-500/20")}
                     >
-                      <div className="label-mono text-[8px] mb-2">{m.role === "assistant" ? "SYSTEM" : "USER"}</div>
                       {m.content}
                     </motion.div>
                   ))}
                 </AnimatePresence>
                 {isTyping && (
-                  <div className="label-mono animate-pulse">THINKING...</div>
+                  <div className="flex gap-1.5 ml-4">
+                     <div className="w-1.5 h-1.5 rounded-full bg-sky-400/50 animate-bounce" />
+                     <div className="w-1.5 h-1.5 rounded-full bg-sky-400/50 animate-bounce [animation-delay:0.2s]" />
+                     <div className="w-1.5 h-1.5 rounded-full bg-sky-400/50 animate-bounce [animation-delay:0.4s]" />
+                  </div>
                 )}
               </div>
 
-              <form onSubmit={handleSendMessage} className="relative mt-auto">
+              <form onSubmit={handleSendMessage} className="relative">
                 <input 
-                  type="text" placeholder="CMD_INPUT..." value={input} onChange={(e) => setInput(e.target.value)}
-                  className="w-full bg-black border border-[#333] p-4 text-[10px] font-mono focus:outline-none focus:border-white transition-all uppercase"
+                  type="text" placeholder="Inquire about security..." value={input} onChange={(e) => setInput(e.target.value)}
+                  className="w-full bg-[#020617] border border-white/10 rounded-xl py-3 px-5 text-sm focus:outline-none focus:border-sky-500/50 transition-all"
                 />
-                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#333] hover:text-white transition-colors">
-                  <ArrowRight className="w-4 h-4" />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-sky-400 hover:text-sky-300">
+                  <Send className="w-4 h-4" />
                 </button>
               </form>
             </motion.div>
 
-            {/* Keys - Span 4 */}
+            {/* Access Management - Span 4 */}
             <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-              className="md:col-span-4 card-stark flex flex-col gap-12"
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className="md:col-span-4 card-fintech flex flex-col gap-6"
             >
                <div className="flex items-center justify-between">
-                  <h3 className="text-fluid-h2 flex items-center gap-4">
-                    <Key className="w-6 h-6" /> KEYS
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <Key className="w-5 h-5 text-sky-400" /> Access Keys
                   </h3>
-                  <div className="pulse-dot" />
                </div>
 
                <form onSubmit={handleCreateKey} className="space-y-4">
                   <input
-                    type="text" placeholder="NEW_IDENTITY..." value={newKeyName} onChange={(e) => setNewKeyName(e.target.value)}
-                    className="w-full bg-black border border-[#333] p-4 text-[10px] font-mono focus:outline-none focus:border-white uppercase"
+                    type="text" placeholder="Access ID label..." value={newKeyName} onChange={(e) => setNewKeyName(e.target.value)}
+                    className="w-full bg-[#020617] border border-white/10 rounded-xl py-4 px-5 text-sm focus:outline-none focus:border-sky-500/50"
                   />
                   <button 
                     type="submit" disabled={!newKeyName}
-                    className="w-full bg-white text-black py-4 text-[10px] font-black uppercase tracking-[0.4em] hover:bg-[#888] transition-all disabled:opacity-10"
+                    className="btn-primary w-full text-xs uppercase tracking-widest"
                   >
-                    GENERATE_TOKEN
+                    Generate Security Token
                   </button>
                </form>
 
-               <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+               <div className="flex-1 space-y-3 overflow-y-auto pr-1">
                   {keys.map(k => (
-                    <div key={k.id} className="p-6 border border-[#333] group hover:border-white transition-all">
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="label-mono text-white">{k.name}</span>
-                        <button onClick={() => handleDeleteKey(k.id)} className="text-[#333] hover:text-white transition-colors">
-                          <Trash className="w-3 h-3" />
+                    <div key={k.id} className="p-4 rounded-xl bg-white/5 border border-white/5 group hover:border-white/10 transition-all">
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-xs font-bold text-white uppercase tracking-wider">{k.name}</span>
+                        <button onClick={() => handleDeleteKey(k.id)} className="text-slate-500 hover:text-red-400 transition-colors">
+                          <Trash className="w-3.5 h-3.5" />
                         </button>
                       </div>
-                      <div className="flex items-center justify-between bg-[#111] p-3 border border-[#222]">
-                         <code className="text-[9px] font-mono text-[#555] truncate mr-4">{k.key}</code>
-                         <button onClick={() => navigator.clipboard.writeText(k.key)} className="text-[#333] hover:text-white">
-                           <Copy className="w-3 h-3" />
+                      <div className="bg-[#020617] rounded-lg p-2.5 flex items-center justify-between border border-white/10">
+                         <code className="text-[10px] font-mono text-slate-400 truncate mr-4">{k.key}</code>
+                         <button onClick={() => navigator.clipboard.writeText(k.key)} className="text-slate-500 hover:text-white">
+                           <Copy className="w-3.5 h-3.5" />
                          </button>
                       </div>
                     </div>
@@ -323,53 +337,53 @@ export default function Dashboard() {
 
             {/* Asset Ledger - Span 8 */}
             <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-              className="md:col-span-8 card-stark flex flex-col gap-12"
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+              className="md:col-span-8 card-fintech flex flex-col gap-6"
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <h3 className="text-fluid-h2 flex items-center gap-4">
-                    <FileText className="w-6 h-6" /> LEDGER
+                  <h3 className="text-xl font-bold flex items-center gap-3">
+                    <FileText className="w-6 h-6 text-sky-400" /> Asset Notary
                   </h3>
-                  <p className="label-mono mt-2">P_QUANTUM_NOTARY_STREAM</p>
+                  <p className="label-fintech mt-1">Verified Document Registry</p>
                 </div>
                 <button 
                   onClick={fetchAssets}
-                  className="touch-target"
+                  className="p-2 text-slate-500 hover:text-white transition-all"
                 >
-                  <RefreshCw className="w-4 h-4" />
+                  <RefreshCw className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="flex-1 border border-[#333] overflow-hidden">
+              <div className="flex-1 bg-[#020617] rounded-xl border border-white/5 overflow-hidden">
                 {assets.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="w-full text-left">
                       <thead>
-                        <tr className="bg-[#111] text-[#888] text-[8px] uppercase tracking-[0.4em] font-bold border-b border-[#333]">
-                          <th className="px-8 py-5">ARTIFACT</th>
-                          <th className="px-8 py-5">SIGNATURE_HASH</th>
-                          <th className="px-8 py-5">VERIFICATION</th>
+                        <tr className="bg-white/5 text-slate-400 text-[10px] uppercase tracking-wider font-bold border-b border-white/10">
+                          <th className="px-8 py-5">Asset Identifier</th>
+                          <th className="px-8 py-5">Security Hash</th>
+                          <th className="px-8 py-5">Verification</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#333] font-mono text-[10px]">
+                      <tbody className="divide-y divide-white/10 text-sm">
                         {assets.map((a) => (
-                          <tr key={a.id} className="group hover:bg-[#050505] transition-colors">
+                          <tr key={a.id} className="group hover:bg-white/5 transition-colors">
                             <td className="px-8 py-6">
-                              <div className="flex items-center gap-4">
-                                <Zap className="w-3 h-3 text-[#333]" />
-                                <span className="font-bold">{a.filename}</span>
+                              <div className="flex items-center gap-3">
+                                <FileText className="w-4 h-4 text-slate-500" />
+                                <span className="font-semibold">{a.filename}</span>
                               </div>
                             </td>
                             <td className="px-8 py-6">
-                              <div className="text-[#333] group-hover:text-[#555] transition-colors">
+                              <div className="text-slate-500 group-hover:text-slate-400 transition-colors">
                                 <EncryptedText text={a.signatureHash.slice(0, 32) + "..."} />
                               </div>
                             </td>
                             <td className="px-8 py-6">
-                               <div className="flex items-center gap-3">
-                                  <div className="w-2 h-2 bg-white" />
-                                  <span className="label-mono text-white tracking-[0.1em]">VALID</span>
+                               <div className="flex items-center gap-2">
+                                  <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                  <span className="text-[11px] font-bold text-emerald-500 uppercase tracking-widest">Authorized</span>
                                </div>
                             </td>
                           </tr>
@@ -378,9 +392,9 @@ export default function Dashboard() {
                     </table>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full min-h-[300px] opacity-10">
-                     <Terminal className="w-12 h-12 mb-4" />
-                     <span className="label-mono">STREAM_EMPTY</span>
+                  <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-slate-700">
+                     <ShieldCheck className="w-12 h-12 mb-4 opacity-10" />
+                     <span className="label-fintech">Registry Empty</span>
                   </div>
                 )}
               </div>

@@ -4,17 +4,25 @@
 
 @layer base {
   :root {
-    /* Stark Brutalist Palette */
-    --bg-primary: #000000;
-    --text-primary: #FFFFFF;
-    --text-secondary: #888888;
-    --border-stark: #333333;
-    --accent-silver: #CCCCCC;
+    /* Executive Fintech Palette (Deep Cobalt) */
+    --bg-primary: #020617;
+    --bg-secondary: #0F172A;
+    --bg-surface: #1E293B;
     
-    /* Semantic Colors (Stark) */
-    --status-success: #FFFFFF;
-    --status-warning: #888888;
-    --status-error: #FFFFFF;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    
+    --accent-primary: #38BDF8;
+    --accent-hover: #0EA5E9;
+    
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-bright: rgba(255, 255, 255, 0.15);
+    
+    /* Semantic Colors */
+    --status-success: #10B981;
+    --status-warning: #F59E0B;
+    --status-error: #EF4444;
   }
 
   html {
@@ -32,20 +40,17 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 900;
-    letter-spacing: -0.05em;
-    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer components {
-  /* Wireframe Bento Grid */
+  /* Modern Responsive Bento Grid */
   .bento-grid {
     display: grid;
-    gap: 0; /* Tight, connected wireframe look */
+    gap: 1.5rem;
     grid-template-columns: repeat(1, 1fr);
-    border-top: 1px solid var(--border-stark);
-    border-left: 1px solid var(--border-stark);
   }
 
   @media (min-width: 768px) {
@@ -54,92 +59,106 @@
     }
   }
 
-  /* Stark Grid Cells */
-  .card-stark {
-    background-color: #000000;
-    border-right: 1px solid var(--border-stark);
-    border-bottom: 1px solid var(--border-stark);
-    padding: 2rem;
-    border-radius: 0 !important;
-    transition: background-color 0.2s ease;
+  /* Executive Card Styling */
+  .card-fintech {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, border-color 0.2s ease;
   }
 
-  .card-stark:hover {
-    background-color: #050505;
+  .card-fintech:hover {
+    border-color: var(--border-bright);
+    transform: translateY(-2px);
   }
 
-  /* Monospace Labels */
-  .label-mono {
-    font-family: var(--font-jetbrains-mono), monospace;
-    font-size: 10px;
-    font-weight: 700;
+  /* Professional Labels */
+  .label-fintech {
+    font-size: 0.75rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.3em;
+    letter-spacing: 0.05em;
     color: var(--text-secondary);
   }
 
-  /* Pulse Indicator (Brutalist) */
+  /* Pulse Indicator */
   .pulse-dot {
-    width: 6px;
-    height: 6px;
-    background: #FFFFFF;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
     position: relative;
+    background-color: var(--status-success);
   }
 
-  /* 44x44 Touch Target */
-  .touch-target {
-    min-width: 44px;
-    min-height: 44px;
-    display: flex;
+  .pulse-dot::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: inherit;
+    opacity: 0.4;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* Enterprise Button */
+  .btn-primary {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border-stark);
-    background: transparent;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    font-family: var(--font-jetbrains-mono), monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    transition: all 0.1s ease;
-  }
-
-  .touch-target:hover:not(:disabled) {
-    background: #FFFFFF;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--accent-primary);
     color: #000000;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    transition: background-color 0.2s ease;
+    min-height: 44px;
+    min-width: 44px;
   }
 
-  .touch-target:disabled {
-    opacity: 0.3;
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--accent-hover);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
   }
 
   /* Fluid Typography */
   .text-fluid-h1 {
-    font-size: clamp(3rem, 8vw + 1rem, 7rem);
-    line-height: 0.85;
-    font-weight: 900;
+    font-size: clamp(2.25rem, 5vw + 1rem, 4.5rem);
+    line-height: 1.1;
+    font-weight: 800;
   }
 
   .text-fluid-h2 {
-    font-size: clamp(1.5rem, 4vw + 1rem, 3rem);
-    line-height: 1;
-    font-weight: 800;
+    font-size: clamp(1.5rem, 3vw + 1rem, 2.5rem);
+    line-height: 1.2;
+    font-weight: 700;
   }
 }
 
-/* Scrollbar */
+/* Custom Scrollbar for Fintech theme */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: var(--bg-surface);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #FFFFFF;
+  background: var(--text-muted);
 }
