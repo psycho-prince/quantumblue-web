@@ -32,10 +32,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
     <html lang="en" className={clsx(inter.variable, jetbrainsMono.variable, firaCode.variable, "dark scroll-smooth")}>
-      <body className="selection:bg-white/10">
-        {/* Achromatic Background Layer */}
-        <div className="lattice-bg" />
-        
+      <body className="selection:bg-white/20">
         <Navbar />
 
         <main className="min-h-screen">
