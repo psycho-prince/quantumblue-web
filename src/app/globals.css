@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-deep: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --accent-quantum: #2563EB;
+  --accent-purple: #3B82F6;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --glass-border: #E2E8F0;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-deep);
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+  font-family: var(--font-fira-code), monospace;
+}
+
+/* Glassmorphism 2.0 - Tactical Depth */
+.glass-vault {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-vault:hover {
+  background: #FFFFFF;
+  border-color: var(--accent-quantum);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Quantum energy gradient button */
+.btn-sovereign {
+  background: #2563EB;
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 1rem 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+  transition: all 0.3s ease;
+  font-size: 0.75rem;
+}
+
+.btn-sovereign:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.btn-glass {
+  background: transparent;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 1rem 2.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.75rem;
+}
+
+.btn-glass:hover {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+}
+
+
+/* Background Quantum Elements */
+.quantum-noise {
+  position: fixed;
+  inset: 0;
+  opacity: 0.04;
+  z-index: -5;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.cyber-grid {
+  background-image: 
+    linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+}
+
+.quantum-gradient {
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 20% 80%, rgba(71, 85, 105, 0.03) 0%, transparent 40%);
+  z-index: -10;
+}
+
+
+/* Kinetic Headings */
+.heading-kinetic {
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  font-weight: 900;
+}
+
+/* Stats / Metrics */
+.metric-card {
+  border-left: 4px solid var(--accent-quantum);
+  padding: 1.5rem;
+  background: #FFFFFF;
+  border-top: 1px solid #E2E8F0;
+  border-right: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.metric-value {
+  font-family: 'Fira Code', monospace;
+  color: var(--accent-quantum);
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+/* Terminal Styling */
+.terminal-block {
+  background: #0F172A;
+  border: 1px solid #1E293B;
+  border-radius: 1rem;
+  padding: 2rem;
+  font-family: 'Fira Code', monospace;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  color: #F8FAFC;
+}
+
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}

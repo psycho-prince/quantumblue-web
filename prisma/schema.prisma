@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  userId    String
+  key       String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  assets    NotarizedAsset[]
+}
+
+model NotarizedAsset {
+  id           String   @id @default(uuid())
+  userId       String
+  apiKeyId     String
+  filename     String
+  signatureHash String
+  createdAt    DateTime @default(now())
+
+  apiKey       ApiKey   @relation(fields: [apiKeyId], references: [id])
+}
