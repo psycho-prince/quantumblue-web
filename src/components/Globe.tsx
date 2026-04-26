@@ -11,7 +11,7 @@ export function Globe({ className }: { className?: string }) {
 
     if (!canvasRef.current) return;
 
-    const globe = createGlobe(canvasRef.current, {
+    const globe = (createGlobe as any)(canvasRef.current, {
       devicePixelRatio: 2,
       width: 600 * 2,
       height: 600 * 2,
@@ -34,7 +34,7 @@ export function Globe({ className }: { className?: string }) {
         state.phi = phi;
         phi += 0.01;
       },
-    } as any);
+    });
 
     return () => {
       globe.destroy();
