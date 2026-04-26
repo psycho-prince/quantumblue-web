@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Terminal, Send, Sparkles, Globe as GlobeIcon, Zap } from "lucide-react";
+import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Terminal, Send, Sparkles, Globe as GlobeIcon, Zap, Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe } from "@/components/Globe";
-import { BackgroundBeams } from "@/components/BackgroundBeams";
 import { EncryptedText } from "@/components/EncryptedText";
 import { cn } from "@/lib/utils";
 
@@ -29,10 +28,12 @@ export default function Dashboard() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [newKeyName, setNewKeyName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
   
   // AI Agent State
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([
-    { role: "assistant", content: "Agentic Intelligence Active. How can I assist with your Sovereign Protocol operations?" }
+    { role: "assistant", content: "Achromatic Intelligence Active. Sovereign Protocol operations are nominal." }
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -56,9 +57,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (user) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchKeys();
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchAssets();
       setLoading(false);
     }
@@ -105,13 +104,12 @@ export default function Dashboard() {
     setInput("");
     setIsTyping(true);
 
-    // Mock AI Response
     setTimeout(() => {
-      let response = "I've analyzed the request. Based on current lattice geometry, your assets are 100% quantum-secure.";
+      let response = "Lattice geometry analysis complete. Asset integrity verified at 100%.";
       if (userMsg.toLowerCase().includes("risk")) {
-        response = "Credit Risk Analysis: NBFC sector exposure is currently balanced. Predictive models suggest a 2.4% shift in PD for automotive portfolios next quarter.";
+        response = "Sector Intelligence: Predictive risk models suggest stable volatility. Institutional exposure remains within sovereign thresholds.";
       } else if (userMsg.toLowerCase().includes("seal")) {
-        response = "Initializing remote sealing protocol. Assets in the registry will be notarized with ML-DSA-87 signatures momentarily.";
+        response = "Sealing protocol initiated. ML-DSA-87 notarization in progress.";
       }
       setMessages(prev => [...prev, { role: "assistant", content: response }]);
       setIsTyping(false);
@@ -119,263 +117,284 @@ export default function Dashboard() {
   };
 
   if (!user || loading) return (
-    <div className="min-h-screen bg-[#020617] flex items-center justify-center">
+    <div className="min-h-screen bg-[#121212] flex items-center justify-center">
       <div className="flex flex-col items-center gap-6">
-        <div className="w-16 h-16 rounded-3xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center animate-bounce">
-          <ShieldCheck className="w-8 h-8 text-blue-500" />
+        <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center animate-pulse">
+          <ShieldCheck className="w-8 h-8 text-[#A0AAB5]" />
         </div>
-        <span className="text-xs font-black uppercase tracking-[0.4em] text-blue-500/50">Initializing Quantum Workspace...</span>
+        <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#A0AAB5]">Synchronizing Hub...</span>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white pt-32 pb-20 px-6 relative overflow-hidden">
-      <BackgroundBeams />
+    <div className="min-h-screen bg-[#121212] text-[#FAF7F2] flex flex-col md:flex-row relative">
       
-      <div className="max-w-7xl mx-auto space-y-12 relative z-10">
+      {/* Sidebar - Desktop Fixed, Mobile Hidden */}
+      <aside className={cn(
+        "fixed inset-y-0 left-0 z-50 w-72 bg-[#121212] border-r border-white/5 transition-transform duration-300 transform md:relative md:translate-x-0",
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="flex flex-col h-full p-8">
+          <div className="flex items-center justify-between mb-16">
+            <span className="text-xl font-bold tracking-tighter uppercase font-['Plus_Jakarta_Sans']">Sovereign Hub</span>
+            <button onClick={() => setSidebarOpen(false)} className="md:hidden touch-target text-[#A0AAB5]">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <nav className="flex-1 space-y-6">
+            {["overview", "notary", "keys", "intelligence"].map((item) => (
+              <button
+                key={item}
+                onClick={() => {
+                  setActiveTab(item);
+                  setSidebarOpen(false);
+                }}
+                className={cn(
+                  "w-full text-left py-2 text-sm font-bold uppercase tracking-[0.2em] transition-all border-l-2 pl-4",
+                  activeTab === item ? "border-[#A0AAB5] text-[#FAF7F2]" : "border-transparent text-[#A0AAB5] hover:text-[#FAF7F2]"
+                )}
+              >
+                {item}
+              </button>
+            ))}
+          </nav>
+
+          <div className="pt-8 border-t border-white/5 flex items-center gap-4">
+            <UserButton />
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-[#A0AAB5] uppercase tracking-widest">Active Operator</span>
+              <span className="text-xs font-bold truncate max-w-[150px]">{user.emailAddresses[0].emailAddress}</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto custom-scrollbar">
         
-        {/* Spatial Header */}
-        <header className="flex flex-col md:flex-row md:justify-between md:items-end gap-10 border-b border-white/5 pb-10">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3 text-blue-400 font-black text-[10px] uppercase tracking-[0.3em]">
-              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              Sovereign Protocol v2.6.4 Active
-            </div>
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase leading-none">
-              Intelligence <span className="text-blue-500 italic">Hub.</span>
-            </h1>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="flex flex-col items-end">
-               <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Active Operator</span>
-               <span className="text-sm font-bold text-white">{user.emailAddresses[0].emailAddress}</span>
-            </div>
-            <div className="p-1 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-xl">
-              <UserButton />
-            </div>
-          </div>
+        {/* Mobile Header */}
+        <header className="md:hidden flex items-center justify-between p-6 border-b border-white/5 sticky top-0 bg-[#121212]/80 backdrop-blur-md z-40">
+          <span className="text-lg font-bold tracking-tighter uppercase font-['Plus_Jakarta_Sans']">QuantumBlue</span>
+          <button onClick={() => setSidebarOpen(true)} className="touch-target text-[#FAF7F2]">
+            <Menu className="w-6 h-6" />
+          </button>
         </header>
 
-        {/* Bento Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(300px,auto)]">
+        <main className="flex-1 p-6 md:p-12 max-w-7xl mx-auto w-full space-y-12">
           
-          {/* Main Analytics Globe - Span 8 */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="md:col-span-8 glass-vault rounded-[2.5rem] p-8 overflow-hidden relative flex flex-col justify-between"
-          >
-            <div className="relative z-20">
-              <div className="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-blue-400 mb-2">
-                 <GlobeIcon className="w-4 h-4" /> Global Traffic Matrix
+          {/* Header Section */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12 border-b border-white/5">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 text-[#A0AAB5] text-[10px] font-bold uppercase tracking-[0.3em]">
+                <div className="pulse-dot bg-emerald-500" />
+                Network Status: Optimal
               </div>
-              <h3 className="text-3xl font-black uppercase tracking-tighter">Real-time <br />Geospatial Flow</h3>
+              <h1 className="text-fluid-h1 font-bold">
+                Achromatic <span className="text-[#A0AAB5] italic">Intelligence.</span>
+              </h1>
             </div>
+            <div className="hidden md:flex items-center gap-4 text-[10px] font-bold text-[#A0AAB5] uppercase tracking-widest">
+              v2.6.4 / Sovereign Protocol
+            </div>
+          </div>
+
+          {/* Fluid Bento Grid */}
+          <div className="bento-grid">
             
-            <div className="absolute inset-0 flex items-center justify-center opacity-40">
-              <Globe className="translate-y-20 scale-125" />
-            </div>
-
-            <div className="relative z-20 grid grid-cols-3 gap-4 pt-40">
-               {[
-                 { label: "Active Nodes", value: "1,248" },
-                 { label: "Latency", value: "12ms" },
-                 { label: "Integrity", value: "100%" }
-               ].map(stat => (
-                 <div key={stat.label} className="bg-white/5 border border-white/5 rounded-2xl p-4 backdrop-blur-md">
-                    <p className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">{stat.label}</p>
-                    <p className="text-xl font-black text-white">{stat.value}</p>
-                 </div>
-               ))}
-            </div>
-          </motion.div>
-
-          {/* AI Agent Interface - Span 4 */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="md:col-span-4 glass-vault rounded-[2.5rem] p-8 flex flex-col gap-6 relative overflow-hidden"
-          >
-            <div className="flex items-center justify-between relative z-10">
-              <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-blue-400" /> Analyst Agent
-              </h3>
-              <div className="px-2 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-[8px] font-black text-blue-400 uppercase tracking-widest">
-                Gemini 3.1 Pro
-              </div>
-            </div>
-
-            <div 
-              ref={scrollRef}
-              className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar relative z-10"
+            {/* Real-time Flow - Span 8 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+              className="md:col-span-8 card-stone relative overflow-hidden group"
             >
-              <AnimatePresence>
-                {messages.map((m, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    key={i} 
-                    className={cn(
-                      "p-4 rounded-2xl text-[11px] leading-relaxed",
-                      m.role === "assistant" 
-                        ? "bg-white/5 border border-white/5 text-zinc-300 mr-8" 
-                        : "bg-blue-600/10 border border-blue-600/20 text-blue-100 ml-8"
-                    )}
-                  >
-                    {m.content}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-              {isTyping && (
-                <div className="flex gap-1 ml-2">
-                   <div className="w-1 h-1 rounded-full bg-blue-500 animate-bounce" />
-                   <div className="w-1 h-1 rounded-full bg-blue-500 animate-bounce [animation-delay:0.2s]" />
-                   <div className="w-1 h-1 rounded-full bg-blue-500 animate-bounce [animation-delay:0.4s]" />
-                </div>
-              )}
-            </div>
-
-            <form onSubmit={handleSendMessage} className="relative z-10">
-              <input 
-                type="text"
-                placeholder="PROMPT AGENT..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                className="w-full bg-black/40 border border-white/5 rounded-2xl py-3 px-5 text-[10px] font-black uppercase tracking-widest focus:outline-none focus:border-blue-500/40 transition-all"
-              />
-              <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-zinc-600 hover:text-blue-400">
-                <Send className="w-4 h-4" />
-              </button>
-            </form>
-          </motion.div>
-
-          {/* Token Management - Span 4 */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="md:col-span-4 glass-vault rounded-[2.5rem] p-8 flex flex-col gap-8"
-          >
-             <div className="flex items-center justify-between">
-                <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-3">
-                  <Key className="w-5 h-5 text-amber-500" /> Sovereign Keys
-                </h3>
-                <span className="text-[9px] font-black text-zinc-500 bg-white/5 border border-white/5 px-3 py-1 rounded-full">
-                  FIPS 203 COMPLIANT
-                </span>
-             </div>
-
-             <form onSubmit={handleCreateKey} className="space-y-3">
-                <input
-                  type="text"
-                  placeholder="NEW TOKEN IDENTITY..."
-                  value={newKeyName}
-                  onChange={(e) => setNewKeyName(e.target.value)}
-                  className="w-full bg-black/20 border border-white/5 rounded-2xl py-4 px-5 text-[10px] font-mono text-blue-400 placeholder:text-zinc-800 focus:outline-none"
-                />
-                <button 
-                  type="submit"
-                  disabled={!newKeyName}
-                  className="w-full bg-white text-black py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-zinc-200 transition-all disabled:opacity-10"
-                >
-                  Issue Notary Token
-                </button>
-             </form>
-
-             <div className="flex-1 space-y-3 overflow-y-auto custom-scrollbar">
-                {keys.map(k => (
-                  <div key={k.id} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-all">
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="text-[10px] font-black text-white uppercase tracking-widest">{k.name}</span>
-                      <button onClick={() => handleDeleteKey(k.id)} className="text-zinc-700 hover:text-red-500 transition-colors">
-                        <Trash className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <div className="bg-black/40 rounded-xl p-2 flex items-center justify-between">
-                       <code className="text-[9px] font-mono text-blue-400/60 truncate mr-4">{k.key}</code>
-                       <button onClick={() => navigator.clipboard.writeText(k.key)} className="text-zinc-600 hover:text-white">
-                         <Copy className="w-3 h-3" />
-                       </button>
-                    </div>
-                  </div>
-                ))}
-             </div>
-          </motion.div>
-
-          {/* Asset Registry - Span 8 */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="md:col-span-8 glass-vault rounded-[2.5rem] p-8 flex flex-col gap-8 relative overflow-hidden"
-          >
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
-              <div>
-                <h3 className="text-2xl font-black uppercase tracking-tighter flex items-center gap-4">
-                  <FileText className="w-7 h-7 text-blue-500" /> Cryptographic Ledger
-                </h3>
-                <p className="text-[10px] font-bold text-zinc-500 mt-1 uppercase tracking-[0.2em]">Post-Quantum Notarization Stream</p>
+              <div className="relative z-20 mb-12">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#A0AAB5] mb-2 block">Global Traffic Matrix</span>
+                <h3 className="text-2xl font-bold uppercase tracking-tighter">Real-time Geospatial Flow</h3>
               </div>
-              <button 
-                onClick={fetchAssets}
-                className="flex items-center gap-3 text-[9px] font-black uppercase tracking-widest text-zinc-500 hover:text-white bg-white/5 px-5 py-3 rounded-2xl border border-white/5 transition-all"
-              >
-                <RefreshCw className="w-3 h-3" /> Re-sync
-              </button>
-            </div>
+              
+              <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity">
+                <Globe className="translate-y-20 scale-125" />
+              </div>
 
-            <div className="flex-1 bg-black/40 rounded-[2rem] border border-white/5 overflow-hidden backdrop-blur-3xl relative z-10">
-              {assets.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead>
-                      <tr className="bg-white/[0.02] border-b border-white/5 text-zinc-600 text-[9px] uppercase tracking-[0.3em] font-black">
-                        <th className="px-8 py-5">Asset Artifact</th>
-                        <th className="px-8 py-5">ML-DSA-87 Signature (3,309 Bytes)</th>
-                        <th className="px-8 py-5">Verification</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {assets.map((a) => (
-                        <tr key={a.id} className="group hover:bg-white/[0.01] transition-colors">
-                          <td className="px-8 py-6">
-                            <div className="flex items-center gap-4">
-                              <div className="w-8 h-8 rounded-xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center">
-                                <Zap className="w-4 h-4 text-blue-500" />
-                              </div>
-                              <span className="font-mono text-zinc-200 text-xs font-bold">{a.filename}</span>
-                            </div>
-                          </td>
-                          <td className="px-8 py-6">
-                            <div className="font-mono text-blue-400/40 text-[9px] truncate max-w-[250px] bg-black/40 px-3 py-1.5 rounded-lg border border-white/5">
-                              <EncryptedText text={a.signatureHash} />
-                            </div>
-                          </td>
-                          <td className="px-8 py-6">
-                             <div className="flex items-center gap-3">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Validated</span>
-                             </div>
-                          </td>
+              <div className="relative z-20 grid grid-cols-1 sm:grid-cols-3 gap-6 mt-40">
+                 {[
+                   { label: "Active Nodes", value: "1,248" },
+                   { label: "Latency", value: "12ms" },
+                   { label: "Integrity", value: "100%" }
+                 ].map(stat => (
+                   <div key={stat.label} className="bg-white/5 border border-white/5 rounded-2xl p-6 backdrop-blur-md">
+                      <p className="text-[9px] font-bold text-[#A0AAB5] uppercase tracking-widest">{stat.label}</p>
+                      <p className="text-xl font-bold">{stat.value}</p>
+                   </div>
+                 ))}
+              </div>
+            </motion.div>
+
+            {/* AI Analyst - Span 4 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+              className="md:col-span-4 card-stone flex flex-col gap-6"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold uppercase tracking-tighter flex items-center gap-3">
+                  <Sparkles className="w-5 h-5 text-[#A0AAB5]" /> Analyst Agent
+                </h3>
+                <div className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[8px] font-bold uppercase tracking-widest text-[#A0AAB5]">
+                  Gemini 3.1
+                </div>
+              </div>
+
+              <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar text-[11px] leading-relaxed">
+                <AnimatePresence>
+                  {messages.map((m, i) => (
+                    <motion.div 
+                      key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                      className={cn("p-4 rounded-2xl", m.role === "assistant" ? "bg-white/5 text-[#A0AAB5] mr-8" : "bg-white/10 text-[#FAF7F2] ml-8")}
+                    >
+                      {m.content}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+                {isTyping && (
+                  <div className="flex gap-1 ml-2">
+                     <div className="w-1 h-1 rounded-full bg-[#A0AAB5] animate-bounce" />
+                     <div className="w-1 h-1 rounded-full bg-[#A0AAB5] animate-bounce [animation-delay:0.2s]" />
+                     <div className="w-1 h-1 rounded-full bg-[#A0AAB5] animate-bounce [animation-delay:0.4s]" />
+                  </div>
+                )}
+              </div>
+
+              <form onSubmit={handleSendMessage} className="relative">
+                <input 
+                  type="text" placeholder="PROMPT..." value={input} onChange={(e) => setInput(e.target.value)}
+                  className="w-full bg-[#121212] border border-white/5 rounded-xl py-3 px-5 text-[10px] font-bold uppercase tracking-widest focus:outline-none focus:border-[#A0AAB5]/40 transition-all"
+                />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-[#A0AAB5] hover:text-[#FAF7F2] touch-target">
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
+            </motion.div>
+
+            {/* Sovereign Keys - Span 4 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className="md:col-span-4 card-stone flex flex-col gap-8"
+            >
+               <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold uppercase tracking-tighter flex items-center gap-3">
+                    <Key className="w-5 h-5 text-[#A0AAB5]" /> Sovereign Keys
+                  </h3>
+                  <div className="pulse-dot bg-emerald-500" />
+               </div>
+
+               <form onSubmit={handleCreateKey} className="space-y-3">
+                  <input
+                    type="text" placeholder="NEW IDENTITY..." value={newKeyName} onChange={(e) => setNewKeyName(e.target.value)}
+                    className="w-full bg-white/5 border border-white/5 rounded-xl py-4 px-5 text-[10px] font-mono text-[#A0AAB5] focus:outline-none"
+                  />
+                  <button 
+                    type="submit" disabled={!newKeyName}
+                    className="w-full bg-[#FAF7F2] text-[#121212] py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-[#A0AAB5] transition-all disabled:opacity-20 touch-target"
+                  >
+                    Issue Notary Token
+                  </button>
+               </form>
+
+               <div className="flex-1 space-y-3 overflow-y-auto custom-scrollbar pr-1">
+                  {keys.map(k => (
+                    <div key={k.id} className="p-4 rounded-xl bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-all">
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-[10px] font-bold text-[#FAF7F2] uppercase tracking-widest">{k.name}</span>
+                        <button onClick={() => handleDeleteKey(k.id)} className="text-[#A0AAB5]/40 hover:text-white transition-colors touch-target">
+                          <Trash className="w-3 h-3" />
+                        </button>
+                      </div>
+                      <div className="bg-[#121212] rounded-lg p-2 flex items-center justify-between border border-white/5">
+                         <code className="text-[9px] font-mono text-[#A0AAB5] truncate mr-4">{k.key}</code>
+                         <button onClick={() => navigator.clipboard.writeText(k.key)} className="text-[#A0AAB5]/40 hover:text-white touch-target">
+                           <Copy className="w-3 h-3" />
+                         </button>
+                      </div>
+                    </div>
+                  ))}
+               </div>
+            </motion.div>
+
+            {/* Asset Ledger - Span 8 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+              className="md:col-span-8 card-stone flex flex-col gap-8"
+            >
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-xl font-bold uppercase tracking-tighter flex items-center gap-4">
+                    <FileText className="w-6 h-6 text-[#A0AAB5]" /> Cryptographic Ledger
+                  </h3>
+                  <p className="text-[9px] font-bold text-[#A0AAB5] mt-1 uppercase tracking-[0.2em]">Validated Notarization Stream</p>
+                </div>
+                <button 
+                  onClick={fetchAssets}
+                  className="touch-target text-[#A0AAB5] hover:text-[#FAF7F2] transition-all"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="flex-1 bg-[#121212] rounded-2xl border border-white/5 overflow-hidden">
+                {assets.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                      <thead>
+                        <tr className="bg-white/5 text-[#A0AAB5] text-[9px] uppercase tracking-[0.3em] font-bold border-b border-white/5">
+                          <th className="px-8 py-5">Artifact</th>
+                          <th className="px-8 py-5">Signature (ML-DSA-87)</th>
+                          <th className="px-8 py-5">Verification</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full min-h-[400px] opacity-20">
-                   <Terminal className="w-12 h-12 text-zinc-700 mb-6" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.4em]">No Live Stream</span>
-                </div>
-              )}
-            </div>
-          </motion.div>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {assets.map((a) => (
+                          <tr key={a.id} className="group hover:bg-white/5 transition-colors">
+                            <td className="px-8 py-6">
+                              <div className="flex items-center gap-4">
+                                <Zap className="w-4 h-4 text-[#A0AAB5]" />
+                                <span className="font-mono text-xs font-bold">{a.filename}</span>
+                              </div>
+                            </td>
+                            <td className="px-8 py-6">
+                              <div className="font-mono text-[#A0AAB5]/40 text-[9px] truncate max-w-[200px] bg-black/20 px-3 py-1.5 rounded border border-white/5">
+                                <EncryptedText text={a.signatureHash} />
+                              </div>
+                            </td>
+                            <td className="px-8 py-6">
+                               <div className="flex items-center gap-3">
+                                  <div className="pulse-dot bg-emerald-500" />
+                                  <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Validated</span>
+                               </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full min-h-[300px] opacity-20">
+                     <Terminal className="w-12 h-12 mb-4" />
+                     <span className="text-[9px] font-bold uppercase tracking-[0.4em]">No Live Stream</span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
 
-        </div>
+          </div>
+        </main>
+
+        {/* Floating Action Button - Mobile Only */}
+        <button className="md:hidden fixed bottom-8 right-8 w-14 h-14 bg-[#FAF7F2] text-[#121212] rounded-full shadow-2xl flex items-center justify-center z-50 hover:scale-110 transition-transform">
+          <ArrowRight className="w-6 h-6" />
+        </button>
+
       </div>
     </div>
   );
 }
-
