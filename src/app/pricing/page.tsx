@@ -11,40 +11,40 @@ export default function PricingPage() {
       price: "$0",
       description: "Mathematical immunity for individual researchers and open protocols.",
       features: [
-        "Local Lattice Sealing (ML-KEM)",
+        "Local Lattice Sealing (ML-KEM-768)",
         "Standard CLI Interface",
-        "Community Support",
+        "QRNG Entropy Seeds",
         "Unlimited Local Notarization"
       ],
       button: "Download CLI",
-      href: "/#platform",
+      href: "/coming-soon",
       highlight: false
     },
     {
-      name: "Pro Workspace",
+      name: "Sovereign Workspace",
       price: "$49",
       description: "Hardened security for professional teams and high-value digital assets.",
       features: [
         "Cloud Artifact Sync",
-        "Team Collaboration",
-        "ML-DSA Signing Portal",
+        "Agentic AI Risk Analytics",
+        "ML-DSA Notary Portal",
         "Priority Architecture Support",
         "Custom Metadata Sealing"
       ],
-      button: "Initiate Workspace",
+      button: "Access Workspace",
       href: "/dashboard",
       highlight: true
     },
     {
-      name: "Enterprise Infra",
+      name: "Institutional Infra",
       price: "Custom",
       description: "Full-scale post-quantum transition for sovereign organizations.",
       features: [
         "Dedicated Sentinel Node",
-        "On-Premise Deployment",
-        "Compliance Audit Reports",
+        "FPGA Cryptographic Offload",
+        "CBOM Compliance Audit",
         "24/7 Tactical Response",
-        "Custom Protocol Fusing"
+        "Sovereign Protocol Fusing"
       ],
       button: "Contact Architects",
       href: "/contact",
@@ -53,13 +53,13 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black pt-48 pb-20 px-6">
+    <div className="min-h-screen bg-[#020617] pt-48 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-24 space-y-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-center gap-3 text-cyan-400 font-black text-[10px] uppercase tracking-[0.4em]"
+            className="flex items-center justify-center gap-3 text-blue-500 font-black text-[10px] uppercase tracking-[0.4em]"
           >
             <Shield className="w-4 h-4" />
             Post-Quantum Tiers
@@ -89,10 +89,10 @@ export default function PricingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i }}
               key={tier.name} 
-              className={`glass-vault p-12 rounded-[3.5rem] flex flex-col justify-between relative overflow-hidden group ${tier.highlight ? 'border-cyan-500/30 bg-cyan-500/[0.02]' : ''}`}
+              className={`glass-vault p-12 rounded-[3.5rem] flex flex-col justify-between relative overflow-hidden group ${tier.highlight ? 'border-blue-500/30 bg-blue-500/[0.02]' : ''}`}
             >
               {tier.highlight && (
-                <div className="absolute top-10 right-[-35px] bg-cyan-500 text-black text-[10px] font-black uppercase tracking-widest px-10 py-1 rotate-45 shadow-2xl">
+                <div className="absolute top-10 right-[-35px] bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-10 py-1 rotate-45 shadow-2xl">
                   Popular
                 </div>
               )}
@@ -110,8 +110,8 @@ export default function PricingPage() {
                 <ul className="space-y-5">
                   {tier.features.map(feature => (
                     <li key={feature} className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-zinc-300">
-                      <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-cyan-500/30 transition-colors">
-                        <Check className="w-3 h-3 text-cyan-400" />
+                      <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-blue-500/30 transition-colors">
+                        <Check className="w-3 h-3 text-blue-500" />
                       </div>
                       {feature}
                     </li>
@@ -130,5 +130,6 @@ export default function PricingPage() {
         </div>
       </div>
     </div>
+
   );
 }

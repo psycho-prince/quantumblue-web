@@ -26,13 +26,16 @@ export async function POST(req: Request) {
       return new NextResponse('Bad Request: filename and signatureHash are required', { status: 400 });
     }
 
+    // Simulate Post-Quantum Tax (Lattice-based math overhead)
+    await new Promise(resolve => setTimeout(resolve, 300));
+
     // Store notarization log
     const asset = await prisma.notarizedAsset.create({
       data: {
         userId: apiKey.userId,
         apiKeyId: apiKey.id,
         filename,
-        signatureHash,
+        signatureHash, // Expecting ML-DSA-87 (~3,309 bytes)
       },
     });
 
