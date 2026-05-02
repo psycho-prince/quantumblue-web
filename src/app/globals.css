@@ -4,20 +4,20 @@
 
 @layer base {
   :root {
-    /* Executive Fintech Palette (Deep Cobalt) */
-    --bg-primary: #020617;
-    --bg-secondary: #0F172A;
-    --bg-surface: #1E293B;
+    /* Modern Dark SaaS Palette (Neutral & Sleek) */
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-surface: #111111;
     
-    --text-primary: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --text-muted: #64748B;
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
     
-    --accent-primary: #38BDF8;
-    --accent-hover: #0EA5E9;
+    --accent-primary: #0070f3;
+    --accent-glow: rgba(0, 112, 243, 0.3);
     
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-bright: rgba(255, 255, 255, 0.15);
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-bright: rgba(255, 255, 255, 0.1);
     
     /* Semantic Colors */
     --status-success: #10B981;
@@ -41,113 +41,60 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em;
   }
 }
 
 @layer components {
-  /* Modern Responsive Bento Grid */
-  .bento-grid {
-    display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(1, 1fr);
-  }
-
-  @media (min-width: 768px) {
-    .bento-grid {
-      grid-template-columns: repeat(12, 1fr);
-    }
-  }
-
-  /* Executive Card Styling */
-  .card-fintech {
-    background-color: var(--bg-secondary);
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-subtle);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s ease, border-color 0.2s ease;
   }
 
-  .card-fintech:hover {
-    border-color: var(--border-bright);
-    transform: translateY(-2px);
+  .gradient-text {
+    background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  /* Professional Labels */
-  .label-fintech {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
-  }
-
-  /* Pulse Indicator */
-  .pulse-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+  .gradient-border {
     position: relative;
-    background-color: var(--status-success);
+    border-radius: inherit;
   }
 
-  .pulse-dot::after {
-    content: '';
+  .gradient-border::before {
+    content: "";
     position: absolute;
-    inset: -4px;
-    border-radius: 50%;
-    background: inherit;
-    opacity: 0.4;
-    animation: pulse 2s infinite;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0.2), transparent, rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
   }
 
-  @keyframes pulse {
-    0% { transform: scale(1); opacity: 0.4; }
-    100% { transform: scale(2.5); opacity: 0; }
+  .btn-saas {
+    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full font-medium transition-all duration-200;
   }
 
-  /* Enterprise Button */
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.5rem;
-    background-color: var(--accent-primary);
-    color: #000000;
-    font-weight: 600;
-    border-radius: 0.75rem;
-    transition: background-color 0.2s ease;
-    min-height: 44px;
-    min-width: 44px;
+  .btn-saas-primary {
+    @apply btn-saas bg-white text-black hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.15)];
   }
 
-  .btn-primary:hover:not(:disabled) {
-    background-color: var(--accent-hover);
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* Fluid Typography */
-  .text-fluid-h1 {
-    font-size: clamp(2.25rem, 5vw + 1rem, 4.5rem);
-    line-height: 1.1;
-    font-weight: 800;
-  }
-
-  .text-fluid-h2 {
-    font-size: clamp(1.5rem, 3vw + 1rem, 2.5rem);
-    line-height: 1.2;
-    font-weight: 700;
+  .btn-saas-secondary {
+    @apply btn-saas glass text-white hover:bg-white/5;
   }
 }
 
-/* Custom Scrollbar for Fintech theme */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -156,7 +103,7 @@
 
 ::-webkit-scrollbar-thumb {
   background: var(--bg-surface);
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

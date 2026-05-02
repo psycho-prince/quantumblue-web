@@ -7,70 +7,70 @@ import { motion } from "framer-motion";
 export default function PricingPage() {
   const tiers = [
     {
-      name: "Open Source Core",
+      name: "Developer",
       price: "$0",
-      description: "Mathematical immunity for individual researchers and open protocols.",
+      description: "Everything you need to build quantum-safe applications for personal projects.",
       features: [
-        "Local Lattice Sealing (ML-KEM-768)",
-        "Standard CLI Interface",
-        "QRNG Entropy Seeds",
-        "Unlimited Local Notarization"
+        "Access to Quantum Blue CLI",
+        "Local Lattice Encryption",
+        "Community Documentation",
+        "Standard API Rate Limits"
       ],
-      button: "Download CLI",
-      href: "/coming-soon",
+      button: "Get Started",
+      href: "/dashboard",
       highlight: false
     },
     {
-      name: "Sovereign Workspace",
-      price: "$49",
-      description: "Hardened security for professional teams and high-value digital assets.",
+      name: "Professional",
+      price: "$29",
+      description: "Advanced infrastructure and higher limits for growing teams and startups.",
       features: [
-        "Cloud Artifact Sync",
-        "Agentic AI Risk Analytics",
-        "ML-DSA Notary Portal",
-        "Priority Architecture Support",
+        "Centralized Key Management",
+        "High-Scale PQC Endpoints",
+        "Team Workspace & RBAC",
+        "Standard Architecture Support",
         "Custom Metadata Sealing"
       ],
-      button: "Access Workspace",
+      button: "Start 14-Day Free Trial",
       href: "/dashboard",
       highlight: true
     },
     {
-      name: "Institutional Infra",
+      name: "Enterprise",
       price: "Custom",
-      description: "Full-scale post-quantum transition for sovereign organizations.",
+      description: "Dedicated security infrastructure and support for global organizations.",
       features: [
-        "Dedicated Sentinel Node",
-        "FPGA Cryptographic Offload",
-        "CBOM Compliance Audit",
-        "24/7 Tactical Response",
-        "Sovereign Protocol Fusing"
+        "Dedicated Sentinel Nodes",
+        "On-Premise Deployment Options",
+        "Compliance & Security Audits",
+        "24/7 Strategic Support",
+        "Custom Integration Engineering"
       ],
-      button: "Contact Architects",
+      button: "Talk to Sales",
       href: "/contact",
       highlight: false
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#020617] pt-48 pb-20 px-6">
+    <div className="min-h-screen bg-black pt-32 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-24 space-y-6">
+        <div className="text-center mb-24 space-y-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-center gap-3 text-blue-500 font-black text-[10px] uppercase tracking-[0.4em]"
+            className="flex items-center justify-center gap-2 text-blue-500 font-bold text-[10px] uppercase tracking-[0.2em]"
           >
             <Shield className="w-4 h-4" />
-            Post-Quantum Tiers
+            Pricing Plans
           </motion.div>
           <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter"
+            className="text-5xl md:text-7xl font-bold text-white tracking-tight"
           >
-            Transparent <br /> Security.
+            Sovereign Security <br /> for Every Team.
           </motion.h1>
           <motion.p 
              initial={{ opacity: 0 }}
@@ -78,41 +78,33 @@ export default function PricingPage() {
              transition={{ delay: 0.2 }}
              className="text-zinc-500 text-xl font-medium max-w-2xl mx-auto leading-relaxed"
           >
-            Choose the level of defense required for your digital heritage. No hidden complexity.
+            Future-proof your infrastructure with predictable, transparent pricing designed for scale.
           </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {tiers.map((tier, i) => (
             <motion.div 
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * i }}
               key={tier.name} 
-              className={`glass-vault p-12 rounded-[3.5rem] flex flex-col justify-between relative overflow-hidden group ${tier.highlight ? 'border-blue-500/30 bg-blue-500/[0.02]' : ''}`}
+              className={`glass p-10 rounded-[3rem] flex flex-col justify-between relative overflow-hidden group ${tier.highlight ? 'border-blue-500/50 shadow-[0_0_50px_rgba(0,112,243,0.15)]' : ''}`}
             >
-              {tier.highlight && (
-                <div className="absolute top-10 right-[-35px] bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-10 py-1 rotate-45 shadow-2xl">
-                  Popular
-                </div>
-              )}
-              
               <div className="space-y-10">
                 <div className="space-y-4">
-                  <h3 className="text-xs font-black uppercase tracking-[0.3em] text-zinc-500">{tier.name}</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">{tier.name}</h3>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-black text-white tracking-tighter">{tier.price}</span>
-                    {tier.price !== "Custom" && <span className="text-zinc-600 text-sm font-bold uppercase tracking-widest">/ month</span>}
+                    <span className="text-5xl font-bold text-white tracking-tight">{tier.price}</span>
+                    {tier.price !== "Custom" && <span className="text-zinc-600 text-sm font-medium">/ month</span>}
                   </div>
-                  <p className="text-zinc-400 font-medium text-sm leading-relaxed">{tier.description}</p>
+                  <p className="text-zinc-500 font-medium text-sm leading-relaxed">{tier.description}</p>
                 </div>
 
-                <ul className="space-y-5">
+                <ul className="space-y-4">
                   {tier.features.map(feature => (
-                    <li key={feature} className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-zinc-300">
-                      <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-blue-500/30 transition-colors">
-                        <Check className="w-3 h-3 text-blue-500" />
-                      </div>
+                    <li key={feature} className="flex items-center gap-3 text-sm font-medium text-zinc-300">
+                      <Check className="w-4 h-4 text-blue-500 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -121,7 +113,7 @@ export default function PricingPage() {
 
               <Link 
                 href={tier.href} 
-                className={`mt-12 w-full py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-center transition-all ${tier.highlight ? 'bg-white text-black hover:scale-[1.02] shadow-[0_0_40px_rgba(255,255,255,0.1)]' : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'}`}
+                className={`mt-10 w-full btn-saas ${tier.highlight ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/5 text-white hover:bg-white/10'}`}
               >
                 {tier.button}
               </Link>
@@ -130,6 +122,5 @@ export default function PricingPage() {
         </div>
       </div>
     </div>
-
   );
 }
