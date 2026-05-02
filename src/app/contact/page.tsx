@@ -5,23 +5,23 @@ import { motion } from "framer-motion";
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-black pt-48 pb-20 px-6">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-32">
+    <div className="min-h-screen bg-black pt-32 pb-20 px-6">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20">
         <div className="space-y-12">
-          <div className="space-y-6">
+          <div className="space-y-4">
             <motion.div 
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
-               className="flex items-center gap-3 text-cyan-400 font-black text-[10px] uppercase tracking-[0.4em]"
+               className="flex items-center gap-2 text-blue-500 font-bold text-[10px] uppercase tracking-[0.2em]"
             >
               <Shield className="w-4 h-4" />
-              Intelligence Channel
+              Sovereign Channel
             </motion.div>
             <motion.h1 
-               initial={{ opacity: 0, y: 30 }}
+               initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ delay: 0.1 }}
-               className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter"
+               className="text-5xl md:text-7xl font-bold text-white tracking-tight"
             >
               Contact <br /> Architects.
             </motion.h1>
@@ -29,9 +29,9 @@ export default function ContactPage() {
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                transition={{ delay: 0.2 }}
-               className="text-zinc-500 text-xl font-medium max-w-lg leading-relaxed"
+               className="text-zinc-500 text-xl font-medium max-lg leading-relaxed"
             >
-              Secure a briefing with our lead cryptography engineers to discuss your sovereign infrastructure needs.
+              Schedule a briefing with our lead engineers to discuss enterprise quantum-safe transitions and custom infrastructure needs.
             </motion.p>
           </div>
 
@@ -39,85 +39,83 @@ export default function ContactPage() {
              initial={{ opacity: 0, x: -20 }}
              animate={{ opacity: 1, x: 0 }}
              transition={{ delay: 0.3 }}
-             className="space-y-10 border-t border-white/5 pt-12"
+             className="space-y-8 border-t border-white/5 pt-12"
           >
             <div className="flex items-center gap-6 group">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-cyan-500/50 transition-colors">
-                <Mail className="w-5 h-5 text-zinc-400 group-hover:text-cyan-400" />
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-blue-500/30 transition-colors">
+                <Mail className="w-5 h-5 text-zinc-500 group-hover:text-blue-500" />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Email Architecture</p>
-                <p className="text-white font-bold tracking-tight">info@quantum-blue.in</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">Email Engineering</p>
+                <p className="text-white font-bold tracking-tight">architects@quantum-blue.io</p>
               </div>
             </div>
 
             <div className="flex items-center gap-6 group">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-cyan-500/50 transition-colors">
-                <MapPin className="w-5 h-5 text-zinc-400 group-hover:text-cyan-400" />
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-blue-500/30 transition-colors">
+                <MapPin className="w-5 h-5 text-zinc-500 group-hover:text-blue-500" />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Digital Presence</p>
-                <p className="text-white font-bold tracking-tight">Decentralized / Remote First</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">Infrastructure</p>
+                <p className="text-white font-bold tracking-tight">Decentralized / Remote-First</p>
               </div>
             </div>
 
             <div className="flex items-center gap-6 group">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-cyan-500/50 transition-colors">
-                <Globe className="w-5 h-5 text-zinc-400 group-hover:text-cyan-400" />
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-blue-500/30 transition-colors">
+                <Globe className="w-5 h-5 text-zinc-500 group-hover:text-blue-500" />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Global Reach</p>
-                <p className="text-white font-bold tracking-tight">Available Across All Epochs</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">Global Service</p>
+                <p className="text-white font-bold tracking-tight">Available Worldwide</p>
               </div>
             </div>
           </motion.div>
         </div>
 
         <motion.div 
-           initial={{ opacity: 0, scale: 0.95 }}
-           animate={{ opacity: 1, scale: 1 }}
-           className="glass-vault p-12 rounded-[4rem] relative overflow-hidden"
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="glass p-8 md:p-12 rounded-[3rem] relative overflow-hidden"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-          
-          <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Full Identity</label>
+          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-2">Full Identity</label>
               <input 
                 type="text" 
-                placeholder="NAME / ALIAS..." 
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-sm font-bold tracking-tight text-white placeholder:text-zinc-700 focus:outline-none focus:border-cyan-500/50 transition-all"
+                placeholder="Full Name" 
+                className="w-full bg-zinc-900 border border-white/10 rounded-2xl px-6 py-4 text-sm font-medium text-white placeholder:text-zinc-700 focus:outline-none focus:border-blue-500/50 transition-all"
               />
             </div>
 
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Secure Channel</label>
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-2">Work Email</label>
               <input 
                 type="email" 
-                placeholder="EMAIL ADDRESS..." 
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-sm font-bold tracking-tight text-white placeholder:text-zinc-700 focus:outline-none focus:border-cyan-500/50 transition-all"
+                placeholder="architect@enterprise.com" 
+                className="w-full bg-zinc-900 border border-white/10 rounded-2xl px-6 py-4 text-sm font-medium text-white placeholder:text-zinc-700 focus:outline-none focus:border-blue-500/50 transition-all"
               />
             </div>
 
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Organization / Project</label>
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-2">Organization</label>
               <input 
                 type="text" 
-                placeholder="DOMAIN NAME..." 
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-sm font-bold tracking-tight text-white placeholder:text-zinc-700 focus:outline-none focus:border-cyan-500/50 transition-all"
+                placeholder="Company Name" 
+                className="w-full bg-zinc-900 border border-white/10 rounded-2xl px-6 py-4 text-sm font-medium text-white placeholder:text-zinc-700 focus:outline-none focus:border-blue-500/50 transition-all"
               />
             </div>
 
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-4">Briefing Details</label>
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-2">Briefing Intent</label>
               <textarea 
-                rows={5}
-                placeholder="DESCRIBE YOUR INFRASTRUCTURE NEEDS..." 
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-sm font-bold tracking-tight text-white placeholder:text-zinc-700 focus:outline-none focus:border-cyan-500/50 transition-all resize-none"
+                rows={4}
+                placeholder="Describe your sovereign infrastructure requirements..." 
+                className="w-full bg-zinc-900 border border-white/10 rounded-2xl px-6 py-4 text-sm font-medium text-white placeholder:text-zinc-700 focus:outline-none focus:border-blue-500/50 transition-all resize-none"
               />
             </div>
 
-            <button className="w-full bg-white text-black py-6 rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-4 hover:scale-[1.02] transition-all shadow-[0_0_50px_rgba(255,255,255,0.1)]">
+            <button className="w-full btn-saas-primary py-4 gap-3 mt-4">
               Establish Connection <Send className="w-4 h-4" />
             </button>
           </form>

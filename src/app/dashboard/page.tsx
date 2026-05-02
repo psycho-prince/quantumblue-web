@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Terminal, Send, Sparkles, Globe as GlobeIcon, Zap, Menu, X, ArrowRight, Activity, Cpu, ShieldAlert } from "lucide-react";
+import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Terminal, Send, Sparkles, Globe as GlobeIcon, Zap, Menu, X, ArrowRight, Activity, Cpu, ShieldAlert, Library } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe } from "@/components/Globe";
 import { EncryptedText } from "@/components/EncryptedText";
@@ -174,6 +174,13 @@ export default function Dashboard() {
                 {item.label}
               </button>
             ))}
+            <Link 
+              href="/resources"
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-zinc-500 hover:text-white hover:bg-white/5 transition-all"
+            >
+              <Library className="w-4 h-4" />
+              Resources
+            </Link>
           </nav>
 
           <div className="pt-6 border-t border-white/5 space-y-4">

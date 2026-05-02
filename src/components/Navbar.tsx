@@ -20,10 +20,10 @@ export function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden lg:flex gap-8">
           {[
-            { label: 'Platform', href: '/#platform' },
-            { label: 'Ecosystem', href: '/#briefing' },
+            { label: 'Platform', href: '/platform' },
             { label: 'Pricing', href: '/pricing' },
-            { label: 'Docs', href: '/coming-soon' }
+            { label: 'Resources', href: '/resources' },
+            { label: 'Contact', href: '/contact' }
           ].map((nav) => (
             <Link 
               key={nav.label} 
