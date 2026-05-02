@@ -82,9 +82,9 @@ export default function RootLayout({
             <div className="space-y-6">
               <h4 className="text-white font-bold text-sm tracking-tight uppercase">Company</h4>
               <ul className="space-y-3 text-zinc-500 text-sm">
-                <li><Link href="/coming-soon" className="hover:text-blue-400 transition-colors">About Us</Link></li>
-                <li><Link href="/coming-soon" className="hover:text-blue-400 transition-colors">Press Kit</Link></li>
-                <li><Link href="/coming-soon" className="hover:text-blue-400 transition-colors">Legal & Compliance</Link></li>
+                <li><Link href="/about" className="hover:text-blue-400 transition-colors">About Us</Link></li>
+                <li><Link href="/press" className="hover:text-blue-400 transition-colors">Press Kit</Link></li>
+                <li><Link href="/legal" className="hover:text-blue-400 transition-colors">Legal & Compliance</Link></li>
                 <li><Link href="/pricing" className="hover:text-blue-400 transition-colors">Enterprise Plans</Link></li>
               </ul>
             </div>
