@@ -82,11 +82,17 @@
   }
 
   .btn-saas-primary {
-    @apply btn-saas bg-white text-black hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.15)];
+    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full font-medium transition-all duration-200;
+    @apply bg-white text-black hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.15)];
   }
 
   .btn-saas-secondary {
-    @apply btn-saas glass text-white hover:bg-white/5;
+    @apply inline-flex items-center justify-center px-6 py-2.5 rounded-full font-medium transition-all duration-200;
+    @apply text-white hover:bg-white/5;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle);
   }
 }
 
