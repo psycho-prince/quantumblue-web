@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Exclude private routes
+Disallow: /dashboard
+├ Disallow: /api/
+
+Sitemap: https://quantum-blue.io/sitemap.xml
