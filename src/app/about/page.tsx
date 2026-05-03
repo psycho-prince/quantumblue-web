@@ -62,7 +62,7 @@ export default function AboutPage() {
           >
              <h2 className="text-3xl font-bold text-white tracking-tight">The Quantum Threat is Real.</h2>
              <p className="text-zinc-400 text-lg leading-relaxed font-medium">
-               Current encryption standards (RSA, ECC) will be rendered obsolete by quantum computers. This isn't a theory; it's a mathematical certainty. At Quantum Blue, we are building the infrastructure to bridge the gap between classical and post-quantum security.
+               Current encryption standards (RSA, ECC) will be rendered obsolete by quantum computers. This isn&apos;t a theory; it&apos;s a mathematical certainty. At Quantum Blue, we are building the infrastructure to bridge the gap between classical and post-quantum security.
              </p>
              <p className="text-zinc-400 text-lg leading-relaxed font-medium">
                Our decentralized team works across three continents, collaborating with NIST and leading research institutions to implement lattice-based cryptography at scale.

@@ -32,7 +32,7 @@ export default function PricingPage() {
         "Custom Metadata Sealing"
       ],
       button: "Start 14-Day Free Trial",
-      href: "/dashboard",
+      href: "/checkout",
       highlight: true
     },
     {

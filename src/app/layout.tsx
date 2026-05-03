@@ -4,7 +4,7 @@ import "@fontsource/plus-jakarta-sans/700.css";
 import "@fontsource/plus-jakarta-sans/800.css";
 import "./globals.css";
 import Link from "next/link";
-import { Command, ShieldCheck, Globe, CreditCard, Lock, Activity } from "lucide-react";
+import { ShieldCheck, Globe, Lock, Activity } from "lucide-react";
 import clsx from "clsx";
 import { ClerkProvider } from '@clerk/nextjs';
 import { Navbar } from "@/components/Navbar";
@@ -94,7 +94,14 @@ export default function RootLayout({
             <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
               &copy; 2026 Quantum Blue Inc. &bull; Engineered for the future.
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
+                 <div className="opacity-[0.02] hover:opacity-10 transition-opacity cursor-default select-none" title="Novus Ordo Seclorum">
+                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                     <path d="M12 3L2 21h20L12 3z" />
+                     <circle cx="12" cy="13" r="3" />
+                     <circle cx="12" cy="13" r="0.5" fill="currentColor" />
+                   </svg>
+                 </div>
                  <Link href="#" className="p-2 text-zinc-500 hover:text-white transition-all"><Globe className="w-4 h-4" /></Link>
                  <Link href="#" className="p-2 text-zinc-500 hover:text-white transition-all"><Lock className="w-4 h-4" /></Link>
                  <Link href="#" className="p-2 text-zinc-500 hover:text-white transition-all"><Activity className="w-4 h-4" /></Link>

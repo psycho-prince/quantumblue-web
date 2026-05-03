@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton, useUser, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
-import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Terminal, Send, Sparkles, Globe as GlobeIcon, Zap, Menu, X, ArrowRight, Activity, Cpu, ShieldAlert, Library } from "lucide-react";
+import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Send, Sparkles, Zap, Menu, X, Activity, Cpu, Library, LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe } from "@/components/Globe";
 import { EncryptedText } from "@/components/EncryptedText";
@@ -25,6 +25,7 @@ type Asset = {
 
 export default function Dashboard() {
   const { user } = useUser();
+  const { signOut } = useClerk();
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [newKeyName, setNewKeyName] = useState("");
@@ -57,11 +58,13 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchKeys();
-      fetchAssets();
-      setLoading(false);
-    }
+    const initDashboard = async () => {
+      if (user) {
+        await Promise.all([fetchKeys(), fetchAssets()]);
+        setLoading(false);
+      }
+    };
+    initDashboard();
   }, [user]);
 
   useEffect(() => {
@@ -201,6 +204,14 @@ export default function Dashboard() {
                 <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Infrastructure Admin</span>
               </div>
             </div>
+
+            <button 
+              onClick={() => signOut({ redirectUrl: "/" })}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-zinc-500 hover:text-red-400 hover:bg-red-400/5 transition-all mt-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign Out
+            </button>
           </div>
         </div>
       </aside>
@@ -307,7 +318,7 @@ export default function Dashboard() {
                       <h3 className="text-xl font-bold">What is Quantum Blue?</h3>
                       <p className="text-zinc-500 text-sm leading-relaxed font-medium">
                         Quantum Blue is a complete ecosystem designed to future-proof your data against quantum computers. 
-                        Our platform provides **Lattice-based encryption (ML-KEM/ML-DSA)** which is mathematically proven to be resistant to Shor's algorithm.
+                        Our platform provides **Lattice-based encryption (ML-KEM/ML-DSA)** which is mathematically proven to be resistant to Shor&apos;s algorithm.
                       </p>
                       <div className="space-y-4 pt-4">
                          <div className="flex items-center gap-4">
