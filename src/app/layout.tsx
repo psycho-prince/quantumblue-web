@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: "Quantum Blue | Post-Quantum Security Ecosystem",
     description: "Enterprise-grade quantum-resistant security infrastructure.",
     type: "website",
-    url: "https://quantum-blue.io",
+    url: "https://quantum-blue.in",
   }
 };
 
@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider domain="quantum-blue.in">
     <html lang="en" className={clsx(inter.variable, jetbrainsMono.variable, firaCode.variable, "dark scroll-smooth")}>
       <body className="selection:bg-blue-500/30 bg-[#000] text-white">
         {/* Subtle Background Glow */}
