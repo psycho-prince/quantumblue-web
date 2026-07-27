@@ -24,10 +24,12 @@ export function Hero() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full mb-8 backdrop-blur-xl"
+            className="flex flex-wrap items-center gap-2.5 px-4 py-1.5 bg-blue-500/5 border border-blue-500/20 rounded-full mb-8 backdrop-blur-xl"
           >
-            <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Quantum-Safe Platform V3.0 is Live</span>
+            <span className="flex h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
+            <span className="text-[9px] font-extrabold text-blue-400 uppercase tracking-widest">Emergent Ventures Backed</span>
+            <span className="text-[9px] text-zinc-600 font-bold uppercase">|</span>
+            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Founded by Prince T. Philip</span>
           </motion.div>
 
           <div className="mb-8">
