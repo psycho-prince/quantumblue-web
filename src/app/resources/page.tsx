@@ -27,6 +27,15 @@ const RESOURCES = [
     ]
   },
   {
+    category: "Research Critique",
+    title: "OVS Framework Deconstruction",
+    description: "A critical physics evaluation and mathematical deconstruction of the Orchestrated Variance Suppression (OVS) hypothesis.",
+    icon: ShieldAlert,
+    links: [
+      { label: "Read Preprint Paper", href: "/resources/ovs-critique" }
+    ]
+  },
+  {
     category: "Security Audit",
     title: "NIST Compliance Report 2026",
     description: "Results of our latest third-party security audit verifying our post-quantum cryptographic standards and zero-trust architecture.",
@@ -60,16 +69,16 @@ export default function ResourcesPage() {
             Engineering <br /> Resources.
           </motion.h1>
           <motion.p 
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             transition={{ delay: 0.2 }}
-             className="text-zinc-500 text-xl font-medium max-w-2xl leading-relaxed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-zinc-500 text-xl font-medium max-w-2xl leading-relaxed"
           >
             Access technical specifications, research papers, and implementation guides to master post-quantum security.
           </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
           {RESOURCES.map((res, i) => (
             <motion.div 
               key={res.title}
