@@ -108,6 +108,7 @@ export default function RootLayout({
                      <circle cx="12" cy="13" r="0.5" fill="currentColor" />
                    </svg>
                  </div>
+                 <span className="p-2 text-zinc-600 hover:text-blue-400 transition-all cursor-default select-none text-xs" title="Protected: Hamsa Hand & Star of David">🪬 ✡</span>
                  <Link href="#" className="p-2 text-zinc-500 hover:text-white transition-all"><Globe className="w-4 h-4" /></Link>
                  <Link href="#" className="p-2 text-zinc-500 hover:text-white transition-all"><Lock className="w-4 h-4" /></Link>
                  <Link href="#" className="p-2 text-zinc-500 hover:text-white transition-all"><Activity className="w-4 h-4" /></Link>
