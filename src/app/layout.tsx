@@ -68,9 +68,9 @@ export default function RootLayout({
             <div className="space-y-6">
               <h4 className="text-white font-bold text-sm tracking-tight uppercase">Ecosystem</h4>
               <ul className="space-y-3 text-zinc-500 text-sm">
-                <li><Link href="/platform" className="hover:text-blue-400 transition-colors">Encryption APIs</Link></li>
-                <li><Link href="/platform" className="hover:text-blue-400 transition-colors">Vault Services</Link></li>
-                <li><Link href="/platform" className="hover:text-blue-400 transition-colors">Identity Core</Link></li>
+                <li><Link href="/platform#apis" className="hover:text-blue-400 transition-colors">Encryption APIs</Link></li>
+                <li><Link href="/platform#vaults" className="hover:text-blue-400 transition-colors">Vault Services</Link></li>
+                <li><Link href="/platform#identity" className="hover:text-blue-400 transition-colors">Identity Core</Link></li>
                 <li><Link href="/dashboard" className="hover:text-blue-400 transition-colors">Quantum Blue CLI</Link></li>
               </ul>
             </div>
@@ -78,9 +78,9 @@ export default function RootLayout({
             <div className="space-y-6">
               <h4 className="text-white font-bold text-sm tracking-tight uppercase">Resources</h4>
               <ul className="space-y-3 text-zinc-500 text-sm">
-                <li><Link href="/resources" className="hover:text-blue-400 transition-colors">Documentation</Link></li>
-                <li><Link href="/resources" className="hover:text-blue-400 transition-colors">Technical Papers</Link></li>
-                <li><Link href="/resources" className="hover:text-blue-400 transition-colors">Security Audit</Link></li>
+                <li><Link href="/resources#documentation" className="hover:text-blue-400 transition-colors">Documentation</Link></li>
+                <li><Link href="/resources#technical-papers" className="hover:text-blue-400 transition-colors">Technical Papers</Link></li>
+                <li><Link href="/resources#security-audit" className="hover:text-blue-400 transition-colors">Security Audit</Link></li>
                 <li><Link href="/contact" className="hover:text-blue-400 transition-colors">Expert Consultation</Link></li>
               </ul>
             </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 
 const MODULES = [
   {
+    id: "apis",
     title: "Post-Quantum Cryptography APIs",
     description: "Enterprise-grade ML-KEM and ML-DSA endpoints. Deploy quantum-resistant encryption across your applications with a single API call.",
     icon: Cpu,
@@ -13,6 +14,7 @@ const MODULES = [
     status: "Stable v2.4"
   },
   {
+    id: "vaults",
     title: "Zero-Trust Data Vaults",
     description: "Immutable, distributed storage built on sovereign lattice architecture. Protect your sensitive assets from harvesting attacks.",
     icon: Database,
@@ -20,6 +22,7 @@ const MODULES = [
     status: "Beta Access"
   },
   {
+    id: "identity",
     title: "Quantum Identity Core",
     description: "Decentralized identity protocols using device-bound, post-quantum signatures. The foundation for secure user authentication.",
     icon: Fingerprint,
@@ -50,10 +53,10 @@ export default function EcosystemPage() {
             Modular Security. <br /> Universal Scale.
           </motion.h1>
           <motion.p 
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             transition={{ delay: 0.2 }}
-             className="text-zinc-500 text-xl font-medium max-w-2xl leading-relaxed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-zinc-500 text-xl font-medium max-w-2xl leading-relaxed"
           >
             Deploy individual modules or the full stack. Quantum Blue provides the infrastructure needed to survive the post-quantum epoch.
           </motion.p>
@@ -63,11 +66,12 @@ export default function EcosystemPage() {
           {MODULES.map((module, i) => (
             <motion.div 
               key={module.title}
+              id={module.id}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="glass p-8 md:p-12 rounded-[3rem] grid lg:grid-cols-2 gap-12 items-center relative overflow-hidden group"
+              className="glass p-8 md:p-12 rounded-[3rem] grid lg:grid-cols-2 gap-12 items-center relative overflow-hidden group scroll-mt-24"
             >
               <div className="space-y-8 relative z-10">
                 <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center group-hover:border-blue-500/40 transition-colors">

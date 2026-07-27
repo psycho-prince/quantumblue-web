@@ -82,11 +82,12 @@ export default function ResourcesPage() {
           {RESOURCES.map((res, i) => (
             <motion.div 
               key={res.title}
+              id={res.category.toLowerCase().replace(" ", "-")}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="glass p-10 rounded-[3rem] flex flex-col justify-between group hover:border-white/10 transition-all"
+              className="glass p-10 rounded-[3rem] flex flex-col justify-between group hover:border-white/10 transition-all scroll-mt-24"
             >
               <div className="space-y-6">
                 <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-blue-500/30 transition-colors">
