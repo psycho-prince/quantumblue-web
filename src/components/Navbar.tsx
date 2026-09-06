@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ShieldCheck, Menu, X } from "lucide-react";
+import { ShieldCheck, Menu, X, Cpu } from "lucide-react";
 import { SignInButton, Show, UserButton } from '@clerk/nextjs';
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -18,15 +18,13 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full glass border-b border-white/5 bg-black/50 backdrop-blur-xl">
+      <nav className="fixed top-0 z-50 w-full glass border-b border-border-bright">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center transition-all group-hover:bg-blue-500/30">
-              <ShieldCheck className="w-5 h-5 text-blue-500" />
+            <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-accent-blue/50 flex items-center justify-center transition-all group-hover:bg-blue-500/20">
+              <Cpu className="w-5 h-5 text-accent-blue" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-lg tracking-tight text-white font-['Plus_Jakarta_Sans'] leading-none">Quantum Blue</span>
-            </div>
+            <span className="font-bold text-lg tracking-tight text-white font-mono leading-none neon-text-blue">QUANTUM_BLUE</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -35,7 +33,7 @@ export function Navbar() {
               <Link 
                 key={nav.label} 
                 href={nav.href}
-                className="text-xs font-medium text-zinc-400 hover:text-white transition-colors"
+                className="text-xs font-mono text-zinc-400 hover:text-white hover:neon-text-blue transition-colors uppercase tracking-widest"
               >
                 {nav.label}
               </Link>
@@ -46,31 +44,31 @@ export function Navbar() {
             <div className="hidden sm:flex items-center gap-4">
               <Show when="signed-out">
                 <SignInButton mode="modal">
-                  <button className="btn-saas-secondary py-1.5 px-4 text-xs">
-                    Log In
+                  <button className="px-4 py-1.5 text-xs font-mono text-white hover:text-accent-blue transition-colors">
+                    LOG_IN
                   </button>
                 </SignInButton>
                 <SignInButton mode="modal">
-                  <button className="btn-saas-primary py-1.5 px-4 text-xs">
-                    Sign Up
+                  <button className="px-4 py-1.5 text-xs font-mono bg-accent-blue/10 border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-black transition-all">
+                    SIGN_UP
                   </button>
                 </SignInButton>
               </Show>
               <Show when="signed-in">
                 <Link
                   href="/dashboard"
-                  className="btn-saas-secondary py-1.5 px-4 text-xs"
+                  className="px-4 py-1.5 text-xs font-mono bg-accent-blue/10 border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-black transition-all"
                 >
-                  Workspace
+                  WORKSPACE
                 </Link>
-                <div className="flex items-center justify-center p-0.5 glass rounded-full">
+                <div className="flex items-center justify-center p-0.5 border border-accent-blue/30 rounded-full">
                   <UserButton appearance={{ elements: { userButtonAvatarBox: 'w-7 h-7' } }} />
                 </div>
               </Show>
             </div>
             
             <button 
-              className="lg:hidden p-2 text-zinc-400 hover:text-white transition-colors"
+              className="lg:hidden p-2 text-accent-blue"
               onClick={() => setMobileMenuOpen(true)}
             >
               <Menu className="w-5 h-5" />
@@ -88,21 +86,21 @@ export function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] lg:hidden"
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] lg:hidden"
             />
             <motion.div 
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 right-0 w-full max-w-xs bg-zinc-950 border-l border-white/5 z-[70] lg:hidden p-8 shadow-2xl"
+              className="fixed inset-y-0 right-0 w-full max-w-xs bg-black border-l border-accent-blue/50 z-[70] lg:hidden p-8 shadow-[0_0_30px_rgba(59,130,246,0.2)]"
             >
-              <div className="flex flex-col h-full">
+              <div className="flex flex-col h-full font-mono">
                 <div className="flex items-center justify-between mb-12">
-                  <span className="font-bold text-lg text-white">Menu</span>
+                  <span className="font-bold text-lg text-white">MENU</span>
                   <button 
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 text-zinc-400 hover:text-white transition-colors"
+                    className="p-2 text-accent-red"
                   >
                     <X className="w-6 h-6" />
                   </button>
@@ -114,35 +112,35 @@ export function Navbar() {
                       key={nav.label} 
                       href={nav.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block text-2xl font-bold text-zinc-400 hover:text-blue-500 transition-colors"
+                      className="block text-2xl font-bold text-zinc-400 hover:text-accent-blue transition-colors"
                     >
                       {nav.label}
                     </Link>
                   ))}
                 </nav>
 
-                <div className="pt-8 border-t border-white/5 space-y-4">
+                <div className="pt-8 border-t border-accent-blue/30 space-y-4">
                   <Show when="signed-out">
                     <SignInButton mode="modal">
-                      <button className="w-full btn-saas-primary py-4">Sign Up</button>
+                      <button className="w-full py-4 bg-accent-blue text-black font-bold uppercase tracking-widest">SIGN_UP</button>
                     </SignInButton>
                     <SignInButton mode="modal">
-                      <button className="w-full btn-saas-secondary py-4">Log In</button>
+                      <button className="w-full py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest">LOG_IN</button>
                     </SignInButton>
                   </Show>
                   <Show when="signed-in">
                     <Link
                       href="/dashboard"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block w-full btn-saas-primary py-4 text-center"
+                      className="block w-full py-4 bg-accent-blue text-black font-bold uppercase tracking-widest text-center"
                     >
-                      Workspace
+                      WORKSPACE
                     </Link>
-                    <div className="flex items-center gap-4 p-4 glass rounded-2xl">
+                    <div className="flex items-center gap-4 p-4 glass rounded-none border border-accent-blue/30">
                        <UserButton appearance={{ elements: { userButtonAvatarBox: 'w-10 h-10' } }} />
                        <div className="flex flex-col overflow-hidden">
-                          <span className="text-sm font-bold text-white">Account</span>
-                          <span className="text-[10px] text-zinc-500 uppercase tracking-widest">Authorized Access</span>
+                          <span className="text-sm font-bold text-white">ACCOUNT</span>
+                          <span className="text-[10px] text-accent-green uppercase tracking-widest">AUTHORIZED_ACCESS</span>
                        </div>
                     </div>
                   </Show>

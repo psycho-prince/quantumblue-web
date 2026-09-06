@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Terminal } from "lucide-react";
+import { ArrowRight, Cpu, Terminal } from "lucide-react";
 import Link from "next/link";
 import { TerminalWidget } from "./TerminalWidget";
 import { LatticeVisualization } from "./LatticeVisualization";
@@ -24,12 +24,10 @@ export function Hero() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-wrap items-center gap-2.5 px-4 py-1.5 bg-blue-500/5 border border-blue-500/20 rounded-full mb-8 backdrop-blur-xl"
+            className="flex items-center gap-2 px-3 py-1 bg-accent-blue/10 border border-accent-blue/30 rounded-none mb-8"
           >
-            <span className="flex h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
-            <span className="text-[9px] font-extrabold text-blue-400 uppercase tracking-widest">Emergent Ventures Backed</span>
-            <span className="text-[9px] text-zinc-600 font-bold uppercase">|</span>
-            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Founded by Prince T. Philip</span>
+            <span className="flex h-2 w-2 rounded-full bg-accent-blue animate-pulse" />
+            <span className="text-[10px] font-bold text-accent-blue uppercase tracking-widest font-mono">SYSTEM_STATUS: SECURE_V3.0</span>
           </motion.div>
 
           <div className="mb-8">
@@ -37,10 +35,10 @@ export function Hero() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-white"
+              className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-white font-mono"
             >
-              Future-Proof Your <br />
-              <span className="text-blue-500">Enterprise Data.</span>
+              FUTURE_PROOF YOUR <br />
+              <span className="neon-text-blue">ENTERPRISE_DATA</span>
             </motion.h1>
           </div>
           
@@ -48,9 +46,9 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-lg md:text-xl text-zinc-400 max-w-xl font-medium mb-12 leading-relaxed"
+            className="text-lg md:text-xl text-zinc-400 max-w-xl font-mono mb-12 leading-relaxed"
           >
-            Deploy quantum-resistant security infrastructure across your entire stack. From CLI tools to high-scale APIs, secure your legacy against the quantum threat.
+            DEPLOY QUANTUM_RESISTANT SECURITY INFRASTRUCTURE. FROM CLI_TOOLS TO HIGH_SCALE APIS, SECURE YOUR LEGACY AGAINST THE THREAT.
           </motion.p>
 
           <motion.div 
@@ -59,12 +57,12 @@ export function Hero() {
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center gap-4"
           >
-            <Link href="/dashboard" className="btn-saas-primary group gap-2">
-              Start Building <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Link href="/dashboard" className="px-8 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono group flex items-center gap-2">
+              BUILD_NOW <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="/coming-soon" className="btn-saas-secondary group gap-2">
-              <Terminal className="w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
-              Explore CLI Docs
+            <Link href="/coming-soon" className="px-8 py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest font-mono group flex items-center gap-2">
+              <Terminal className="w-4 h-4" />
+              CLI_DOCS
             </Link>
           </motion.div>
         </div>
@@ -76,11 +74,10 @@ export function Hero() {
           className="relative group"
         >
           {/* Subtle Glow behind terminal */}
-          <div className="absolute -inset-10 bg-blue-500/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+          <div className="absolute -inset-10 bg-accent-blue/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           
-          <div className="relative glass rounded-[2.5rem] p-1 border-white/10 shadow-2xl overflow-hidden">
-             <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
-             <div className="bg-black/80 rounded-[2.4rem] p-4">
+          <div className="relative glass-glow-blue rounded-none p-1 border-accent-blue/30 shadow-[0_0_50px_rgba(59,130,246,0.1)] overflow-hidden">
+             <div className="bg-black/90 p-4">
                <TerminalWidget />
              </div>
           </div>

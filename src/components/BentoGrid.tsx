@@ -5,50 +5,50 @@ import { Lock, Cpu, Fingerprint, Terminal, Shield, Database } from "lucide-react
 
 const CARDS = [
   {
-    title: "Post-Quantum Cryptography APIs",
-    description: "Enterprise-grade ML-KEM and ML-DSA endpoints. Future-proof your applications with one API call.",
+    title: "PQC_API_ENDPOINTS",
+    description: "ENTERPRISE_GRADE ML-KEM AND ML-DSA ENDPOINTS. FUTURE_PROOF YOUR APPLICATIONS WITH ONE API CALL.",
     icon: Cpu,
     span: "md:col-span-8",
-    tags: ["FIPS-203 Ready", "High Throughput"],
-    bg: "bg-blue-600/5"
+    tags: ["FIPS_203_READY", "HIGH_THROUGHPUT"],
+    bg: "bg-accent-blue/10"
   },
   {
-    title: "Zero-Trust Data Vaults",
-    description: "Immutable storage with lattice-based encryption at rest and in transit.",
+    title: "ZERO_TRUST_VAULTS",
+    description: "IMMUTABLE STORAGE WITH LATTICE_BASED ENCRYPTION AT REST AND IN TRANSIT.",
     icon: Database,
     span: "md:col-span-4",
-    status: "v2.4.1 Stable",
-    bg: "bg-indigo-600/5"
+    status: "V2.4.1_STABLE",
+    bg: "bg-accent-blue/10"
   },
   {
-    title: "Quantum Identity Core",
-    description: "Biometric and device-bound identity protocols designed for the post-quantum era.",
+    title: "IDENTITY_CORE",
+    description: "BIOMETRIC AND DEVICE_BOUND IDENTITY PROTOCOLS DESIGNED FOR THE POST_QUANTUM ERA.",
     icon: Fingerprint,
     span: "md:col-span-4",
     live: true,
-    bg: "bg-emerald-600/5"
+    bg: "bg-accent-green/10"
   },
   {
-    title: "Quantum Blue CLI",
-    description: "The ultimate developer tool. Encrypt, sign, and deploy from your terminal.",
+    title: "QUANTUM_BLUE_CLI",
+    description: "THE ULTIMATE DEVELOPER TOOL. ENCRYPT, SIGN, AND DEPLOY FROM YOUR TERMINAL.",
     icon: Terminal,
     span: "md:col-span-8",
     terminal: true,
-    bg: "bg-slate-600/5"
+    bg: "bg-accent-blue/10"
   },
   {
-    title: "Compliance & Security Hub",
-    description: "Real-time auditing and automated compliance reports for NIST and ISO standards.",
+    title: "COMPLIANCE_HUB",
+    description: "REAL_TIME AUDITING AND AUTOMATED COMPLIANCE REPORTS FOR NIST AND ISO STANDARDS.",
     icon: Shield,
     span: "md:col-span-6",
-    bg: "bg-purple-600/5"
+    bg: "bg-accent-blue/10"
   },
   {
-    title: "Hybrid Network Protocol",
-    description: "Seamlessly bridge legacy RSA/ECC with next-gen lattice-based security.",
+    title: "HYBRID_PROTOCOL",
+    description: "SEAMLESSLY BRIDGE LEGACY RSA/ECC WITH NEXT_GEN LATTICE_BASED SECURITY.",
     icon: Lock,
     span: "md:col-span-6",
-    bg: "bg-cyan-600/5"
+    bg: "bg-accent-blue/10"
   }
 ];
 
@@ -62,10 +62,10 @@ export function BentoGrid() {
           viewport={{ once: true }}
           className="space-y-4 max-w-2xl"
         >
-          <span className="text-blue-500 font-bold text-[10px] uppercase tracking-[0.2em] block">Platform Ecosystem</span>
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white">Quantum-Safe <br />Infrastructure.</h2>
-          <p className="text-zinc-500 text-lg font-medium leading-relaxed">
-            Everything you need to secure your modern enterprise against the threats of tomorrow. A complete ecosystem for post-quantum security.
+          <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">PLATFORM_ECOSYSTEM</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white font-mono">QUANTUM_SAFE <br />INFRASTRUCTURE.</h2>
+          <p className="text-zinc-400 text-lg font-mono leading-relaxed">
+            EVERYTHING YOU NEED TO SECURE YOUR MODERN ENTERPRISE AGAINST THE THREATS OF TOMORROW.
           </p>
         </motion.div>
       </div>
@@ -78,16 +78,16 @@ export function BentoGrid() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
-            className={`${card.span} glass rounded-[2.5rem] p-8 md:p-10 min-h-[380px] flex flex-col justify-between group overflow-hidden relative border border-white/5 hover:border-white/10 transition-all`}
+            className={`${card.span} glass rounded-none p-8 md:p-10 min-h-[380px] flex flex-col justify-between group overflow-hidden relative border border-border-bright transition-all hover:border-accent-blue`}
           >
             <div className="relative z-10">
-              <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mb-8 group-hover:border-blue-500/30 transition-colors">
-                <card.icon className="w-5 h-5 text-zinc-400 group-hover:text-blue-400 transition-colors" />
+              <div className="w-12 h-12 bg-black border border-accent-blue/50 flex items-center justify-center mb-8 group-hover:bg-accent-blue group-hover:text-black transition-colors">
+                <card.icon className="w-5 h-5 text-accent-blue group-hover:text-black transition-colors" />
               </div>
-              <h3 className={`font-bold text-white tracking-tight mb-4 ${card.span.includes('col-span-8') ? 'text-3xl' : 'text-xl'}`}>
+              <h3 className={`font-bold text-white tracking-tight mb-4 font-mono ${card.span.includes('col-span-8') ? 'text-3xl' : 'text-xl'}`}>
                 {card.title}
               </h3>
-              <p className="text-zinc-500 text-lg font-medium leading-relaxed max-w-md">
+              <p className="text-zinc-400 text-sm font-mono leading-relaxed max-w-md">
                 {card.description}
               </p>
             </div>
@@ -96,30 +96,27 @@ export function BentoGrid() {
               {card.tags && (
                 <div className="flex gap-2">
                   {card.tags.map(tag => (
-                    <span key={tag} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold uppercase tracking-widest text-zinc-400">{tag}</span>
+                    <span key={tag} className="px-3 py-1 bg-accent-blue/10 border border-accent-blue/30 text-[9px] font-bold uppercase tracking-widest text-accent-blue font-mono">{tag}</span>
                   ))}
                 </div>
               )}
               {card.status && <div className="font-mono text-[10px] text-zinc-600">{card.status}</div>}
               {card.live && (
                 <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                  <span className="font-mono text-[9px] text-blue-500 uppercase tracking-widest">Active Nodes</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-accent-green animate-pulse" />
+                  <span className="font-mono text-[9px] text-accent-green uppercase tracking-widest">ACTIVE_NODES</span>
                 </div>
               )}
               {card.terminal && (
-                <div className="bg-black/60 border border-white/10 rounded-xl p-6 font-mono text-[10px] sm:text-xs shadow-2xl">
+                <div className="bg-black border border-accent-blue/30 p-6 font-mono text-[10px] sm:text-xs">
                   <div className="space-y-2">
                     <p className="flex gap-2"><span className="text-zinc-600">$</span> <span className="text-zinc-300">qb init --project enterprise</span></p>
-                    <p className="text-emerald-500 ml-4 font-bold">✓ Infrastructure Deployed</p>
-                    <p className="text-zinc-500 ml-4 font-bold">Initializing ML-KEM Keypairs...</p>
+                    <p className="text-accent-green ml-4 font-bold">✓ INFRASTRUCTURE_DEPLOYED</p>
+                    <p className="text-zinc-500 ml-4 font-bold">INITIALIZING_ML_KEM_KEYPAIRS...</p>
                   </div>
                 </div>
               )}
             </div>
-
-            {/* Subtle Gradient Backdrop */}
-            <div className={`absolute -bottom-20 -right-20 w-80 h-80 ${card.bg} rounded-full blur-[100px] group-hover:opacity-100 opacity-30 transition-all duration-700`} />
           </motion.div>
         ))}
       </div>
