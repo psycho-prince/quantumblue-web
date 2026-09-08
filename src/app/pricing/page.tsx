@@ -7,46 +7,47 @@ import { motion } from "framer-motion";
 export default function PricingPage() {
   const tiers = [
     {
-      name: "Developer",
-      price: "$0",
-      description: "Everything you need to build quantum-safe applications for personal projects.",
+      name: "Startup / Scale",
+      price: "$999",
+      description: "For high-growth startups requiring military-grade cryptographic infrastructure.",
       features: [
-        "Access to Quantum Blue CLI",
-        "Local Lattice Encryption",
-        "Community Documentation",
-        "Standard API Rate Limits"
+        "Up to 1M PQC Operations / mo",
+        "Centralized Key Management",
+        "Cloud-Hosted PQC Endpoints",
+        "Immutable Audit Logs",
+        "Standard SLA & Support"
       ],
-      button: "Get Started",
-      href: "/dashboard",
+      button: "Start Free Trial",
+      href: "/sign-up",
       highlight: false
     },
     {
-      name: "Professional",
-      price: "$29",
-      description: "Advanced infrastructure and higher limits for growing teams and startups.",
+      name: "Enterprise",
+      price: "$4,999",
+      description: "Dedicated infrastructure for financial institutions and large-scale tech companies.",
       features: [
-        "Centralized Key Management",
-        "High-Scale PQC Endpoints",
-        "Team Workspace & RBAC",
-        "Standard Architecture Support",
-        "Custom Metadata Sealing"
+        "Unlimited PQC Operations",
+        "Dedicated Sentinel Nodes",
+        "Hardware Security Module (HSM) Integrations",
+        "Continuous CBOM Scanning",
+        "24/7 Priority Engineering Support"
       ],
-      button: "Contact Sales",
+      button: "Deploy Now",
       href: "/contact",
       highlight: true
     },
     {
-      name: "Enterprise",
+      name: "Sovereign / Defense",
       price: "Custom",
-      description: "Dedicated security infrastructure and support for global organizations.",
+      description: "Air-gapped and strictly regulated deployments for nation-states and defense contractors.",
       features: [
-        "Dedicated Sentinel Nodes",
-        "On-Premise Deployment Options",
-        "Compliance & Security Audits",
-        "24/7 Strategic Support",
-        "Custom Integration Engineering"
+        "100% On-Premise / Sovereign Cloud",
+        "FIPS 140-3 Level 3 Hardware Provisioning",
+        "Custom Lattice Parameter Sets",
+        "White-glove Regulatory Compliance",
+        "Dedicated Cryptography Engineers"
       ],
-      button: "Talk to Sales",
+      button: "Contact Executive Team",
       href: "/contact",
       highlight: false
     }
