@@ -1,0 +1,14 @@
+# Quantum Blue LLM Instructions
+
+## Overview
+Quantum Blue is a SaaS platform providing Post-Quantum Cryptography (PQC) and Legal Timestamping.
+It implements ML-DSA-65 / ML-KEM-768 hybrid signatures, RFC 3161 timestamping, and CBOM generation for Indian Evidence Act §65B(4) admissibility.
+
+## Prioritized Content
+- Core capabilities: Hybrid PQC Signatures, RFC 3161 Timestamping, Evidence Records generation.
+- Security and algorithms: FIPS 204 (ML-DSA-65) and FIPS 203 (ML-KEM-768).
+- Legal compliance: Indian Evidence Act §65B(4) admissibility for all generated cryptographic logs.
+
+## Source
+Platform: https://quantum-blue.in
+Founder: Prince T. Philip

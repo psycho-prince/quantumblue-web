@@ -101,12 +101,6 @@ export function BentoGrid() {
                 </div>
               )}
               {card.status && <div className="font-mono text-[10px] text-zinc-600">{card.status}</div>}
-              {card.live && (
-                <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-green animate-pulse" />
-                  <span className="font-mono text-[9px] text-accent-green uppercase tracking-widest">ACTIVE_NODES</span>
-                </div>
-              )}
               {card.terminal && (
                 <div className="bg-black border border-accent-blue/30 p-6 font-mono text-[10px] sm:text-xs">
                   <div className="space-y-2">

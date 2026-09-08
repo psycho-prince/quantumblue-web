@@ -5,6 +5,7 @@ import { BriefingShield } from "@/components/BriefingShield";
 import { Stats } from "@/components/Stats";
 import { TrustBanner } from "@/components/TrustBanner";
 import { HowItWorks } from "@/components/HowItWorks";
+import { CryptoTests } from "@/components/CryptoTests";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Hero />
       <TrustBanner />
       <BentoGrid />
+      <CryptoTests />
       <HowItWorks />
 
       {/* Legal Admissibility Context */}
