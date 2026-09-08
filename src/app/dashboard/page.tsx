@@ -481,6 +481,11 @@ export default function Dashboard() {
                        if (res.ok) {
                          const data = await res.json();
                          setPqcKey(data);
+                       } else if (res.status === 429) {
+                         const errData = await res.json();
+                         alert(errData.error || "Rate limit exceeded.");
+                       } else {
+                         alert("Failed to generate keys. Check your API configuration.");
                        }
                        setGeneratingPqc(false);
                      }}
