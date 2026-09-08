@@ -112,11 +112,21 @@ export default function CheckoutPage() {
               )}
 
               <div className="space-y-4 pt-4">
-                <button className="w-full btn-saas-primary py-4 text-sm">
+                <button 
+                  onClick={() => {
+                    const btn = document.getElementById('checkout-btn');
+                    if (btn) btn.innerText = "Processing...";
+                    setTimeout(() => {
+                      window.location.href = "/dashboard";
+                    }, 1500);
+                  }}
+                  id="checkout-btn"
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold uppercase tracking-widest py-4 rounded-xl transition-all text-sm"
+                >
                   Start My 14-Day Free Trial
                 </button>
                 <p className="text-[10px] text-zinc-600 text-center uppercase tracking-widest leading-loose">
-                  By clicking above, you agree to our <Link href="/legal" className="underline hover:text-zinc-400">Terms of Service</Link> <br />
+                  By clicking above, you agree to our <Link href="/terms" className="underline hover:text-zinc-400">Terms of Service</Link> <br />
                   and authorize Quantum Blue to charge your payment method after the trial ends.
                 </p>
               </div>
