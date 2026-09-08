@@ -31,8 +31,8 @@ export default function PricingPage() {
         "Standard Architecture Support",
         "Custom Metadata Sealing"
       ],
-      button: "Start 14-Day Free Trial",
-      href: "/checkout",
+      button: "Contact Sales",
+      href: "/contact",
       highlight: true
     },
     {
