@@ -491,7 +491,7 @@ export default function Dashboard() {
                        setGeneratingPqc(false);
                      }}
                      disabled={generatingPqc}
-                     className="w-full md:w-auto px-8 py-3 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono hover:bg-accent-blue/80 transition-all disabled:opacity-50"
+                     className="w-full md:w-auto px-10 py-4 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 text-white font-bold uppercase tracking-widest font-mono shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(99,102,241,0.6)] hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 rounded-lg border border-white/20"
                    >
                      {generatingPqc ? "GENERATING_LATTICE..." : "REQUEST_PQC_KEYPAIR"}
                    </button>
