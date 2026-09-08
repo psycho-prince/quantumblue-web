@@ -14,11 +14,11 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jet
 const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" });
 
 export const metadata: Metadata = {
-  title: "Quantum Blue | The Quantum-Safe Infrastructure Platform",
-  description: "Secure your enterprise against the quantum threat. Deploy future-proof encryption, identity, and data vaults across your entire stack.",
+  title: "Quantum Blue — Post-Quantum Cryptography & Legal Timestamping CLI",
+  description: "Open-source Go CLI implementing ML-DSA-65 / ML-KEM-768 hybrid signatures, RFC 3161 timestamping, and CBOM generation for Indian Evidence Act §65B(4) admissibility.",
   openGraph: {
-    title: "Quantum Blue | Post-Quantum Security Ecosystem",
-    description: "Enterprise-grade quantum-resistant security infrastructure.",
+    title: "Quantum Blue — Open-Source PQC Signing & Legal Timestamping CLI",
+    description: "Hybrid PQC signing (ML-DSA-65), RFC 3161 timestamping & CBOM generation for legal evidence admissibility.",
     type: "website",
     url: "https://quantum-blue.in",
   }
@@ -61,44 +61,44 @@ export default function RootLayout({
                 <span className="font-bold text-xl tracking-tight text-white font-['Plus_Jakarta_Sans']">Quantum Blue</span>
               </div>
               <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
-                The foundation for a quantum-safe world. Secure your data today, for the challenges of tomorrow.
+                Open-source Go CLI for hybrid post-quantum signing, RFC 3161 timestamping, and CBOM generation. Built for Indian Evidence Act §65B(4) admissibility.
               </p>
             </div>
             
             <div className="space-y-6">
-              <h4 className="text-white font-bold text-sm tracking-tight uppercase">Ecosystem</h4>
+              <h4 className="text-white font-bold text-sm tracking-tight uppercase">CLI Tool</h4>
               <ul className="space-y-3 text-zinc-500 text-sm">
-                <li><Link href="/platform#apis" className="hover:text-blue-400 transition-colors">Encryption APIs</Link></li>
-                <li><Link href="/platform#vaults" className="hover:text-blue-400 transition-colors">Vault Services</Link></li>
-                <li><Link href="/platform#identity" className="hover:text-blue-400 transition-colors">Identity Core</Link></li>
-                <li><Link href="/dashboard" className="hover:text-blue-400 transition-colors">Quantum Blue CLI</Link></li>
+                <li><a href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">GitHub Repository</a></li>
+                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/docs/TECH_SPEC_HYBRID_PQC_TSA.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Technical Spec</a></li>
+                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/docs/LEGAL_COMPLIANCE_CHECKLIST.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">§65B Compliance</a></li>
+                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Contributing</a></li>
               </ul>
             </div>
 
             <div className="space-y-6">
-              <h4 className="text-white font-bold text-sm tracking-tight uppercase">Resources</h4>
+              <h4 className="text-white font-bold text-sm tracking-tight uppercase">Specifications</h4>
               <ul className="space-y-3 text-zinc-500 text-sm">
-                <li><Link href="/resources#documentation" className="hover:text-blue-400 transition-colors">Documentation</Link></li>
-                <li><Link href="/resources#technical-papers" className="hover:text-blue-400 transition-colors">Technical Papers</Link></li>
-                <li><Link href="/resources#security-audit" className="hover:text-blue-400 transition-colors">Security Audit</Link></li>
-                <li><Link href="/contact" className="hover:text-blue-400 transition-colors">Expert Consultation</Link></li>
+                <li><span className="hover:text-blue-400 transition-colors">NIST FIPS 204 (ML-DSA-65)</span></li>
+                <li><span className="hover:text-blue-400 transition-colors">NIST FIPS 203 (ML-KEM-768)</span></li>
+                <li><span className="hover:text-blue-400 transition-colors">IETF RFC 3161 Timestamping</span></li>
+                <li><span className="hover:text-blue-400 transition-colors">Indian Evidence Act §65B(4)</span></li>
               </ul>
             </div>
 
             <div className="space-y-6">
-              <h4 className="text-white font-bold text-sm tracking-tight uppercase">Company</h4>
+              <h4 className="text-white font-bold text-sm tracking-tight uppercase">Project</h4>
               <ul className="space-y-3 text-zinc-500 text-sm">
-                <li><Link href="/about" className="hover:text-blue-400 transition-colors">About Us</Link></li>
-                <li><Link href="/press" className="hover:text-blue-400 transition-colors">Press Kit</Link></li>
-                <li><Link href="/legal" className="hover:text-blue-400 transition-colors">Legal & Compliance</Link></li>
-                <li><Link href="/pricing" className="hover:text-blue-400 transition-colors">Enterprise Plans</Link></li>
+                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/LICENSE" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">License (MIT)</a></li>
+                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/SECURITY.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Security Policy</a></li>
+                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/CHANGELOG.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Changelog</a></li>
+                <li><Link href="/contact" className="hover:text-blue-400 transition-colors">Contact</Link></li>
               </ul>
             </div>
           </div>
 
           <div className="max-w-7xl mx-auto px-6 pt-12 mt-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6">
             <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
-              &copy; 2026 Quantum Blue Inc. &bull; Engineered for the future.
+              &copy; 2026 Quantum Blue &mdash; a project by Prince T. Philip
             </div>
             <div className="flex gap-4 items-center">
                  <div className="opacity-[0.02] hover:opacity-10 transition-opacity cursor-default select-none" title="Novus Ordo Seclorum">

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { UserButton, useUser, useClerk } from "@clerk/nextjs";
+import { UserButton, useUser, useClerk, useOrganization } from "@clerk/nextjs";
 import Link from "next/link";
-import { ShieldCheck, Key, Trash, RefreshCw, FileText, Copy, Send, Sparkles, Zap, Menu, X, Activity, Cpu, Library, LogOut } from "lucide-react";
+import { ShieldCheck, Key, RefreshCw, FileText, Copy, Send, Sparkles, Zap, Menu, X, Activity, Cpu, Library, LogOut, ScanLine, AlertTriangle, LayoutDashboard, Trash } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe } from "@/components/Globe";
 import { EncryptedText } from "@/components/EncryptedText";
@@ -26,6 +26,7 @@ type Asset = {
 export default function Dashboard() {
   const { user } = useUser();
   const { signOut } = useClerk();
+  const { organization } = useOrganization();
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [newKeyName, setNewKeyName] = useState("");
@@ -154,7 +155,9 @@ export default function Dashboard() {
 
           <nav className="flex-1 space-y-1">
             {[
-              { id: "overview", label: "DASHBOARD", icon: Activity },
+              { id: "overview", label: "OVERVIEW", icon: LayoutDashboard },
+              { id: "scans", label: "SCANS", icon: ScanLine },
+              { id: "anomalies", label: "ANOMALIES", icon: AlertTriangle },
               { id: "quickstart", label: "QUICK_START", icon: Zap },
               { id: "keys", label: "ACCESS_KEYS", icon: Key },
               { id: "notary", label: "REGISTRY", icon: FileText },
@@ -300,6 +303,37 @@ export default function Dashboard() {
                         VIEW_DOCUMENTATION
                      </button>
                   </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === "scans" && (
+              <motion.div 
+                key="scans" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
+              >
+                <div className="pb-6 border-b border-border-bright">
+                   <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">SCAN_MANAGEMENT</span>
+                   <h1 className="text-3xl font-bold tracking-tight font-mono">SCANS</h1>
+                </div>
+                <div className="glass p-8 border border-border-bright">
+                  <p className="text-zinc-400 text-sm font-mono">Use the CLI to scan and push:</p>
+                  <code className="text-[11px] font-mono text-accent-blue block mt-2">qb scan /path/to/target --push --endpoint https://app.quantum-blue.in</code>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === "anomalies" && (
+              <motion.div 
+                key="anomalies" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
+              >
+                <div className="pb-6 border-b border-border-bright">
+                   <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">ANOMALY_DETECTION</span>
+                   <h1 className="text-3xl font-bold tracking-tight font-mono">ANOMALIES</h1>
+                </div>
+                <div className="glass p-8 border border-border-bright">
+                  <p className="text-zinc-400 text-sm font-mono">Anomalies are detected automatically when a new quantum-vulnerable primitive appears at a new location compared to the previous scan.</p>
                 </div>
               </motion.div>
             )}
@@ -498,36 +532,36 @@ export default function Dashboard() {
                        key={i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
                        className={cn(
                          "p-5 text-sm font-medium leading-relaxed max-w-[80%] font-mono border",
-                         m.role === "assistant" ? "bg-zinc-900 text-zinc-300 border-border-bright self-start" : "bg-accent-blue text-black border-accent-blue self-end ml-auto"
+                         m.role === "assistant" 
+                           ? "bg-zinc-900 text-zinc-200 border-border-bright" 
+                           : "bg-accent-blue/10 text-accent-blue border-accent-blue/30 ml-auto"
                        )}
                      >
                        {m.content}
                      </motion.div>
                    ))}
                    {isTyping && (
-                     <div className="flex gap-1.5 ml-4">
-                        <div className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-bounce" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-bounce [animation-delay:0.2s]" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-bounce [animation-delay:0.4s]" />
+                     <div className="p-5 bg-zinc-900 text-zinc-200 border border-border-bright max-w-[80%] font-mono">
+                       <span className="animate-pulse">ANALYZING...</span>
                      </div>
                    )}
                 </div>
 
-                <div className="p-8 bg-black border-t border-border-bright">
-                   <form onSubmit={handleSendMessage} className="relative group">
-                      <input 
-                        type="text" placeholder="ANALYZE_SECURITY_POSTURE_OR_INQUIRE_ABOUT_PQC_PROTOCOLS..." value={input} onChange={(e) => setInput(e.target.value)}
-                        className="relative w-full bg-zinc-950 border border-border-bright py-4 px-6 text-sm focus:outline-none focus:border-accent-blue transition-all placeholder:text-zinc-600 font-mono text-white"
+                <form onSubmit={handleSendMessage} className="p-6 border-t border-border-bright bg-zinc-950">
+                   <div className="flex gap-3">
+                      <input
+                        type="text" value={input} onChange={(e) => setInput(e.target.value)}
+                        placeholder="QUERY_SECURITY_POSTURE..."
+                        className="flex-1 bg-black border border-border-bright py-3 px-4 text-sm focus:outline-none focus:border-accent-blue font-mono text-white placeholder:text-zinc-600"
                       />
-                      <button className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-accent-blue text-black hover:bg-white transition-colors">
-                        <Send className="w-4 h-4" />
+                      <button type="submit" className="px-6 py-3 bg-accent-blue text-black font-bold uppercase tracking-widest text-xs font-mono hover:bg-accent-blue/80 transition-colors">
+                         <Send className="w-4 h-4" />
                       </button>
-                   </form>
-                </div>
+                   </div>
+                </form>
               </motion.div>
             )}
           </AnimatePresence>
-
         </main>
       </div>
     </div>

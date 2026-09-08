@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "./src/generated/prisma"
 }
 
 datasource db {
@@ -27,21 +27,21 @@ model ApiKey {
 }
 
 model Scan {
-  id             String        @id @default(uuid())
-  organizationId String
-  organization   Organization  @relation(fields: [organizationId], references: [id])
-  targetName     String
+  id              String       @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id])
+  targetName      String
   bomSerialNumber String
-  rawBom         Json
-  createdAt      DateTime      @default(now())
-  findings       Finding[]
-  anomalies      Anomaly[]
+  rawBom          Json
+  createdAt       DateTime     @default(now())
+  findings        Finding[]
+  anomalies       Anomaly[]
 }
 
 model Finding {
-  id                       String   @id @default(uuid())
+  id                       String  @id @default(uuid())
   scanId                   String
-  scan                     Scan     @relation(fields: [scanId], references: [id])
+  scan                     Scan    @relation(fields: [scanId], references: [id])
   bomRef                   String
   name                     String
   primitive                String

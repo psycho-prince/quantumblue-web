@@ -1,17 +1,13 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import { auth } from '@clerk/nextjs/server';
 
 export async function GET() {
-  const { userId } = await auth();
+  const { userId, orgId } = await auth();
   if (!userId) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
 
-  const assets = await prisma.notarizedAsset.findMany({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-  });
-
-  return NextResponse.json(assets);
+  // In the new schema, assets are stored as findings within scans
+  // This endpoint is deprecated — use /api/scans instead
+  return NextResponse.json([]);
 }

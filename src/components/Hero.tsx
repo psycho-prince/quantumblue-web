@@ -27,7 +27,7 @@ export function Hero() {
             className="flex items-center gap-2 px-3 py-1 bg-accent-blue/10 border border-accent-blue/30 rounded-none mb-8"
           >
             <span className="flex h-2 w-2 rounded-full bg-accent-blue animate-pulse" />
-            <span className="text-[10px] font-bold text-accent-blue uppercase tracking-widest font-mono">SYSTEM_STATUS: SECURE_V3.0</span>
+            <span className="text-[10px] font-bold text-accent-blue uppercase tracking-widest font-mono">OPEN-SOURCE GO CLI</span>
           </motion.div>
 
           <div className="mb-8">
@@ -37,8 +37,8 @@ export function Hero() {
               transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-white font-mono"
             >
-              FUTURE_PROOF YOUR <br />
-              <span className="neon-text-blue">ENTERPRISE_DATA</span>
+              POST-QUANTUM <br />
+              <span className="neon-text-blue">SIGNING & TIMESTAMPING</span>
             </motion.h1>
           </div>
           
@@ -48,7 +48,7 @@ export function Hero() {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="text-lg md:text-xl text-zinc-400 max-w-xl font-mono mb-12 leading-relaxed"
           >
-            DEPLOY QUANTUM_RESISTANT SECURITY INFRASTRUCTURE. FROM CLI_TOOLS TO HIGH_SCALE APIS, SECURE YOUR LEGACY AGAINST THE THREAT.
+            HYBRID ML-DSA-65 + ED25519 SIGNATURES, RFC 3161 TIMESTAMPING, AND CBOM GENERATION FOR INDIAN EVIDENCE ACT §65B(4) ADMISSIBILITY.
           </motion.p>
 
           <motion.div 
@@ -57,12 +57,12 @@ export function Hero() {
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center gap-4"
           >
-            <Link href="/dashboard" className="px-8 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono group flex items-center gap-2">
-              BUILD_NOW <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Link href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="px-8 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono group flex items-center gap-2">
+              VIEW ON GITHUB <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="/coming-soon" className="px-8 py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest font-mono group flex items-center gap-2">
+            <Link href="https://github.com/psycho-prince/quantumblue-cli#readme" target="_blank" rel="noopener" className="px-8 py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest font-mono group flex items-center gap-2">
               <Terminal className="w-4 h-4" />
-              CLI_DOCS
+              README
             </Link>
           </motion.div>
         </div>

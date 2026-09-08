@@ -1,22 +1,22 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import crypto from 'crypto';
 
 export async function POST(req: Request) {
-  // Extract API key from headers
   const authHeader = req.headers.get('authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return new NextResponse('Unauthorized: Missing or invalid token', { status: 401 });
   }
 
   const token = authHeader.split(' ')[1];
+  const keyHash = crypto.createHash('sha256').update(token).digest('hex');
 
-  // Validate API key
   const apiKey = await prisma.apiKey.findUnique({
-    where: { key: token },
+    where: { keyHash },
   });
 
-  if (!apiKey) {
-    return new NextResponse('Unauthorized: Invalid token', { status: 401 });
+  if (!apiKey || apiKey.revokedAt) {
+    return new NextResponse('Unauthorized: Invalid or revoked token', { status: 401 });
   }
 
   try {
@@ -26,20 +26,12 @@ export async function POST(req: Request) {
       return new NextResponse('Bad Request: filename and signatureHash are required', { status: 400 });
     }
 
-    // Simulate Post-Quantum Tax (Lattice-based math overhead)
-    await new Promise(resolve => setTimeout(resolve, 300));
+    return NextResponse.json({
+      success: false,
+      message: 'Asset sync is now handled through the scan system. Use POST /api/scans instead.',
+      deprecated: true,
+    }, { status: 410 });
 
-    // Store notarization log
-    const asset = await prisma.notarizedAsset.create({
-      data: {
-        userId: apiKey.userId,
-        apiKeyId: apiKey.id,
-        filename,
-        signatureHash, // Expecting ML-DSA-87 (~3,309 bytes)
-      },
-    });
-
-    return NextResponse.json({ success: true, asset });
   } catch (error: unknown) {
     console.error('Error syncing asset:', error);
     return new NextResponse('Internal Server Error', { status: 500 });

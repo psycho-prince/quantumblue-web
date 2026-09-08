@@ -5,24 +5,24 @@ import { Lock, Cpu, Fingerprint, Terminal, Shield, Database } from "lucide-react
 
 const CARDS = [
   {
-    title: "PQC_API_ENDPOINTS",
-    description: "ENTERPRISE_GRADE ML-KEM AND ML-DSA ENDPOINTS. FUTURE_PROOF YOUR APPLICATIONS WITH ONE API CALL.",
+    title: "HYBRID_PQC_SIGNATURES",
+    description: "COMBINES ML-DSA-65 (FIPS 204) WITH ED25519 FOR QUANTUM-RESISTANT SIGNATURES THAT REMAIN CLASSICALLY VERIFIABLE TODAY.",
     icon: Cpu,
     span: "md:col-span-8",
-    tags: ["FIPS_203_READY", "HIGH_THROUGHPUT"],
+    tags: ["FIPS_204", "ML-DSA-65"],
     bg: "bg-accent-blue/10"
   },
   {
-    title: "ZERO_TRUST_VAULTS",
-    description: "IMMUTABLE STORAGE WITH LATTICE_BASED ENCRYPTION AT REST AND IN TRANSIT.",
-    icon: Database,
+    title: "RFC_3161_TIMESTAMPING",
+    description: "BINDS FILES TO TRUSTED TSA CLOCK AUTHORITIES, CREATING IMMUTABLE PROOF OF EXISTENCE.",
+    icon: Lock,
     span: "md:col-span-4",
-    status: "V2.4.1_STABLE",
+    status: "RFC_3161_COMPLIANT",
     bg: "bg-accent-blue/10"
   },
   {
-    title: "IDENTITY_CORE",
-    description: "BIOMETRIC AND DEVICE_BOUND IDENTITY PROTOCOLS DESIGNED FOR THE POST_QUANTUM ERA.",
+    title: "§65B_EVIDENCE_RECORDS",
+    description: "GENERATES VERIFICATION LOGS AND CERTIFICATES FORMATTED FOR INDIAN EVIDENCE ACT §65B(4) ADMISSIBILITY.",
     icon: Fingerprint,
     span: "md:col-span-4",
     live: true,
@@ -30,23 +30,23 @@ const CARDS = [
   },
   {
     title: "QUANTUM_BLUE_CLI",
-    description: "THE ULTIMATE DEVELOPER TOOL. ENCRYPT, SIGN, AND DEPLOY FROM YOUR TERMINAL.",
+    description: "OPEN-SOURCE GO CLI. KEYGEN, SIGN, VERIFY, AND GENERATE CBOM FROM YOUR TERMINAL.",
     icon: Terminal,
     span: "md:col-span-8",
     terminal: true,
     bg: "bg-accent-blue/10"
   },
   {
-    title: "COMPLIANCE_HUB",
-    description: "REAL_TIME AUDITING AND AUTOMATED COMPLIANCE REPORTS FOR NIST AND ISO STANDARDS.",
+    title: "CBOM_GENERATION",
+    description: "AUTOMATED CRYPTOGRAPHIC BILL OF MATERIALS IN CYCLONEDX JSON FORMAT FOR AUDIT TRAILS.",
     icon: Shield,
     span: "md:col-span-6",
     bg: "bg-accent-blue/10"
   },
   {
-    title: "HYBRID_PROTOCOL",
-    description: "SEAMLESSLY BRIDGE LEGACY RSA/ECC WITH NEXT_GEN LATTICE_BASED SECURITY.",
-    icon: Lock,
+    title: "ML-KEM-768_KEY_EXCHANGE",
+    description: "MODULE-LATTICE KEY ENCAPSULATION (FIPS 203) FOR QUANTUM-SAFE KEY EXCHANGE OPERATIONS.",
+    icon: Database,
     span: "md:col-span-6",
     bg: "bg-accent-blue/10"
   }
@@ -62,10 +62,10 @@ export function BentoGrid() {
           viewport={{ once: true }}
           className="space-y-4 max-w-2xl"
         >
-          <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">PLATFORM_ECOSYSTEM</span>
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white font-mono">QUANTUM_SAFE <br />INFRASTRUCTURE.</h2>
+          <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">CLI_CAPABILITIES</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white font-mono">CRYPTOGRAPHIC <br />TOOLCHAIN.</h2>
           <p className="text-zinc-400 text-lg font-mono leading-relaxed">
-            EVERYTHING YOU NEED TO SECURE YOUR MODERN ENTERPRISE AGAINST THE THREATS OF TOMORROW.
+            EVERY CAPABILITY AVAILABLE IN THE OPEN-SOURCE QUANTUMBLUE CLI TOOL.
           </p>
         </motion.div>
       </div>
@@ -110,9 +110,9 @@ export function BentoGrid() {
               {card.terminal && (
                 <div className="bg-black border border-accent-blue/30 p-6 font-mono text-[10px] sm:text-xs">
                   <div className="space-y-2">
-                    <p className="flex gap-2"><span className="text-zinc-600">$</span> <span className="text-zinc-300">qb init --project enterprise</span></p>
-                    <p className="text-accent-green ml-4 font-bold">✓ INFRASTRUCTURE_DEPLOYED</p>
-                    <p className="text-zinc-500 ml-4 font-bold">INITIALIZING_ML_KEM_KEYPAIRS...</p>
+                    <p className="flex gap-2"><span className="text-zinc-600">$</span> <span className="text-zinc-300">qb keygen --scheme hybrid-mldsa65-ed25519</span></p>
+                    <p className="text-accent-green ml-4 font-bold">✓ KEYPAIR_GENERATED</p>
+                    <p className="text-zinc-500 ml-4 font-bold">ML-DSA-65 + Ed25519 hybrid key saved to ~/.qb/keys/</p>
                   </div>
                 </div>
               )}

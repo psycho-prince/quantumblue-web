@@ -3,18 +3,18 @@ import { Terminal, Cpu, Layout } from "lucide-react";
 export function HowItWorks() {
   const steps = [
     {
-      title: "1. INTEGRATE",
-      description: "CONNECT YOUR EXISTING INFRASTRUCTURE VIA OUR QUANTUM BLUE CLI OR HIGH_PERFORMANCE APIS. SEAMLESSLY BRIDGE YOUR LEGACY SYSTEMS.",
+      title: "1. INSTALL",
+      description: "INSTALL THE QUANTUMBLUE CLI VIA GO INSTALL OR DOWNLOAD A SIGNED BINARY FROM GITHUB RELEASES.",
       icon: Terminal,
     },
     {
-      title: "2. ENCRYPT",
-      description: "DEPLOY NIST_STANDARD ML_KEM AND ML_DSA ENCRYPTION ACROSS YOUR DATA LAYER. PROTECT ASSETS WITH MATHEMATICAL LATTICE IMMUNITY.",
+      title: "2. SIGN",
+      description: "GENERATE HYBRID ML-DSA-65 + ED25519 KEYPAIRS AND SIGN FILES WITH RFC 3161 TIMESTAMPS FOR LEGAL ADMISSIBILITY.",
       icon: Cpu,
     },
     {
-      title: "3. SCALE",
-      description: "MONITOR, AUDIT, AND SCALE YOUR QUANTUM_SAFE INFRASTRUCTURE GLOBALLY. MAINTAIN FULL SOVEREIGN CONTROL OVER YOUR ENTERPRISE SECURITY.",
+      title: "3. VERIFY",
+      description: "VERIFY SIGNATURES, VALIDATE TIMESTAMP CHAINS, AND EXPORT CBOM MANIFESTS FOR §65B(4) COMPLIANCE AUDITS.",
       icon: Layout,
     }
   ];
@@ -23,8 +23,8 @@ export function HowItWorks() {
     <section className="py-32 bg-black border-t border-border-bright">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-20">
-          <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] mb-4 block font-mono">THE_PROCESS</span>
-          <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-none font-mono">SIMPLE_INTEGRATION. <br />UNIVERSAL_PROTECTION.</h2>
+          <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] mb-4 block font-mono">HOW_IT_WORKS</span>
+          <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-none font-mono">INSTALL. SIGN. <br />VERIFY.</h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">

@@ -3,9 +3,9 @@ import Link from "next/link";
 
 export function TrustBanner() {
   const standards = [
-    { name: "NIST_FIPS_203", icon: ShieldCheck },
-    { name: "KYBER_768_INTEGRATED", icon: Cpu },
-    { name: "DILITHIUM3_SIGNATURES", icon: Fingerprint },
+    { name: "NIST FIPS 204 (ML-DSA-65)", icon: ShieldCheck },
+    { name: "NIST FIPS 203 (ML-KEM-768)", icon: Cpu },
+    { name: "RFC 3161 TIMESTAMPING", icon: Fingerprint },
   ];
 
   return (
@@ -28,10 +28,12 @@ export function TrustBanner() {
       </div>
       
       <Link 
-        href="/coming-soon" 
+        href="https://github.com/psycho-prince/quantumblue-cli/tree/main/docs" 
+        target="_blank" 
+        rel="noopener"
         className="mt-8 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-accent-blue hover:text-white transition-colors font-mono"
       >
-        ARCHITECTURE_WHITEPAPER <ArrowRight className="w-3 h-3" />
+        TECHNICAL SPEC &amp; §65B CHECKLIST <ArrowRight className="w-3 h-3" />
       </Link>
     </div>
   );

@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Copy, Check } from "lucide-react";
 
 const COMMANDS = [
-  { text: "$ qb init --project quantum-vault", delay: 1000 },
-  { text: "[+] Initializing post-quantum security layer...", delay: 500, type: "output", color: "text-zinc-500" },
-  { text: "[+] Deploying ML-KEM & ML-DSA infrastructure...", delay: 800, type: "output", color: "text-zinc-500" },
-  { text: "✓ Enterprise environment ready.", delay: 500, type: "output", color: "text-blue-500 font-bold" },
-  { text: "$ qb deploy", delay: 1200 },
-  { text: "[+] Synchronizing keys with identity core...", delay: 600, type: "output", color: "text-zinc-500" },
-  { text: "✓ Infrastructure Live at https://vault.qb.io", delay: 400, type: "output", color: "text-emerald-500 font-bold" },
+  { text: "$ qb keygen --scheme hybrid-mldsa65-ed25519", delay: 1000 },
+  { text: "[+] Generating ML-DSA-65 keypair (FIPS 204)...", delay: 500, type: "output", color: "text-zinc-500" },
+  { text: "[+] Generating Ed25519 classical keypair...", delay: 800, type: "output", color: "text-zinc-500" },
+  { text: "✓ Hybrid keypair saved to ~/.qb/keys/", delay: 500, type: "output", color: "text-blue-500 font-bold" },
+  { text: "$ qb sign --file evidence.pdf --tsa http://timestamp.digicert.com", delay: 1200 },
+  { text: "[+] Computing hybrid signature (ML-DSA-65 + Ed25519)...", delay: 600, type: "output", color: "text-zinc-500" },
+  { text: "✓ Signed: evidence.pdf.qbsig (RFC 3161 timestamp bound)", delay: 400, type: "output", color: "text-emerald-500 font-bold" },
 ];
 
 export function TerminalWidget() {
@@ -37,7 +37,7 @@ export function TerminalWidget() {
   }, [currentIndex]);
 
   const copyUrl = () => {
-    navigator.clipboard.writeText("https://vault.qb.io");
+    navigator.clipboard.writeText("go install github.com/psycho-prince/quantumblue-cli@latest");
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };

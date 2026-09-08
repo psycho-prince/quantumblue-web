@@ -3,16 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, Menu, X, Cpu } from "lucide-react";
-import { SignInButton, Show, UserButton } from '@clerk/nextjs';
 import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const NAV_LINKS = [
-    { label: 'Platform', href: '/platform' },
-    { label: 'Pricing', href: '/pricing' },
-    { label: 'Resources', href: '/resources' },
+    { label: 'Features', href: '/#platform' },
+    { label: 'CLI Examples', href: '/#platform' },
+    { label: 'Specs', href: '/#security' },
     { label: 'Contact', href: '/contact' }
   ];
 
@@ -42,29 +41,15 @@ export function Navbar() {
 
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-4">
-              <Show when="signed-out">
-                <SignInButton mode="modal">
-                  <button className="px-4 py-1.5 text-xs font-mono text-white hover:text-accent-blue transition-colors">
-                    LOG_IN
-                  </button>
-                </SignInButton>
-                <SignInButton mode="modal">
-                  <button className="px-4 py-1.5 text-xs font-mono bg-accent-blue/10 border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-black transition-all">
-                    SIGN_UP
-                  </button>
-                </SignInButton>
-              </Show>
-              <Show when="signed-in">
-                <Link
-                  href="/dashboard"
-                  className="px-4 py-1.5 text-xs font-mono bg-accent-blue/10 border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-black transition-all"
-                >
-                  WORKSPACE
-                </Link>
-                <div className="flex items-center justify-center p-0.5 border border-accent-blue/30 rounded-full">
-                  <UserButton appearance={{ elements: { userButtonAvatarBox: 'w-7 h-7' } }} />
-                </div>
-              </Show>
+              <a 
+                href="https://github.com/psycho-prince/quantumblue-cli" 
+                target="_blank" 
+                rel="noopener"
+                className="px-4 py-1.5 text-xs font-mono bg-accent-blue/10 border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-black transition-all flex items-center gap-2"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                GITHUB
+              </a>
             </div>
             
             <button 
@@ -120,30 +105,22 @@ export function Navbar() {
                 </nav>
 
                 <div className="pt-8 border-t border-accent-blue/30 space-y-4">
-                  <Show when="signed-out">
-                    <SignInButton mode="modal">
-                      <button className="w-full py-4 bg-accent-blue text-black font-bold uppercase tracking-widest">SIGN_UP</button>
-                    </SignInButton>
-                    <SignInButton mode="modal">
-                      <button className="w-full py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest">LOG_IN</button>
-                    </SignInButton>
-                  </Show>
-                  <Show when="signed-in">
-                    <Link
-                      href="/dashboard"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block w-full py-4 bg-accent-blue text-black font-bold uppercase tracking-widest text-center"
-                    >
-                      WORKSPACE
-                    </Link>
-                    <div className="flex items-center gap-4 p-4 glass rounded-none border border-accent-blue/30">
-                       <UserButton appearance={{ elements: { userButtonAvatarBox: 'w-10 h-10' } }} />
-                       <div className="flex flex-col overflow-hidden">
-                          <span className="text-sm font-bold text-white">ACCOUNT</span>
-                          <span className="text-[10px] text-accent-green uppercase tracking-widest">AUTHORIZED_ACCESS</span>
-                       </div>
-                    </div>
-                  </Show>
+                  <a 
+                    href="https://github.com/psycho-prince/quantumblue-cli" 
+                    target="_blank" 
+                    rel="noopener"
+                    className="block w-full py-4 bg-accent-blue text-black font-bold uppercase tracking-widest text-center"
+                  >
+                    VIEW ON GITHUB
+                  </a>
+                  <a 
+                    href="https://github.com/psycho-prince/quantumblue-cli#readme" 
+                    target="_blank" 
+                    rel="noopener"
+                    className="block w-full py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest text-center"
+                  >
+                    README
+                  </a>
                 </div>
               </div>
             </motion.div>
