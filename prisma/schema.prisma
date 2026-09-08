@@ -11,8 +11,9 @@ model Organization {
   id        String   @id @default(uuid())
   name      String
   createdAt DateTime @default(now())
-  apiKeys   ApiKey[]
-  scans     Scan[]
+  apiKeys    ApiKey[]
+  scans      Scan[]
+  auditEvents AuditEvent[]
 }
 
 model ApiKey {
@@ -58,4 +59,13 @@ model Anomaly {
   description    String
   severity       String
   createdAt      DateTime @default(now())
+}
+
+model AuditEvent {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  action         String
+  details        Json
+  createdAt      DateTime     @default(now())
 }
