@@ -373,20 +373,21 @@ export default function Dashboard() {
                    </div>
 
                    <div className="glass p-8 border border-border-bright space-y-6">
-                      <h3 className="text-xl font-bold font-mono">CLI_REFERENCE</h3>
-                      <div className="space-y-4">
-                         {[
-                           { cmd: "QB_INIT", desc: "LINK_YOUR_LOCAL_MACHINE_TO_THE_ECOSYSTEM." },
-                           { cmd: "QB_SEAL_[FILE]", desc: "APPLY_LATTICE_BASED_ENCRYPTION_TO_A_FILE." },
-                           { cmd: "QB_VERIFY_[HASH]", desc: "CHECK_ASSET_INTEGRITY_AGAINST_REGISTRY." },
-                           { cmd: "QB_KEYS", desc: "MANAGE_YOUR_ACTIVE_PQC_KEYPAIRS." }
-                         ].map(item => (
-                           <div key={item.cmd} className="p-4 bg-black border border-border-bright space-y-1">
-                              <code className="text-[11px] font-mono text-accent-blue font-bold">{item.cmd}</code>
-                              <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest font-mono">{item.desc}</p>
-                           </div>
-                         ))}
-                      </div>
+                       <h3 className="text-xl font-bold font-mono">NODE.JS SDK INTEGRATION</h3>
+                       <div className="space-y-4">
+                          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest font-mono">1_LINE_OF_CODE_FOR_FINANCIAL_GRADE_SECURITY</p>
+                          <div className="p-4 bg-black border border-border-bright space-y-1 overflow-hidden">
+                             <code className="text-[10px] font-mono text-accent-blue font-bold whitespace-pre">
+{`import { QuantumBlue } from '@quantumblue/sdk';
+
+const qb = new QuantumBlue({ apiKey: 'YOUR_KEY' });
+
+// Sign financial payload with ML-DSA-65
+const signature = await qb.sign({ amount: 500M });
+`}
+                             </code>
+                          </div>
+                       </div>
                    </div>
                 </div>
 
