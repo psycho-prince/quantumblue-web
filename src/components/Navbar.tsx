@@ -13,7 +13,8 @@ export function Navbar() {
 
   const NAV_LINKS = [
     { label: 'Features', href: '/#platform' },
-    { label: 'CLI Examples', href: '/#platform' },
+    { label: 'API Docs', href: '/docs' },
+    { label: 'Pricing', href: '/pricing' },
     { label: 'Specs', href: '/#security' },
     { label: 'Contact', href: '/contact' }
   ];
