@@ -8,6 +8,7 @@ import { ShieldCheck, Globe, Lock, Activity } from "lucide-react";
 import clsx from "clsx";
 import { ClerkProvider } from '@clerk/nextjs';
 import { Navbar } from "@/components/Navbar";
+import { CookieBanner } from "@/components/CookieBanner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
@@ -66,22 +67,11 @@ export default function RootLayout({
             </div>
             
             <div className="space-y-6">
-              <h4 className="text-white font-bold text-sm tracking-tight uppercase">CLI Tool</h4>
+              <h4 className="text-white font-bold text-sm tracking-tight uppercase">CLI Tool & Specs</h4>
               <ul className="space-y-3 text-zinc-500 text-sm">
                 <li><a href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">GitHub Repository</a></li>
-                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/docs/TECH_SPEC_HYBRID_PQC_TSA.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Technical Spec</a></li>
-                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/docs/LEGAL_COMPLIANCE_CHECKLIST.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">§65B Compliance</a></li>
-                <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Contributing</a></li>
-              </ul>
-            </div>
-
-            <div className="space-y-6">
-              <h4 className="text-white font-bold text-sm tracking-tight uppercase">Specifications</h4>
-              <ul className="space-y-3 text-zinc-500 text-sm">
-                <li><span className="hover:text-blue-400 transition-colors">NIST FIPS 204 (ML-DSA-65)</span></li>
-                <li><span className="hover:text-blue-400 transition-colors">NIST FIPS 203 (ML-KEM-768)</span></li>
-                <li><span className="hover:text-blue-400 transition-colors">IETF RFC 3161 Timestamping</span></li>
-                <li><span className="hover:text-blue-400 transition-colors">Indian Evidence Act §65B(4)</span></li>
+                <li><Link href="/it-regulations" className="hover:text-blue-400 transition-colors">Technical Spec & §65B</Link></li>
+                <li><a href="https://github.com/psycho-prince/quantumblue-web" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Web Platform Repo</a></li>
               </ul>
             </div>
 
@@ -125,17 +115,9 @@ export default function RootLayout({
           </div>
         </footer>
 
-        {/* Cookie Consent & Legal Notice Banner */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-black/90 backdrop-blur-md border-t border-white/10 z-50">
-          <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-zinc-400 text-xs text-center sm:text-left leading-relaxed">
-              By using Quantum Blue, you agree to our <Link href="/terms" className="text-white underline hover:text-blue-400">User Permission Agreement</Link>, <Link href="/privacy" className="text-white underline hover:text-blue-400">Privacy Policy</Link>, and our compliance with <Link href="/it-regulations" className="text-white underline hover:text-blue-400">IT Regulations</Link>. We use essential cookies to provide our SaaS platform.
-            </p>
-            <button className="whitespace-nowrap px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-full transition-colors">
-              Accept & Continue
-            </button>
-          </div>
-        </div>
+        </footer>
+
+        <CookieBanner />
 
       </body>
     </html>
