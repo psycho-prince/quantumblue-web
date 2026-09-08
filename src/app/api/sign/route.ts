@@ -9,7 +9,8 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    const response = await fetch('http://localhost:8080/v1/sign', {
+    const daemonUrl = process.env.DAEMON_URL || 'http://localhost:8080';
+    const response = await fetch(`${daemonUrl}/v1/sign`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

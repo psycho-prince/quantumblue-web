@@ -15,7 +15,8 @@ export async function POST(request: Request) {
     // or use the authHeader if provided from frontend.
     
     // For this demonstration, we'll hit the daemon directly
-    const response = await fetch('http://localhost:8080/v1/keys', {
+    const daemonUrl = process.env.DAEMON_URL || 'http://localhost:8080';
+    const response = await fetch(`${daemonUrl}/v1/keys`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
