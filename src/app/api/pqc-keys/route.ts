@@ -77,10 +77,16 @@ export async function POST(request: Request) {
       }
     });
 
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("Daemon returned error:", response.status, errText);
+      return NextResponse.json({ error: `Daemon error: ${response.status} - ${errText}` }, { status: response.status });
+    }
+
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error proxying keys request:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: `Internal Server Error: ${error.message || String(error)}` }, { status: 500 });
   }
 }

@@ -485,7 +485,8 @@ export default function Dashboard() {
                          const errData = await res.json();
                          alert(errData.error || "Rate limit exceeded.");
                        } else {
-                         alert("Failed to generate keys. Check your API configuration.");
+                         const errData = await res.json().catch(() => ({}));
+                         alert(`Failed to generate keys. ${errData.error || ''}`);
                        }
                        setGeneratingPqc(false);
                      }}
