@@ -33,6 +33,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [pqcKey, setPqcKey] = useState<{ public_key: string, private_key: string } | null>(null);
+  const [generatingPqc, setGeneratingPqc] = useState(false);
   
   // AI Agent State
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([
@@ -160,6 +162,7 @@ export default function Dashboard() {
               { id: "anomalies", label: "ANOMALIES", icon: AlertTriangle },
               { id: "quickstart", label: "QUICK_START", icon: Zap },
               { id: "keys", label: "ACCESS_KEYS", icon: Key },
+              { id: "pqc-keys", label: "PQC_KEYS", icon: ShieldCheck },
               { id: "notary", label: "REGISTRY", icon: FileText },
               { id: "intelligence", label: "SECURITY_AI", icon: Cpu },
             ].map((item) => (
@@ -452,6 +455,63 @@ export default function Dashboard() {
                          {keys.length === 0 && <div className="text-center py-10 text-zinc-600 font-bold uppercase text-[10px] tracking-widest font-mono">NO_KEYS_GENERATED_YET.</div>}
                       </div>
                    </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === "pqc-keys" && (
+              <motion.div 
+                key="pqc-keys" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
+              >
+                <div className="pb-6 border-b border-border-bright">
+                   <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">CRYPTOGRAPHIC_MATERIAL</span>
+                   <h1 className="text-3xl font-bold tracking-tight font-mono">POST-QUANTUM KEYS</h1>
+                </div>
+
+                <div className="glass p-8 border border-border-bright space-y-6">
+                   <h3 className="text-lg font-bold font-mono">GENERATE ML-DSA-65 KEYPAIR</h3>
+                   <p className="text-zinc-400 text-sm font-mono leading-relaxed">
+                     Generate a true lattice-based post-quantum keypair natively via the QuantumBlue Crypto Engine.
+                   </p>
+                   <button 
+                     onClick={async () => {
+                       setGeneratingPqc(true);
+                       const res = await fetch("/api/pqc-keys", { method: "POST" });
+                       if (res.ok) {
+                         const data = await res.json();
+                         setPqcKey(data);
+                       }
+                       setGeneratingPqc(false);
+                     }}
+                     disabled={generatingPqc}
+                     className="w-full md:w-auto px-8 py-3 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono hover:bg-accent-blue/80 transition-all disabled:opacity-50"
+                   >
+                     {generatingPqc ? "GENERATING_LATTICE..." : "REQUEST_PQC_KEYPAIR"}
+                   </button>
+                   
+                   {pqcKey && (
+                     <div className="mt-8 space-y-4">
+                       <div className="p-4 bg-black border border-border-bright space-y-2">
+                         <div className="flex justify-between">
+                            <span className="text-[10px] font-bold text-accent-green uppercase tracking-widest font-mono">PUBLIC_KEY (ML-DSA-65)</span>
+                            <Copy onClick={() => navigator.clipboard.writeText(pqcKey.public_key)} className="w-4 h-4 text-zinc-500 cursor-pointer hover:text-white" />
+                         </div>
+                         <div className="max-h-32 overflow-y-auto custom-scrollbar">
+                            <code className="text-[10px] font-mono text-zinc-400 break-all">{pqcKey.public_key}</code>
+                         </div>
+                       </div>
+                       <div className="p-4 bg-black border border-accent-red/30 space-y-2">
+                         <div className="flex justify-between">
+                            <span className="text-[10px] font-bold text-accent-red uppercase tracking-widest font-mono">PRIVATE_KEY (SENSITIVE)</span>
+                            <Copy onClick={() => navigator.clipboard.writeText(pqcKey.private_key)} className="w-4 h-4 text-zinc-500 cursor-pointer hover:text-white" />
+                         </div>
+                         <div className="max-h-32 overflow-y-auto custom-scrollbar opacity-30 hover:opacity-100 transition-opacity">
+                            <code className="text-[10px] font-mono text-zinc-500 break-all">{pqcKey.private_key}</code>
+                         </div>
+                       </div>
+                     </div>
+                   )}
                 </div>
               </motion.div>
             )}
