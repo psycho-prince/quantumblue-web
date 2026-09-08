@@ -45,6 +45,7 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-blue-500/5 blur-[100px] rounded-full" />
             <BriefingShield />
           </div>
+        </div>
       </section>
 
       {/* SaaS Sales / Demo CTA & NPM Install */}

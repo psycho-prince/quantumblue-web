@@ -115,8 +115,6 @@ export default function RootLayout({
           </div>
         </footer>
 
-        </footer>
-
         <CookieBanner />
 
       </body>
