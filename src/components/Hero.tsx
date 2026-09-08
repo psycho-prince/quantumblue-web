@@ -27,7 +27,7 @@ export function Hero() {
             className="flex items-center gap-2 px-3 py-1 bg-accent-blue/10 border border-accent-blue/30 rounded-none mb-8"
           >
             <span className="flex h-2 w-2 rounded-full bg-accent-blue animate-pulse" />
-            <span className="text-[10px] font-bold text-accent-blue uppercase tracking-widest font-mono">OPEN-SOURCE GO CLI</span>
+            <span className="text-[10px] font-bold text-accent-blue uppercase tracking-widest font-mono">QUANTUM BLUE</span>
           </motion.div>
 
           <div className="mb-8">
@@ -35,10 +35,10 @@ export function Hero() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-5xl md:text-7xl font-bold leading-[1.1] tracking-tight text-white font-mono"
+              className="text-4xl md:text-6xl font-bold leading-[1.1] tracking-tight text-white font-mono uppercase"
             >
-              POST-QUANTUM <br />
-              <span className="neon-text-blue">SIGNING & TIMESTAMPING</span>
+              THE POST-QUANTUM <br />
+              <span className="neon-text-blue">SECURITY PLATFORM</span>
             </motion.h1>
           </div>
           
@@ -46,23 +46,32 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-lg md:text-xl text-zinc-400 max-w-xl font-mono mb-12 leading-relaxed"
+            className="text-lg md:text-xl text-zinc-400 max-w-xl font-mono mb-6 leading-relaxed"
           >
-            HYBRID ML-DSA-65 + ED25519 SIGNATURES, RFC 3161 TIMESTAMPING, AND CBOM GENERATION FOR INDIAN EVIDENCE ACT §65B(4) ADMISSIBILITY.
+            Discover quantum risk. Migrate legacy cryptography. Protect critical data with standardized post-quantum cryptography.
+          </motion.p>
+
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-sm md:text-md text-accent-blue font-bold tracking-widest font-mono mb-12"
+          >
+            DISCOVER → MIGRATE → PROTECT → PROVE
           </motion.p>
 
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center gap-4"
+            className="flex flex-col sm:flex-row items-center gap-4 w-full"
           >
-            <Link href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="px-8 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono group flex items-center gap-2">
-              VIEW ON GITHUB <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Link href="/contact" className="px-8 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono flex-1 text-center group flex items-center justify-center gap-2">
+              ENTERPRISE CLOUD <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="https://github.com/psycho-prince/quantumblue-cli#readme" target="_blank" rel="noopener" className="px-8 py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest font-mono group flex items-center gap-2">
+            <Link href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="px-8 py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest font-mono flex-1 text-center group flex items-center justify-center gap-2">
               <Terminal className="w-4 h-4" />
-              README
+              CLI TOOLKIT
             </Link>
           </motion.div>
         </div>
