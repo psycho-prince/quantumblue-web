@@ -27,11 +27,39 @@ export async function GET(req: NextRequest) {
     where: { scan: { organizationId }, primitive: "unknown" },
   });
 
+  // PQC Operations over the last 7 days
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  const auditEvents = await prisma.auditEvent.findMany({
+    where: {
+      organizationId,
+      action: { in: ['SIGN_ENVELOPE', 'VERIFY_ENVELOPE', 'GENERATE_CBOM'] },
+      createdAt: { gte: sevenDaysAgo }
+    },
+    select: { createdAt: true }
+  });
+
+  const dailyOps: Record<string, number> = {};
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    dailyOps[d.toISOString().split('T')[0]] = 0;
+  }
+
+  auditEvents.forEach(e => {
+    const dateStr = e.createdAt.toISOString().split('T')[0];
+    if (dailyOps[dateStr] !== undefined) {
+      dailyOps[dateStr]++;
+    }
+  });
+
   return NextResponse.json({
     totalScans,
     totalFindings,
     findingsByLevel,
     unknownCount,
+    dailyOps,
     recentScans: scans.map((s) => ({
       id: s.id,
       targetName: s.targetName,

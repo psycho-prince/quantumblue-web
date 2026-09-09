@@ -35,6 +35,8 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [pqcKey, setPqcKey] = useState<{ public_key: string, private_key: string } | null>(null);
   const [generatingPqc, setGeneratingPqc] = useState(false);
+  const [stats, setStats] = useState<any>(null);
+  const [anomalies, setAnomalies] = useState<any[]>([]);
   
   // AI Agent State
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([
@@ -62,11 +64,25 @@ export default function Dashboard() {
     }
   };
 
+  const fetchStats = async () => {
+    const headers: HeadersInit = process.env.NODE_ENV === "development" ? { "x-org-id": "org-test-001" } : {};
+    const [statsRes, anomRes] = await Promise.all([
+      fetch("/api/dashboard/stats", { headers }),
+      fetch("/api/anomalies", { headers })
+    ]);
+    if (statsRes.ok) {
+      setStats(await statsRes.json());
+    }
+    if (anomRes.ok) {
+      setAnomalies(await anomRes.json());
+    }
+  };
+
   useEffect(() => {
     const initDashboard = async () => {
       const isDev = process.env.NODE_ENV === "development";
       if (user || isDev) {
-        await Promise.all([fetchKeys(), fetchAssets()]);
+        await Promise.all([fetchKeys(), fetchAssets(), fetchStats()]);
         setLoading(false);
       }
     };
@@ -272,17 +288,28 @@ export default function Dashboard() {
                            <Globe />
                         </div>
                         <div className="grid grid-cols-3 gap-8 mt-8 border-t border-border-bright pt-8">
-                           <div>
-                              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-1">GLOBAL_NODES</p>
-                              <p className="text-2xl font-bold text-white font-mono">1,248</p>
-                           </div>
-                           <div>
-                              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-1">MEAN_LATENCY</p>
-                              <p className="text-2xl font-bold text-white font-mono">12MS</p>
-                           </div>
-                           <div>
-                              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-1">PQC_ENTROPY</p>
-                              <p className="text-2xl font-bold text-white font-mono">99.9%</p>
+                           <div className="col-span-3">
+                              <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-sm font-bold text-white font-mono uppercase tracking-widest">PQC_OPERATIONS_CHART</h3>
+                                <span className="text-[10px] text-zinc-500 uppercase tracking-widest">LAST_7_DAYS</span>
+                              </div>
+                              <div className="h-48 flex items-end gap-2">
+                                {stats?.dailyOps && Object.entries(stats.dailyOps).map(([date, count]: [string, any]) => (
+                                  <div key={date} className="flex-1 flex flex-col items-center gap-2 group">
+                                    <div className="w-full bg-accent-blue/20 relative group-hover:bg-accent-blue/40 transition-colors" style={{ height: `${Math.max((count / Math.max(...Object.values(stats.dailyOps) as number[], 1)) * 100, 2)}%` }}>
+                                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black border border-border-bright text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                        {count} ops
+                                      </div>
+                                    </div>
+                                    <span className="text-[9px] text-zinc-500 hidden md:block">{new Date(date).toLocaleDateString(undefined, { weekday: 'short' })}</span>
+                                  </div>
+                                ))}
+                                {(!stats?.dailyOps || Object.keys(stats.dailyOps).length === 0) && (
+                                  <div className="w-full h-full flex items-center justify-center border border-border-bright border-dashed">
+                                    <span className="text-xs text-zinc-500 font-bold uppercase tracking-widest">0_OPERATIONS_RECORDED</span>
+                                  </div>
+                                )}
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -324,8 +351,31 @@ export default function Dashboard() {
                    <h1 className="text-3xl font-bold tracking-tight font-mono">SCANS</h1>
                 </div>
                 <div className="glass p-8 border border-border-bright">
-                  <p className="text-zinc-400 text-sm font-mono">Use the CLI to scan and push:</p>
-                  <code className="text-[11px] font-mono text-accent-blue block mt-2">qb scan /path/to/target --push --endpoint https://app.quantum-blue.in</code>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold font-mono">RECENT_SCANS</h3>
+                  </div>
+                  {stats?.recentScans?.length === 0 ? (
+                    <div className="text-center py-12">
+                      <ScanLine className="w-12 h-12 text-zinc-800 mx-auto mb-4" />
+                      <p className="text-zinc-600 font-bold uppercase text-[10px] tracking-widest">NO_SCANS_YET</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {stats?.recentScans?.map((scan: any) => (
+                        <div key={scan.id} className="flex items-center justify-between p-4 border border-border-bright hover:border-accent-blue transition-all">
+                          <div>
+                            <span className="text-sm font-bold text-white block">{scan.targetName}</span>
+                            <span className="text-[10px] text-zinc-500">{scan.findingCount} findings</span>
+                          </div>
+                          <span className="text-[10px] text-zinc-500">{new Date(scan.createdAt).toLocaleDateString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <p className="text-zinc-500 text-[10px] font-mono mt-8 pt-4 border-t border-border-bright uppercase tracking-widest">
+                    TO_INGEST_NEW_DATA, USE_THE_CLI: <br />
+                    <span className="text-accent-blue">qb scan /path/to/target --push --endpoint https://app.quantum-blue.in</span>
+                  </p>
                 </div>
               </motion.div>
             )}
@@ -340,7 +390,29 @@ export default function Dashboard() {
                    <h1 className="text-3xl font-bold tracking-tight font-mono">ANOMALIES</h1>
                 </div>
                 <div className="glass p-8 border border-border-bright">
-                  <p className="text-zinc-400 text-sm font-mono">Anomalies are detected automatically when a new quantum-vulnerable primitive appears at a new location compared to the previous scan.</p>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold font-mono">DETECTED_ANOMALIES</h3>
+                    <span className="text-[10px] font-bold text-accent-red uppercase tracking-widest">{anomalies.length} ALERTS</span>
+                  </div>
+                  {anomalies.length === 0 ? (
+                    <div className="text-center py-12">
+                      <AlertTriangle className="w-12 h-12 text-zinc-800 mx-auto mb-4" />
+                      <p className="text-zinc-600 font-bold uppercase text-[10px] tracking-widest">0_ANOMALIES_DETECTED</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {anomalies.map((anomaly: any) => (
+                         <div key={anomaly.id} className="p-4 bg-black border border-accent-red/30 space-y-2">
+                           <div className="flex justify-between">
+                              <span className="text-[10px] font-bold text-accent-red uppercase tracking-widest font-mono">{anomaly.kind} - {anomaly.severity}</span>
+                              <span className="text-[10px] text-zinc-500 font-mono">{new Date(anomaly.createdAt).toLocaleDateString()}</span>
+                           </div>
+                           <p className="text-[11px] font-mono text-zinc-400">{anomaly.description}</p>
+                           <p className="text-[10px] font-mono text-zinc-600">Scan: {anomaly.scan.targetName}</p>
+                         </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}
