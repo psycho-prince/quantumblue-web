@@ -33,7 +33,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
-  const [pqcKey, setPqcKey] = useState<{ public_key: string, private_key?: string } | null>(null);
+  const [pqcKey, setPqcKey] = useState<{ public_key: string } | null>(null);
   const [generatingPqc, setGeneratingPqc] = useState(false);
   const [stats, setStats] = useState<any>(null);
   const [anomalies, setAnomalies] = useState<any[]>([]);
