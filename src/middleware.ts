@@ -1,7 +1,7 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest, NextFetchEvent } from "next/server";
 
-export default async function middleware(req: any, evt: any) {
+export default async function middleware(req: NextRequest, evt: NextFetchEvent) {
   if (process.env.NODE_ENV === "development") {
     return NextResponse.next();
   }

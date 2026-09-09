@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       where: { organizationId: org.id, revokedAt: null }
     });
 
-    let rawApiKey = "qb_internal_key_" + crypto.randomBytes(16).toString('hex');
+    const rawApiKey = "qb_internal_key_" + crypto.randomBytes(16).toString('hex');
     
     if (!apiKeyRecord) {
       const hashedKey = crypto.createHash('sha256').update(rawApiKey).digest('hex');
@@ -89,8 +89,9 @@ export async function POST(request: Request) {
 
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error proxying keys request:', error);
-    return NextResponse.json({ error: `Internal Server Error: ${error.message || String(error)}` }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: `Internal Server Error: ${errorMessage}` }, { status: 500 });
   }
 }
