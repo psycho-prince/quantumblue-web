@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { 
   Calculator, 
   Terminal, 
@@ -13,6 +13,71 @@ import {
   ArrowLeft 
 } from "lucide-react";
 import Link from "next/link";
+
+// Static data moved outside component to avoid recreation on every render
+const CLI_OUTPUTS: Record<string, string[]> = {
+  init: [
+    "$ quantumblue init",
+    "[+] Initializing post-quantum notary environment...",
+    "[+] Loading cryptographic parameters...",
+    "[+] Generating Kyber-1024 (PQC KEM) keypair...",
+    "[+] Generating Dilithium5 (PQC Signature) keypair...",
+    "[+] Master key successfully backed by secure enclave emulation.",
+    "[+] quantumblue-cli environment initialized."
+  ],
+  register: [
+    "$ quantumblue register --owner \"Prince T Philip\"",
+    "[+] Generating cryptographic identity registration token...",
+    "[+] Contacting public post-quantum blockchain ledger...",
+    "[+] Identity registered: Dilithium5-PK-Hash: 0x9f3d51ab2c00a89d...",
+    "[+] Sovereign ownership certified."
+  ],
+  seal: [
+    "$ quantumblue seal --dir src/",
+    "[+] Scanning active workspace: src/ (Found 8 files)",
+    "[+] Compiling notary tree metadata...",
+    "[+] Running Dilithium5 high-security sign operation on manifest...",
+    "[+] Sealing files with Dilithium5 signature...",
+    "[+] Notarization complete. Manifest Hash: qb_notary_8b31a89c9d0ef...",
+    "[+] Sovereign daemon initialized: active file monitoring active."
+  ],
+  verify: [
+    "$ quantumblue verify --manifest qb_notary_8b31a89c9d0ef.json",
+    "[+] Loading signed manifest...",
+    "[+] Verifying Dilithium5 signature against registration hash...",
+    "[+] Validating file hashes against sealed manifest...",
+    "[[OK]] Integrity CHECK: 100% matched.",
+    "[[OK]] Notarized signature valid. Code integrity verified."
+  ],
+  status: [
+    "$ quantumblue status",
+    "[+] Daemon status: RUNNING (PID 40821)",
+    "[+] Monitored path: /home/kali/Desktop/src",
+    "[+] Security level: Post-Quantum Dilithium5 + Kyber-1024",
+    "[+] Auto-seal triggered: 3 times today.",
+    "[+] Notary integrity: SAFE"
+  ]
+};
+
+const TESTBENCH_STEPS = [
+  { text: "[SYS] Initializing Atom Interferometer suite...", delay: 400 },
+  { text: "[SYS] Calibrating optical platform isolation (vibration check < 1e-7 Hz)...", delay: 500 },
+  { text: "[TEST 1] Testing Central Limit Theorem Applicability...", delay: 400 },
+  { text: "[DATA] Analyzing topological correlations in Planck-scale spacetime cell foam...", delay: 600 },
+  { text: "[RESULT 1] Entangled metric states detected. Non-linear scaling (alpha ~ 0.67) confirmed. CLT is NOT applicable.", delay: 500 },
+  { text: "[TEST 2] Testing Weak Equivalence Principle (WEP) Shielding...", delay: 400 },
+  { text: "[DATA] Loading control sample (fused silica glass microtubule lattice)...", delay: 500 },
+  { text: "[DATA] Control gravity acceleration measured: 9.80665 m/s^2 (0% suppression)", delay: 600 },
+  { text: "[DATA] Loading biologically active microtubule sample (Debye-screened, structured water)...", delay: 700 },
+  { text: "[DATA] Microtubule gravity acceleration measured: 9.80665 m/s^2 (0% suppression)", delay: 600 },
+  { text: "[RESULT 2] WEP validated to 1 part in 10^15. No gravitational shielding detected. Claim: FALSIFIED.", delay: 500 },
+  { text: "[TEST 3] Testing Cosmological Spacetime Stability...", delay: 400 },
+  { text: "[DATA] Pulling Chandra/Hubble quasar light path phase coherence statistics...", delay: 600 },
+  { text: "[RESULT 3] Quasar images are sharp (blur well below 1 arcsecond). Naive metric volatility ruled out.", delay: 500 },
+  { text: "[TEST 4] Testing Microtubule Quantum Coherence Lifespans...", delay: 400 },
+  { text: "[RESULT 4] Decoherence time measured: ~10-^15 seconds. Gamma synchrony (25 ms) impossible at 310 K.", delay: 600 },
+  { text: "[CONCLUSION] OVS framework fails on all mathematical, empirical, and physical grounds.", delay: 800 }
+];
 
 export default function OvsCritiquePage() {
   // Math Simulator State
@@ -36,16 +101,28 @@ export default function OvsCritiquePage() {
   const logRw = Math.log10(rw);
   const ordersDiff = Math.abs(Math.round(logOvs - logRw));
 
-  // Console terminal states
+  // Console terminal states — useRef to track active intervals/timeouts for cleanup
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [cliActiveKey, setCliActiveKey] = useState<string | null>(null);
+  const cliIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const cliTimeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   // Testbench diagnostic states
   const [testbenchLines, setTestbenchLines] = useState<string[]>([]);
   const [isTestbenchRunning, setIsTestbenchRunning] = useState(false);
+  const testbenchTimeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   // Copy Citation state
   const [copied, setCopied] = useState(false);
+
+  // Cleanup all async timers on unmount
+  useEffect(() => {
+    return () => {
+      if (cliIntervalRef.current) clearInterval(cliIntervalRef.current);
+      cliTimeoutRefs.current.forEach(t => clearTimeout(t));
+      testbenchTimeoutRefs.current.forEach(t => clearTimeout(t));
+    };
+  }, []);
 
   useEffect(() => {
     setTerminalLines([
@@ -61,7 +138,7 @@ export default function OvsCritiquePage() {
 
   const getSuperscript = (num: number) => {
     const sups: Record<string, string> = {
-      '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
+      '-': '-', '0': '⁰', '1': '^1', '2': '^2', '3': '³', '4': '⁴', '5': '5', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
     };
     return String(num).split('').map(c => sups[c] || c).join('');
   };
@@ -78,9 +155,9 @@ export default function OvsCritiquePage() {
 
   const getLengthLabel = (logL: number) => {
     const val = Math.pow(10, logL);
-    if (logL === -3) return "1 mm (10⁻³ m)";
-    if (logL === -6) return "1 µm (10⁻⁶ m)";
-    if (logL === -9) return "1 nm (10⁻⁹ m)";
+    if (logL === -3) return "1 mm (10-³ m)";
+    if (logL === -6) return "1 µm (10-⁶ m)";
+    if (logL === -9) return "1 nm (10-⁹ m)";
     return val >= 0.01 ? `${val.toFixed(2)} m` : `${val.toExponential(1)} m`;
   };
 
@@ -92,108 +169,62 @@ export default function OvsCritiquePage() {
     });
   };
 
-  const cliOutputs: Record<string, string[]> = {
-    init: [
-      "$ quantumblue init",
-      "[+] Initializing post-quantum notary environment...",
-      "[+] Loading cryptographic parameters...",
-      "[+] Generating Kyber-1024 (PQC KEM) keypair...",
-      "[+] Generating Dilithium5 (PQC Signature) keypair...",
-      "[+] Master key successfully backed by secure enclave emulation.",
-      "[+] quantumblue-cli environment initialized."
-    ],
-    register: [
-      "$ quantumblue register --owner \"Prince T Philip\"",
-      "[+] Generating cryptographic identity registration token...",
-      "[+] Contacting public post-quantum blockchain ledger...",
-      "[+] Identity registered: Dilithium5-PK-Hash: 0x9f3d51ab2c00a89d...",
-      "[+] Sovereign ownership certified."
-    ],
-    seal: [
-      "$ quantumblue seal --dir src/",
-      "[+] Scanning active workspace: src/ (Found 8 files)",
-      "[+] Compiling notary tree metadata...",
-      "[+] Running Dilithium5 high-security sign operation on manifest...",
-      "[+] Sealing files with Dilithium5 signature...",
-      "[+] Notarization complete. Manifest Hash: qb_notary_8b31a89c9d0ef...",
-      "[+] Sovereign daemon initialized: active file monitoring active."
-    ],
-    verify: [
-      "$ quantumblue verify --manifest qb_notary_8b31a89c9d0ef.json",
-      "[+] Loading signed manifest...",
-      "[+] Verifying Dilithium5 signature against registration hash...",
-      "[+] Validating file hashes against sealed manifest...",
-      "[✓] Integrity CHECK: 100% matched.",
-      "[✓] Notarized signature valid. Code integrity verified."
-    ],
-    status: [
-      "$ quantumblue status",
-      "[+] Daemon status: RUNNING (PID 40821)",
-      "[+] Monitored path: /home/kali/Desktop/src",
-      "[+] Security level: Post-Quantum Dilithium5 + Kyber-1024",
-      "[+] Auto-seal triggered: 3 times today.",
-      "[+] Notary integrity: SAFE"
-    ]
-  };
-
-  const runCliCommand = (cmdKey: string) => {
+  const runCliCommand = useCallback((cmdKey: string) => {
     if (cliActiveKey) return;
     setCliActiveKey(cmdKey);
     setTerminalLines([]);
 
-    const lines = cliOutputs[cmdKey];
-    let idx = 0;
+    const lines = CLI_OUTPUTS[cmdKey];
+    if (!lines) return;
 
-    const interval = setInterval(() => {
+    let idx = 0;
+    // Clear any previous cli timers
+    cliTimeoutRefs.current.forEach(t => clearTimeout(t));
+    cliTimeoutRefs.current = [];
+    if (cliIntervalRef.current) clearInterval(cliIntervalRef.current);
+
+    cliIntervalRef.current = setInterval(() => {
       if (idx < lines.length) {
         setTerminalLines(prev => [...prev, lines[idx]]);
         idx++;
       } else {
-        setTerminalLines(prev => [...prev, "kali@resilience-node:~$"]);
-        setCliActiveKey(null);
-        clearInterval(interval);
+        const promptTimer = setTimeout(() => {
+          setTerminalLines(prev => [...prev, "kali@resilience-node:~$"]);
+          setCliActiveKey(null);
+          cliTimeoutRefs.current = cliTimeoutRefs.current.filter(t => t !== promptTimer);
+        }, 180);
+        cliTimeoutRefs.current.push(promptTimer);
+        if (cliIntervalRef.current) {
+          clearInterval(cliIntervalRef.current);
+        }
+        cliIntervalRef.current = null;
       }
     }, 180);
-  };
+  }, [cliActiveKey]);
 
-  const testbenchSteps = [
-    { text: "[SYS] Initializing Atom Interferometer suite...", delay: 400 },
-    { text: "[SYS] Calibrating optical platform isolation (vibration check < 1e-7 Hz)...", delay: 500 },
-    { text: "[TEST 1] Testing Central Limit Theorem Applicability...", delay: 400 },
-    { text: "[DATA] Analyzing topological correlations in Planck-scale spacetime cell foam...", delay: 600 },
-    { text: "[RESULT 1] Entangled metric states detected. Non-linear scaling (α ≈ 0.67) confirmed. CLT is NOT applicable.", delay: 500 },
-    { text: "[TEST 2] Testing Weak Equivalence Principle (WEP) Shielding...", delay: 400 },
-    { text: "[DATA] Loading control sample (fused silica glass microtubule lattice)...", delay: 500 },
-    { text: "[DATA] Control gravity acceleration measured: 9.80665 m/s² (0% suppression)", delay: 600 },
-    { text: "[DATA] Loading biologically active microtubule sample (Debye-screened, structured water)...", delay: 700 },
-    { text: "[DATA] Microtubule gravity acceleration measured: 9.80665 m/s² (0% suppression)", delay: 600 },
-    { text: "[RESULT 2] WEP validated to 1 part in 10¹⁵. No gravitational shielding detected. Claim: FALSIFIED.", delay: 500 },
-    { text: "[TEST 3] Testing Cosmological Spacetime Stability...", delay: 400 },
-    { text: "[DATA] Pulling Chandra/Hubble quasar light path phase coherence statistics...", delay: 600 },
-    { text: "[RESULT 3] Quasar images are sharp (blur threshold << 1 arcsecond). Naive metric volatility ruled out.", delay: 500 },
-    { text: "[TEST 4] Testing Microtubule Quantum Coherence Lifespans...", delay: 400 },
-    { text: "[RESULT 4] Decoherence time measured: ~10⁻¹⁵ seconds. Gamma synchrony (25 ms) impossible at 310 K.", delay: 600 },
-    { text: "[CONCLUSION] OVS framework fails on all mathematical, empirical, and physical grounds.", delay: 800 }
-  ];
-
-  const runTestbenchSequence = () => {
+  const runTestbenchSequence = useCallback(() => {
     if (isTestbenchRunning) return;
     setIsTestbenchRunning(true);
     setTestbenchLines([]);
 
     let idx = 0;
+    // Clear any previous testbench timers
+    testbenchTimeoutRefs.current.forEach(t => clearTimeout(t));
+    testbenchTimeoutRefs.current = [];
+
     const executeNext = () => {
-      if (idx < testbenchSteps.length) {
-        setTestbenchLines(prev => [...prev, testbenchSteps[idx].text]);
-        const delay = testbenchSteps[idx].delay;
+      if (idx < TESTBENCH_STEPS.length) {
+        setTestbenchLines(prev => [...prev, TESTBENCH_STEPS[idx].text]);
+        const delay = TESTBENCH_STEPS[idx].delay;
         idx++;
-        setTimeout(executeNext, delay);
+        const timer = setTimeout(executeNext, delay);
+        testbenchTimeoutRefs.current.push(timer);
       } else {
         setIsTestbenchRunning(false);
       }
     };
     executeNext();
-  };
+  }, [isTestbenchRunning]);
 
   return (
     <div className="min-h-screen bg-black pt-32 pb-20 px-6">
@@ -308,7 +339,7 @@ export default function OvsCritiquePage() {
                 <div className="border-t border-white/5 pt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                   <div className="p-4 bg-zinc-900/50 border border-white/5 rounded-2xl">
                     <span className="block text-[9px] font-bold text-zinc-500 uppercase tracking-wider">OVS Macro Variance</span>
-                    <span className="block text-base font-extrabold text-red-500 mt-1">{formatScientific(sigmaMacro)} m/s²</span>
+                    <span className="block text-base font-extrabold text-red-500 mt-1">{formatScientific(sigmaMacro)} m/s^2</span>
                   </div>
                   <div className="p-4 bg-zinc-900/50 border border-white/5 rounded-2xl">
                     <span className="block text-[9px] font-bold text-zinc-500 uppercase tracking-wider">Random Walk δl</span>
@@ -369,7 +400,7 @@ export default function OvsCritiquePage() {
                           <span className="text-teal-400">kali@resilience-node</span>:<span className="text-indigo-400">~</span> {line}
                         </div>
                       );
-                    } else if (line.startsWith("[✓]")) {
+                    } else if (line.startsWith("[[OK]]")) {
                       return <div key={i} className="text-green-400">{line}</div>;
                     } else if (line.startsWith("[+]")) {
                       return <div key={i} className="text-sky-400">{line}</div>;
@@ -480,21 +511,21 @@ export default function OvsCritiquePage() {
                 <div className="space-y-2">
                   <span className="block text-[9px] font-bold text-zinc-500 uppercase tracking-widest">1. Introduction & Context</span>
                   <p className="leading-relaxed text-justify">
-                    Recently, a derivative and highly controversial theoretical framework termed &quot;Orchestrated Variance Suppression&quot; (OVS) has surfaced, primarily authored by independent researcher Prince T. Philip. The model asserts: (1) Unobserved Gravity generates 10⁷ m/s² macroscopic variance; (2) microtubules act as gravitational Faraday cages; (3) this creates a stabilized envelope of spacetime; (4) structures evolved to support consciousness.
+                    Recently, a derivative and highly controversial theoretical framework termed &quot;Orchestrated Variance Suppression&quot; (OVS) has surfaced, primarily authored by independent researcher Prince T. Philip. The model asserts: (1) Unobserved Gravity generates 10⁷ m/s^2 macroscopic variance; (2) microtubules act as gravitational Faraday cages; (3) this creates a stabilized envelope of spacetime; (4) structures evolved to support consciousness.
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <span className="block text-[9px] font-bold text-zinc-500 uppercase tracking-widest">2. Deconstructing the CLT Fallacy</span>
                   <p className="leading-relaxed text-justify text-zinc-400">
-                    The OVS model applies the Classical Central Limit Theorem (CLT) to quantum foam. Given parameters: σ_Planck ~ 10⁻³⁵, contributions N = 10⁵, scaling S = 10⁴⁰, OVS claims σ_macro = √N × σ_Planck × S ≈ 3.16 × 10⁷ m/s². This calculation is physically invalid because spacetime geometry at quantum scales is not a pre-existing classical background, and metric fluctuations are fundamentally entangled rather than independent. Standard quantum gravity models scale non-linearly (Random Walk α=1/2, Holographic α=2/3), resulting in metric fluctuations on the order of 10⁻¹⁹ to 10⁻²⁴ m for biological scales—incomparable to OVS's claim.
+                    The OVS model applies the Classical Central Limit Theorem (CLT) to quantum foam. Given parameters: σ_Planck ~ 10-³5, contributions N = 105, scaling S = 10⁴⁰, OVS claims σ_macro = √N × σ_Planck × S ~ 3.16 × 10⁷ m/s^2. This calculation is physically invalid because spacetime geometry at quantum scales is not a pre-existing classical background, and metric fluctuations are fundamentally entangled rather than independent. Standard quantum gravity models scale non-linearly (Random Walk alpha=1/2, Holographic alpha=2/3), resulting in metric fluctuations on the order of 10-^1⁹ to 10-^2⁴ m for biological scales—incomparable to OVS's claim.
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <span className="block text-[9px] font-bold text-zinc-500 uppercase tracking-widest">3. Astrophysical Contradictions</span>
                   <p className="leading-relaxed text-justify text-zinc-400">
-                    If spacetime foam generated macroscopic variance of 10⁷ m/s², photons propagating across cosmological distances would undergo random diffusion, producing massive phase fluctuations. However, Hubble and Chandra images of cosmologically distant quasars display exceptional sharpness, indicating that the universe does not exhibit large-scale metric volatility. Lorentz invariance tests of gamma-ray bursts further establish that time-of-flight differences are infinitesimally small (~10⁻¹⁹ s), directly falsifying OVS.
+                    If spacetime foam generated macroscopic variance of 10⁷ m/s^2, photons propagating across cosmological distances would undergo random diffusion, producing massive phase fluctuations. However, Hubble and Chandra images of cosmologically distant quasars display exceptional sharpness, indicating that the universe does not exhibit large-scale metric volatility. Lorentz invariance tests of gamma-ray bursts further establish that time-of-flight differences are infinitesimally small (~10-^1⁹ s), directly falsifying OVS.
                   </p>
                 </div>
 
