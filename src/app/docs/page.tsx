@@ -44,14 +44,14 @@ export default function DocsPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent-blue/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-accent-blue/10"></div>
               <div className="flex items-center gap-4">
                 <span className="px-3 py-1 bg-accent-blue text-black font-bold font-mono text-xs tracking-widest">POST</span>
-                <code className="text-white font-mono text-lg">/api/keys</code>
+                <code className="text-white font-mono text-lg">/api/pqc-keys</code>
               </div>
               <p className="text-zinc-400 font-mono text-sm leading-relaxed">
                 Generates a pure ML-DSA-65 (Kyber/Dilithium) public and private keypair.
               </p>
               <div className="bg-black border border-border-bright p-4 overflow-x-auto">
                 <pre className="text-xs text-zinc-300 font-mono">
-                  {`curl -X POST https://quantum-blue.in/api/keys \\
+                  {`curl -X POST https://quantum-blue.in/api/pqc-keys \\
   -H "Authorization: Bearer <YOUR_API_KEY>" \\
   -H "Content-Type: application/json"`}
                 </pre>

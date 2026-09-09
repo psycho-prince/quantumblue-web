@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    const daemonUrl = process.env.DAEMON_URL || 'http://localhost:8080';
+    const daemonUrl = process.env.DAEMON_URL || 'https://quantumblue-cli.onrender.com';
     const response = await fetch(`${daemonUrl}/v1/cbom`, {
       method: 'POST',
       headers: {
@@ -19,6 +19,10 @@ export async function POST(request: Request) {
       body: JSON.stringify(body),
     });
 
+    if (!response.ok) {
+      const errText = await response.text();
+      return NextResponse.json({ error: `Daemon error: ${response.status} - ${errText}` }, { status: response.status });
+    }
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
