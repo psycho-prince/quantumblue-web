@@ -15,7 +15,7 @@ export function Navbar() {
     { label: 'Features', href: '/#platform' },
     { label: 'API Docs', href: '/docs' },
     { label: 'Pricing', href: '/pricing' },
-    { label: 'Specs', href: '/#security' },
+    { label: 'Specs', href: '/#crypto-tests' },
     { label: 'Contact', href: '/contact' }
   ];
 

@@ -25,9 +25,9 @@ export default function PrivacyPolicyPage() {
 
         <h2>2. Information We Collect</h2>
         <p>
-          <strong>Account Information:</strong> When you register, we collect your name, email address, and organizational details to provision your API keys and access.
+          <span className="font-bold text-white">Account Information:</span> When you register, we collect your name, email address, and organizational details to provision your API keys and access.
           <br /><br />
-          <strong>Cryptographic Metadata:</strong> We process cryptographic signatures, hashes, and public keys required for hybrid PQC (ML-DSA-65) validation and RFC 3161 timestamp generation. <strong>We never collect or store your private keys.</strong>
+          <span className="font-bold text-white">Cryptographic Metadata:</span> We process cryptographic signatures, hashes, and public keys required for hybrid PQC (ML-DSA-65) validation and RFC 3161 timestamp generation. <span className="font-bold text-white">We never collect or store your private keys.</span>
         </p>
 
         <h2>3. How We Use Your Data</h2>
@@ -47,7 +47,7 @@ export default function PrivacyPolicyPage() {
 
         <h2>6. Contact Us</h2>
         <p>
-          If you have questions or comments about this policy, you may email our Data Protection Officer at <strong>prince.philip@quantum-blue.in</strong>.
+          If you have questions or comments about this policy, you may email our Data Protection Officer at <span className="font-bold text-white">prince.philip@quantum-blue.in</span>.
         </p>
       </div>
     </div>

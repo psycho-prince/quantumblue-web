@@ -44,14 +44,14 @@ export default function DocsPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent-blue/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-accent-blue/10"></div>
               <div className="flex items-center gap-4">
                 <span className="px-3 py-1 bg-accent-blue text-black font-bold font-mono text-xs tracking-widest">POST</span>
-                <code className="text-white font-mono text-lg">/v1/keys</code>
+                <code className="text-white font-mono text-lg">/api/keys</code>
               </div>
               <p className="text-zinc-400 font-mono text-sm leading-relaxed">
                 Generates a pure ML-DSA-65 (Kyber/Dilithium) public and private keypair.
               </p>
               <div className="bg-black border border-border-bright p-4 overflow-x-auto">
                 <pre className="text-xs text-zinc-300 font-mono">
-                  {`curl -X POST https://quantumblue-cli.onrender.com/v1/keys \\
+                  {`curl -X POST https://quantum-blue.in/api/keys \\
   -H "Authorization: Bearer <YOUR_API_KEY>" \\
   -H "Content-Type: application/json"`}
                 </pre>
@@ -63,14 +63,14 @@ export default function DocsPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent-green/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-accent-green/10"></div>
               <div className="flex items-center gap-4">
                 <span className="px-3 py-1 bg-accent-green text-black font-bold font-mono text-xs tracking-widest">POST</span>
-                <code className="text-white font-mono text-lg">/v1/sign</code>
+                <code className="text-white font-mono text-lg">/api/sign</code>
               </div>
               <p className="text-zinc-400 font-mono text-sm leading-relaxed">
                 Cryptographically signs a payload using your ML-DSA-65 private key.
               </p>
               <div className="bg-black border border-border-bright p-4 overflow-x-auto">
                 <pre className="text-xs text-zinc-300 font-mono">
-                  {`curl -X POST https://quantumblue-cli.onrender.com/v1/sign \\
+                  {`curl -X POST https://quantum-blue.in/api/sign \\
   -H "Authorization: Bearer <YOUR_API_KEY>" \\
   -d '{"data": "base64_payload", "private_key": "your_private_key"}'`}
                 </pre>
@@ -82,7 +82,7 @@ export default function DocsPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent-red/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-accent-red/10"></div>
               <div className="flex items-center gap-4">
                 <span className="px-3 py-1 bg-accent-red text-black font-bold font-mono text-xs tracking-widest">POST</span>
-                <code className="text-white font-mono text-lg">/v1/verify</code>
+                <code className="text-white font-mono text-lg">/api/verify</code>
               </div>
               <p className="text-zinc-400 font-mono text-sm leading-relaxed">
                 Verifies a digital signature against the original payload and public key.
@@ -94,7 +94,7 @@ export default function DocsPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/5 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-yellow-500/10"></div>
               <div className="flex items-center gap-4">
                 <span className="px-3 py-1 bg-yellow-500 text-black font-bold font-mono text-xs tracking-widest">POST</span>
-                <code className="text-white font-mono text-lg">/v1/cbom</code>
+                <code className="text-white font-mono text-lg">/api/cbom</code>
               </div>
               <p className="text-zinc-400 font-mono text-sm leading-relaxed">
                 Generates a Cryptographic Bill of Materials (CBOM) by scanning your source code for legacy primitives.
