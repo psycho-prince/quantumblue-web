@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const daemonUrl = process.env.DAEMON_URL || 'https://quantum-blue.in/api';
+    const daemonUrl = process.env.DAEMON_URL || 'http://localhost:8080';
     const response = await fetch(`${daemonUrl}/v1/keys`, {
       method: 'POST',
       headers: {
