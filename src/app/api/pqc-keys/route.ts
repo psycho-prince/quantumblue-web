@@ -7,11 +7,8 @@ export async function POST(request: Request) {
   try {
     let { userId, orgId } = await auth().catch(() => ({ userId: null, orgId: null }));
     
-    // Fallback if Clerk strict auth fails in Render environment
     if (!userId) {
-      console.warn("Clerk auth failed, falling back to anonymous session");
-      userId = "anonymous_render_user";
-      orgId = "anonymous_render_org";
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Ensure user has an organization in our DB

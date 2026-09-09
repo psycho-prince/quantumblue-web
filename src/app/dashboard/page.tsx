@@ -33,7 +33,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
-  const [pqcKey, setPqcKey] = useState<{ public_key: string, private_key: string } | null>(null);
+  const [pqcKey, setPqcKey] = useState<{ public_key: string, private_key?: string } | null>(null);
   const [generatingPqc, setGeneratingPqc] = useState(false);
   const [stats, setStats] = useState<any>(null);
   const [anomalies, setAnomalies] = useState<any[]>([]);
@@ -584,15 +584,7 @@ const signature = await qb.sign({ amount: 500M });
                             <code className="text-[10px] font-mono text-zinc-400 break-all">{pqcKey.public_key}</code>
                          </div>
                        </div>
-                       <div className="p-4 bg-black border border-accent-red/30 space-y-2">
-                         <div className="flex justify-between">
-                            <span className="text-[10px] font-bold text-accent-red uppercase tracking-widest font-mono">PRIVATE_KEY (SENSITIVE)</span>
-                            <Copy onClick={() => navigator.clipboard.writeText(pqcKey.private_key)} className="w-4 h-4 text-zinc-500 cursor-pointer hover:text-white" />
-                         </div>
-                         <div className="max-h-32 overflow-y-auto custom-scrollbar opacity-30 hover:opacity-100 transition-opacity">
-                            <code className="text-[10px] font-mono text-zinc-500 break-all">{pqcKey.private_key}</code>
-                         </div>
-                       </div>
+
                      </div>
                    )}
                 </div>
