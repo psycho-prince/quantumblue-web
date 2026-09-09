@@ -1,11 +1,16 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export default function middleware(req: any, evt: any) {
+export default async function middleware(req: any, evt: any) {
   if (process.env.NODE_ENV === "development") {
     return NextResponse.next();
   }
-  return clerkMiddleware()(req, evt);
+  const response = await clerkMiddleware()(req, evt);
+  if (response && response.headers) {
+    response.headers.delete('x-clerk-auth-reason');
+    response.headers.delete('x-clerk-auth-status');
+  }
+  return response;
 }
 
 export const config = {
