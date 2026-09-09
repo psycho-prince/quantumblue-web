@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
       <div className="prose prose-invert prose-zinc max-w-none font-mono text-sm leading-relaxed">
         <h2>1. Overview</h2>
         <p>
-          Quantum Blue (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) operates the quantum-blue.in SaaS platform. We are committed to protecting your personal information and your right to privacy. This Privacy Policy adheres to global standards including the GDPR, CCPA, and India&apos;s Digital Personal Data Protection Act (DPDPA).
+          Quantum Blue (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) operates the quantum-blue.in SaaS platform. We are committed to protecting your personal information and your right to privacy. This Privacy Policy adheres to global standards including the GDPR, CCPA, UAE PDPL (Federal Decree-Law No. 45 of 2021), and India&apos;s Digital Personal Data Protection Act (DPDPA).
         </p>
 
         <h2>2. Information We Collect</h2>

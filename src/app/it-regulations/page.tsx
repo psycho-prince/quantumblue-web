@@ -35,10 +35,16 @@ export default function ITRegulationsPage() {
             <li><span className="font-bold text-white">GDPR (General Data Protection Regulation):</span> Providing transparent data processing and ensuring data subject rights.</li>
             <li><span className="font-bold text-white">DPDPA (Digital Personal Data Protection Act, India):</span> Lawful processing of digital personal data within the territorial scope of India.</li>
             <li><span className="font-bold text-white">CCPA (California Consumer Privacy Act):</span> Safeguarding consumer privacy rights and data transparency.</li>
+            <li><span className="font-bold text-white">UAE PDPL (Federal Decree-Law No. 45 of 2021):</span> Ensuring compliance with personal data protection laws within the UAE.</li>
           </ul>
         </p>
 
-        <h2>4. Audit Trails & CBOM</h2>
+        <h2>4. DIFC / UAE</h2>
+        <p>
+          Quantum Blue's output format has been mapped to DIFC Electronic Transactions Law (DIFC Law No. 2 of 2017) and DIFC Courts (RDC Parts 28 & 29) requirements, alongside the UAE National Encryption Policy (NEP 2025). [Status: complete — legal review pending].
+        </p>
+
+        <h2>5. Audit Trails & CBOM</h2>
         <p>
           The platform generates Cryptographic Bill of Materials (CBOM) conforming to the <span className="font-bold text-white">CycloneDX</span> standard. This ensures organizations can maintain comprehensive, standardized audit trails of their cryptographic assets for regulatory compliance and zero-trust architectures.
         </p>
