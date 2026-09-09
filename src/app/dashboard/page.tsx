@@ -45,7 +45,8 @@ export default function Dashboard() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const fetchKeys = async () => {
-    const res = await fetch("/api/keys");
+    const headers: HeadersInit = process.env.NODE_ENV === "development" ? { "x-org-id": "org-test-001" } : {};
+    const res = await fetch("/api/keys", { headers });
     if (res.ok) {
       const data = await res.json();
       setKeys(data);
@@ -53,7 +54,8 @@ export default function Dashboard() {
   };
 
   const fetchAssets = async () => {
-    const res = await fetch("/api/assets");
+    const headers: HeadersInit = process.env.NODE_ENV === "development" ? { "x-org-id": "org-test-001" } : {};
+    const res = await fetch("/api/assets", { headers });
     if (res.ok) {
       const data = await res.json();
       setAssets(data);
@@ -62,7 +64,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     const initDashboard = async () => {
-      if (user) {
+      const isDev = process.env.NODE_ENV === "development";
+      if (user || isDev) {
         await Promise.all([fetchKeys(), fetchAssets()]);
         setLoading(false);
       }
@@ -123,7 +126,8 @@ export default function Dashboard() {
     }, 1500);
   };
 
-  if (!user || loading) return (
+  const isDev = process.env.NODE_ENV === "development";
+  if ((!user && !isDev) || loading) return (
     <div className="min-h-screen bg-black flex items-center justify-center font-mono">
       <div className="flex flex-col items-center gap-6">
         <div className="w-16 h-16 border border-accent-blue flex items-center justify-center animate-pulse">
@@ -208,7 +212,7 @@ export default function Dashboard() {
                 <UserButton appearance={{ elements: { userButtonAvatarBox: 'w-7 h-7' } }} />
               </div>
               <div className="flex flex-col overflow-hidden">
-                <span className="text-xs font-semibold truncate text-zinc-300">{user.emailAddresses[0].emailAddress}</span>
+                <span className="text-xs font-semibold truncate text-zinc-300">{user?.emailAddresses?.[0]?.emailAddress ?? "dev@local.test"}</span>
                 <span className="text-[9px] font-bold text-accent-green uppercase tracking-wider">ADMIN_ACCESS</span>
               </div>
             </div>

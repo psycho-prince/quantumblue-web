@@ -1,6 +1,12 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware();
+export default function middleware(req: any, evt: any) {
+  if (process.env.NODE_ENV === "development") {
+    return NextResponse.next();
+  }
+  return clerkMiddleware()(req, evt);
+}
 
 export const config = {
   matcher: [
