@@ -30,7 +30,7 @@ export async function POST(req: Request) {
           clerkOrgId: internalOrgId,
           clerkUserId: userId,
           razorpayCustomerId: rzpCustomer.id,
-          name: rzpCustomer.name,
+          name: rzpCustomer.name || '',
           email: rzpCustomer.email || ''
         }
       });
