@@ -46,14 +46,13 @@ export async function POST(req: Request) {
     }
 
     // Create a Razorpay Subscription (for UPI AutoPay / Recurring)
-    // @ts-expect-error customer_id is valid but missing from SDK types
     const subscription = await razorpay.subscriptions.create({
       plan_id: planId,
       customer_id: billingCustomer.razorpayCustomerId,
       total_count: 120, // 10 years
       customer_notify: 1,
       notes: { clerkOrgId: internalOrgId }
-    });
+    } as any);
 
     await prisma.subscription.create({
       data: {
