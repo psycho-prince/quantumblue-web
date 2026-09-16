@@ -37,6 +37,7 @@ export async function POST(req: Request) {
     }
 
     let planId = '';
+    if (plan === 'STARTER') planId = process.env.RAZORPAY_STARTER_PLAN_ID || '';
     if (plan === 'PRO') planId = process.env.RAZORPAY_PRO_PLAN_ID || '';
     if (plan === 'BUSINESS') planId = process.env.RAZORPAY_BUSINESS_PLAN_ID || '';
 

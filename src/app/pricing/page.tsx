@@ -4,11 +4,28 @@ import { Check, Shield } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+import { CheckoutButton } from "@/components/CheckoutButton";
+
 export default function PricingPage() {
   const tiers = [
     {
-      name: "Startup / Scale",
-      price: "$999",
+      name: "Starter",
+      price: "₹999",
+      planKey: "STARTER",
+      description: "For individuals and small teams getting started with post-quantum security.",
+      features: [
+        "Up to 100k PQC Operations / mo",
+        "Basic Key Management",
+        "Community Support",
+        "Standard Encryption Algorithms"
+      ],
+      button: "Start Subscription",
+      highlight: false
+    },
+    {
+      name: "Pro",
+      price: "₹1,999",
+      planKey: "PRO",
       description: "For high-growth startups requiring military-grade cryptographic infrastructure.",
       features: [
         "Up to 1M PQC Operations / mo",
@@ -17,14 +34,14 @@ export default function PricingPage() {
         "Immutable Audit Logs",
         "Standard SLA & Support"
       ],
-      button: "Start Free Trial",
-      href: "/sign-up",
-      highlight: false
+      button: "Upgrade to Pro",
+      highlight: true
     },
     {
-      name: "Enterprise",
-      price: "$4,999",
-      description: "Dedicated infrastructure for financial institutions and large-scale tech companies.",
+      name: "Business",
+      price: "₹4,999",
+      planKey: "BUSINESS",
+      description: "Dedicated infrastructure for financial institutions and mid-market companies.",
       features: [
         "Unlimited PQC Operations",
         "Dedicated Sentinel Nodes",
@@ -32,23 +49,7 @@ export default function PricingPage() {
         "Continuous CBOM Scanning",
         "24/7 Priority Engineering Support"
       ],
-      button: "Deploy Now",
-      href: "/contact",
-      highlight: true
-    },
-    {
-      name: "Sovereign / Defense",
-      price: "Custom",
-      description: "Air-gapped and strictly regulated deployments for nation-states and defense contractors.",
-      features: [
-        "100% On-Premise / Sovereign Cloud",
-        "FIPS 140-3 Level 3 Hardware Provisioning",
-        "Custom Lattice Parameter Sets",
-        "White-glove Regulatory Compliance",
-        "Dedicated Cryptography Engineers"
-      ],
-      button: "Contact Executive Team",
-      href: "/contact",
+      button: "Deploy Business",
       highlight: false
     }
   ];
@@ -112,12 +113,20 @@ export default function PricingPage() {
                 </ul>
               </div>
 
-              <Link 
-                href={tier.href} 
-                className={`mt-10 w-full btn-saas ${tier.highlight ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/5 text-white hover:bg-white/10'}`}
-              >
-                {tier.button}
-              </Link>
+              {tier.price === "Custom" ? (
+                <Link 
+                  href="/contact" 
+                  className={`mt-10 w-full btn-saas flex justify-center items-center ${tier.highlight ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/5 text-white hover:bg-white/10'}`}
+                >
+                  {tier.button}
+                </Link>
+              ) : (
+                <CheckoutButton 
+                  plan={tier.planKey} 
+                  buttonText={tier.button} 
+                  className={`mt-10 w-full btn-saas ${tier.highlight ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/5 text-white hover:bg-white/10'}`} 
+                />
+              )}
             </motion.div>
           ))}
         </div>
