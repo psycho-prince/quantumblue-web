@@ -14,6 +14,12 @@ model Organization {
   apiKeys    ApiKey[]
   scans      Scan[]
   auditEvents AuditEvent[]
+  
+  // Billing Relations
+  billingCustomer BillingCustomer?
+  subscriptions   Subscription[]
+  payments        PaymentTransaction[]
+  invoices        Invoice[]
 }
 
 model ApiKey {
@@ -68,4 +74,78 @@ model AuditEvent {
   action         String
   details        Json
   createdAt      DateTime     @default(now())
+}
+
+// --- BILLING MODELS ---
+
+model BillingCustomer {
+  id                   String       @id @default(uuid())
+  clerkOrgId           String       @unique
+  organization         Organization @relation(fields: [clerkOrgId], references: [id])
+  clerkUserId          String?
+  razorpayCustomerId   String       @unique
+  zohoCustomerId       String?      @unique
+  email                String
+  name                 String
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+}
+
+model Subscription {
+  id                     String       @id @default(uuid())
+  clerkOrgId             String
+  organization           Organization @relation(fields: [clerkOrgId], references: [id])
+  razorpayCustomerId     String
+  razorpaySubscriptionId String       @unique
+  razorpayPlanId         String
+  planKey                String
+  status                 String
+  currentPeriodStart     DateTime
+  currentPeriodEnd       DateTime
+  cancelAtPeriodEnd      Boolean      @default(false)
+  cancelledAt            DateTime?
+  endedAt                DateTime?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+}
+
+model PaymentTransaction {
+  id                     String       @id @default(uuid())
+  clerkOrgId             String
+  organization           Organization @relation(fields: [clerkOrgId], references: [id])
+  razorpayPaymentId      String       @unique
+  razorpayOrderId        String?
+  razorpaySubscriptionId String?
+  amount                 Int
+  currency               String
+  status                 String
+  method                 String?
+  email                  String?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+}
+
+model Invoice {
+  id                 String       @id @default(uuid())
+  clerkOrgId         String
+  organization       Organization @relation(fields: [clerkOrgId], references: [id])
+  razorpayInvoiceId  String?      @unique
+  zohoInvoiceId      String?      @unique
+  invoiceNumber      String?
+  amount             Int
+  currency           String
+  status             String
+  invoiceUrl         String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model WebhookEvent {
+  id          String   @id @default(uuid())
+  provider    String
+  eventId     String   @unique
+  eventType   String
+  processed   Boolean  @default(false)
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
 }
