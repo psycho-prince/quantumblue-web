@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export function CheckoutButton({ plan, buttonText, className }: { plan: string, buttonText: string, className?: string }) {
   const [loading, setLoading] = useState(false);
+  const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     // Dynamically load the Razorpay checkout script
@@ -13,6 +17,11 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
   }, []);
 
   const handleCheckout = async () => {
+    if (isLoaded && !isSignedIn) {
+      router.push("/sign-in?redirect_url=/pricing");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/billing/checkout", {
