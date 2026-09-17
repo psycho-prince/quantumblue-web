@@ -5,19 +5,31 @@ import { razorpay } from '@/lib/razorpay';
 
 export async function POST(req: Request) {
   try {
-    const authResult = await auth().catch(e => ({ error: e.message }));
-    if ('error' in authResult) {
-      return NextResponse.json({ error: 'Auth threw an error: ' + authResult.error }, { status: 401 });
-    }
-    const { userId, orgId } = authResult;
+    const authResult: any = await auth().catch(e => ({ error: String(e) }));
+    let userId: string | null = authResult?.userId || null;
+    let orgId: string | null = authResult?.orgId || null;
     
     if (!userId) {
-      const authHeader = req.headers.get('authorization') || 'missing';
-      const cookieHeader = req.headers.get('cookie') || 'missing';
-      return NextResponse.json({ 
-        error: 'Unauthorized. No userId returned.',
-        debug: { hasAuthHeader: authHeader !== 'missing', authHeaderStart: authHeader.substring(0, 15), hasCookie: cookieHeader !== 'missing' }
-      }, { status: 401 });
+      const authHeader = req.headers.get('authorization');
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.replace('Bearer ', '');
+        try {
+          const { verifyToken } = require('@clerk/nextjs/server');
+          if (!process.env.CLERK_SECRET_KEY) {
+             return NextResponse.json({ error: 'CLERK_SECRET_KEY is missing on server' }, { status: 500 });
+          }
+          const verified = await verifyToken(token, { secretKey: process.env.CLERK_SECRET_KEY });
+          userId = verified.sub as string;
+          orgId = (verified as any).org_id as string || null;
+        } catch (err: any) {
+          return NextResponse.json({ 
+            error: 'Manual token verification failed: ' + String(err.message || err),
+            debug: { tokenPrefix: token.substring(0, 15) }
+          }, { status: 401 });
+        }
+      } else {
+        return NextResponse.json({ error: 'Unauthorized and no Bearer token provided' }, { status: 401 });
+      }
     }
 
     const { plan } = await req.json();
