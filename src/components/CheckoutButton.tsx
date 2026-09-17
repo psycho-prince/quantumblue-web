@@ -24,10 +24,12 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
 
     setLoading(true);
     try {
+      const token = await getToken();
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { 
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ plan })
       });
