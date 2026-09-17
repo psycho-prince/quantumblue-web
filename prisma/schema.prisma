@@ -8,18 +8,19 @@ datasource db {
 }
 
 model Organization {
-  id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
-  apiKeys    ApiKey[]
-  scans      Scan[]
+  id          String       @id @default(uuid())
+  name        String
+  createdAt   DateTime     @default(now())
+  apiKeys     ApiKey[]
+  scans       Scan[]
   auditEvents AuditEvent[]
-  
+
   // Billing Relations
   billingCustomer BillingCustomer?
   subscriptions   Subscription[]
   payments        PaymentTransaction[]
   invoices        Invoice[]
+  assets          Asset[]
 }
 
 model ApiKey {
@@ -33,21 +34,28 @@ model ApiKey {
 }
 
 model Scan {
-  id             String        @id @default(uuid())
-  organizationId String
-  organization   Organization  @relation(fields: [organizationId], references: [id])
-  targetName     String
+  id              String       @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id])
+  targetName      String
   bomSerialNumber String
-  rawBom         Json
-  createdAt      DateTime      @default(now())
-  findings       Finding[]
-  anomalies      Anomaly[]
+  rawBom          Json
+  createdAt       DateTime     @default(now())
+  findings        Finding[]
+  anomalies       Anomaly[]
+
+  scanType    String    @default("source")
+  status      String    @default("complete")
+  startedAt   DateTime?
+  completedAt DateTime?
+  errorText   String?
+  riskSummary Json      @default("{}")
 }
 
 model Finding {
-  id                       String   @id @default(uuid())
+  id                       String  @id @default(uuid())
   scanId                   String
-  scan                     Scan     @relation(fields: [scanId], references: [id])
+  scan                     Scan    @relation(fields: [scanId], references: [id])
   bomRef                   String
   name                     String
   primitive                String
@@ -79,16 +87,16 @@ model AuditEvent {
 // --- BILLING MODELS ---
 
 model BillingCustomer {
-  id                   String       @id @default(uuid())
-  clerkOrgId           String       @unique
-  organization         Organization @relation(fields: [clerkOrgId], references: [id])
-  clerkUserId          String?
-  razorpayCustomerId   String       @unique
-  zohoCustomerId       String?      @unique
-  email                String
-  name                 String
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
+  id                 String       @id @default(uuid())
+  clerkOrgId         String       @unique
+  organization       Organization @relation(fields: [clerkOrgId], references: [id])
+  clerkUserId        String?
+  razorpayCustomerId String       @unique
+  zohoCustomerId     String?      @unique
+  email              String
+  name               String
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
 }
 
 model Subscription {
@@ -126,26 +134,167 @@ model PaymentTransaction {
 }
 
 model Invoice {
-  id                 String       @id @default(uuid())
-  clerkOrgId         String
-  organization       Organization @relation(fields: [clerkOrgId], references: [id])
-  razorpayInvoiceId  String?      @unique
-  zohoInvoiceId      String?      @unique
-  invoiceNumber      String?
-  amount             Int
-  currency           String
-  status             String
-  invoiceUrl         String?
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
+  id                String       @id @default(uuid())
+  clerkOrgId        String
+  organization      Organization @relation(fields: [clerkOrgId], references: [id])
+  razorpayInvoiceId String?      @unique
+  zohoInvoiceId     String?      @unique
+  invoiceNumber     String?
+  amount            Int
+  currency          String
+  status            String
+  invoiceUrl        String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 }
 
 model WebhookEvent {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   provider    String
-  eventId     String   @unique
+  eventId     String    @unique
   eventType   String
-  processed   Boolean  @default(false)
+  processed   Boolean   @default(false)
   processedAt DateTime?
+  createdAt   DateTime  @default(now())
+  payload     Json      @default("{}")
+  receivedAt  DateTime  @default(now())
+}
+
+model Asset {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  kind           String
+  identifier     String
+  displayName    String?
+  source         String
+  criticality    String       @default("unknown")
+  firstSeenAt    DateTime     @default(now())
+  lastSeenAt     DateTime     @updatedAt
+  active         Boolean      @default(true)
+  metadata       Json         @default("{}")
+
+  outgoing     AssetEdge[]         @relation("FromAsset")
+  incoming     AssetEdge[]         @relation("ToAsset")
+  cryptoUses   CryptoUse[]
+  certificates CertificateRecord[]
+
+  @@unique([organizationId, kind, identifier])
+  @@index([organizationId, kind])
+}
+
+model AssetEdge {
+  id          String   @id @default(uuid())
+  fromAssetId String
+  toAssetId   String
+  fromAsset   Asset    @relation("FromAsset", fields: [fromAssetId], references: [id])
+  toAsset     Asset    @relation("ToAsset", fields: [toAssetId], references: [id])
+  relation    String
+  confidence  Float    @default(1.0)
   createdAt   DateTime @default(now())
+
+  @@unique([fromAssetId, toAssetId, relation])
+}
+
+model CryptoUse {
+  id             String  @id @default(uuid())
+  organizationId String
+  assetId        String
+  asset          Asset   @relation(fields: [assetId], references: [id])
+  scanId         String?
+
+  primitive     String
+  role          String
+  keyBits       Int?
+  curve         String?
+  parameterSet  String?
+  quantumStatus String
+  location      String
+  evidence      Json     @default("{}")
+  detectedAt    DateTime @default(now())
+
+  @@index([organizationId, primitive])
+  @@index([organizationId, quantumStatus])
+}
+
+model CertificateRecord {
+  id                 String   @id @default(uuid())
+  organizationId     String
+  assetId            String
+  asset              Asset    @relation(fields: [assetId], references: [id])
+  serialNumber       String
+  fingerprintSHA256  String
+  subject            String
+  issuer             String
+  sans               String[]
+  notBefore          DateTime
+  notAfter           DateTime
+  signatureAlgorithm String
+  publicKeyAlgorithm String
+  publicKeyBits      Int?
+  isCA               Boolean  @default(false)
+  chainPosition      Int      @default(0)
+  selfSigned         Boolean  @default(false)
+
+  @@unique([organizationId, fingerprintSHA256])
+  @@index([organizationId, notAfter])
+}
+
+model DomainVerification {
+  id             String    @id @default(uuid())
+  organizationId String
+  domain         String
+  method         String
+  token          String    @unique
+  verifiedAt     DateTime?
+  lastCheckedAt  DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@unique([organizationId, domain])
+}
+
+model Entitlement {
+  id             String   @id @default(uuid())
+  organizationId String   @unique
+  planCode       String   @default("free")
+  source         String
+  maxDomains     Int      @default(1)
+  maxAssets      Int      @default(50)
+  scansPerMonth  Int      @default(3)
+  features       Json     @default("{}")
+  validFrom      DateTime @default(now())
+  validUntil     DateTime
+  updatedAt      DateTime @updatedAt
+}
+
+model ScheduledJob {
+  id             String    @id @default(uuid())
+  organizationId String
+  kind           String
+  targetRef      String
+  cronExpr       String
+  nextRunAt      DateTime
+  lastRunAt      DateTime?
+  lockedAt       DateTime?
+  lockedBy       String?
+  failureCount   Int       @default(0)
+  enabled        Boolean   @default(true)
+
+  @@index([enabled, nextRunAt])
+}
+
+model Alert {
+  id             String    @id @default(uuid())
+  organizationId String
+  severity       String
+  kind           String
+  title          String
+  body           String
+  assetId        String?
+  findingRef     String?
+  deliveredAt    DateTime?
+  acknowledgedAt DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([organizationId, createdAt])
 }
