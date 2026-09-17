@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
 export function CheckoutButton({ plan, buttonText, className }: { plan: string, buttonText: string, className?: string }) {
   const [loading, setLoading] = useState(false);
   const { isLoaded, isSignedIn, getToken } = useAuth();
-  const { user } = require('@clerk/nextjs').useUser();
+  const { user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
