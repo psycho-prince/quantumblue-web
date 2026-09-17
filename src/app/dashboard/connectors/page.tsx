@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { ConnectorsClient } from "./client";
+import { ConnectorsClient, AWSConnectorsClient } from "./client";
 
 export default async function ConnectorsPage() {
   const { userId, orgId } = await auth();
@@ -16,9 +16,11 @@ export default async function ConnectorsPage() {
   });
 
   let hasGithub = false;
+  let hasAws = false;
   if (entitlement && entitlement.features) {
     const features = entitlement.features as any;
     hasGithub = features.github_connector === true;
+    hasAws = features.aws_connector === true;
   }
 
   return (
@@ -49,6 +51,27 @@ export default async function ConnectorsPage() {
           
           <ConnectorsClient hasGithub={hasGithub} />
         </div>
+        {/* AWS Connector */}
+        <div className="bg-[#111] border border-[#222] p-6 rounded-xl mt-6">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h2 className="text-xl font-semibold flex items-center gap-2">
+                Amazon Web Services (AWS)
+                {!hasAws && (
+                  <span className="text-xs bg-purple-900/50 text-purple-200 px-2 py-1 rounded-full border border-purple-800">
+                    Business Plan Required
+                  </span>
+                )}
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                Scan your cloud infrastructure via cross-account assume-role. Discovers ACM certificates, ALB TLS policies, and KMS cryptography.
+              </p>
+            </div>
+          </div>
+          
+          <AWSConnectorsClient hasAws={hasAws} />
+        </div>
+
       </div>
     </div>
   );
