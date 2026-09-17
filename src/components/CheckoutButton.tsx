@@ -37,7 +37,7 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
       const data = await res.json();
       
       if (!res.ok) {
-        alert(`Checkout failed: ${data.error || "Unknown error"}`);
+        alert(`Checkout failed: ${data.error || "Unknown error"}\nDebug: ${JSON.stringify(data.debug || {})}`);
         setLoading(false);
         return;
       }

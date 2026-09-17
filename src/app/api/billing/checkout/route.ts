@@ -5,9 +5,19 @@ import { razorpay } from '@/lib/razorpay';
 
 export async function POST(req: Request) {
   try {
-    const { userId, orgId } = await auth();
+    const authResult = await auth().catch(e => ({ error: e.message }));
+    if ('error' in authResult) {
+      return NextResponse.json({ error: 'Auth threw an error: ' + authResult.error }, { status: 401 });
+    }
+    const { userId, orgId } = authResult;
+    
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      const authHeader = req.headers.get('authorization') || 'missing';
+      const cookieHeader = req.headers.get('cookie') || 'missing';
+      return NextResponse.json({ 
+        error: 'Unauthorized. No userId returned.',
+        debug: { hasAuthHeader: authHeader !== 'missing', authHeaderStart: authHeader.substring(0, 15), hasCookie: cookieHeader !== 'missing' }
+      }, { status: 401 });
     }
 
     const { plan } = await req.json();
