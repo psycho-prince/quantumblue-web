@@ -44,9 +44,9 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
 
       const options = {
         key: data.keyId,
-        subscription_id: data.subscriptionId,
+        order_id: data.orderId,
         name: "QuantumBlue",
-        description: `${plan} Subscription`,
+        description: `${plan} Plan`,
         image: "/icon.svg",
         handler: function (response: any) {
           alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);

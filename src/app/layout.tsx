@@ -32,7 +32,6 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider 
-      domain="quantum-blue.in" 
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
       signInFallbackRedirectUrl="/dashboard"
