@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 export function CheckoutButton({ plan, buttonText, className }: { plan: string, buttonText: string, className?: string }) {
   const [loading, setLoading] = useState(false);
   const { isLoaded, isSignedIn, getToken } = useAuth();
+  const { user } = require('@clerk/nextjs').useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -48,6 +49,10 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
         name: "QuantumBlue",
         description: `${plan} Plan`,
         image: "/icon.svg",
+        prefill: {
+          email: user?.primaryEmailAddress?.emailAddress || "",
+          name: user?.fullName || ""
+        },
         handler: function (response: any) {
           alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
           // You can redirect to billing dashboard here
