@@ -12,8 +12,8 @@ export function Navbar() {
   const { isLoaded, userId } = useAuth();
 
   const NAV_LINKS = [
-    { label: 'Blog', href: '/blog' },
     { label: 'Features', href: '/#platform' },
+    { label: 'Blog', href: '/blog' },
     { label: 'API Docs', href: '/docs' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'Specs', href: '/#crypto-tests' },
