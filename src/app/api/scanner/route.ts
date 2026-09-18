@@ -58,8 +58,8 @@ export async function POST(req: Request) {
           }
 
           resolve({
-            subject: getStr(cert.subject.CN) || host,
-            issuer: getStr(cert.issuer.O) || getStr(cert.issuer.CN) || 'Unknown',
+            subject: getStr(cert.subject?.CN) || host,
+            issuer: getStr(cert.issuer?.O) || getStr(cert.issuer?.CN) || 'Unknown',
             validFrom: cert.valid_from,
             validTo: cert.valid_to,
             bits: cert.bits || 0,
