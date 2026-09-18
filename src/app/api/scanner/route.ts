@@ -44,9 +44,11 @@ export async function POST(req: Request) {
             return reject(new Error('No certificate found'));
           }
 
+          const getStr = (val: string | string[] | undefined): string | undefined => Array.isArray(val) ? val[0] : val;
+
           resolve({
-            subject: cert.subject.CN || host,
-            issuer: cert.issuer.O || cert.issuer.CN || 'Unknown',
+            subject: getStr(cert.subject.CN) || host,
+            issuer: getStr(cert.issuer.O) || getStr(cert.issuer.CN) || 'Unknown',
             validFrom: cert.valid_from,
             validTo: cert.valid_to,
             bits: cert.bits || 0,
