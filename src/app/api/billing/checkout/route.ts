@@ -69,9 +69,9 @@ export async function POST(req: Request) {
 
     
     const planIds: Record<string, string> = {
-      'STARTER': 'plan_TdcxSyaILWtAMM',
-      'PRO': 'plan_Tdcy69p7jtVQie',
-      'BUSINESS': 'plan_TdcyjggCpTwsDa'
+      'STARTER': process.env.RAZORPAY_PLAN_STARTER || 'plan_TdcxSyaILWtAMM',
+      'PRO': process.env.RAZORPAY_PLAN_PRO || 'plan_Tdcy69p7jtVQie',
+      'BUSINESS': process.env.RAZORPAY_PLAN_BUSINESS || 'plan_TdcyjggCpTwsDa'
     };
     
     if (!planIds[plan]) {
