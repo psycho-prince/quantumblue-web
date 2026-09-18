@@ -28,7 +28,7 @@ function parseFrontmatter(fileContent: string) {
 export default async function BlogIndex() {
   const postsDirectory = path.join(process.cwd(), 'content', 'blog');
   
-  let posts = [];
+  let posts: any[] = [];
   if (fs.existsSync(postsDirectory)) {
     const filenames = fs.readdirSync(postsDirectory);
     posts = filenames.filter(f => f.endsWith('.md')).map(filename => {
