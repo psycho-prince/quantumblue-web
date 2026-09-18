@@ -13,7 +13,7 @@ export default function ForgotPasswordPage() {
             <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
               <ShieldCheck className="w-6 h-6 text-blue-500" />
             </div>
-            <span className="font-bold text-2xl tracking-tight text-white font-['Plus_Jakarta_Sans']">Quantum Blue</span>
+            <span className="font-bold text-2xl tracking-tight text-white font-[family-name:var(--font-plus-jakarta-sans)]">Quantum Blue</span>
           </Link>
           <h1 className="text-3xl font-bold text-white">Reset Password</h1>
           <p className="text-zinc-500 text-sm">

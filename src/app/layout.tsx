@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Fira_Code } from "next/font/google";
-import "@fontsource/plus-jakarta-sans/700.css";
-import "@fontsource/plus-jakarta-sans/800.css";
+import { Inter, JetBrains_Mono, Fira_Code, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { ShieldCheck, Globe, Lock, Activity } from "lucide-react";
@@ -13,6 +11,7 @@ import { CookieBanner } from "@/components/CookieBanner";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
 const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" });
+const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-plus-jakarta-sans" });
 
 export const metadata: Metadata = {
   title: "Quantum Blue — Post-Quantum Cryptography & Legal Timestamping CLI",
@@ -37,7 +36,7 @@ export default function RootLayout({
       signInFallbackRedirectUrl="/dashboard"
       signUpFallbackRedirectUrl="/dashboard"
     >
-    <html lang="en" className={clsx(inter.variable, jetbrainsMono.variable, firaCode.variable, "dark scroll-smooth")}>
+    <html lang="en" className={clsx(inter.variable, jetbrainsMono.variable, firaCode.variable, plusJakartaSans.variable, "dark scroll-smooth")}>
       <body className="selection:bg-blue-500/30 bg-[#000] text-white">
         {/* Subtle Background Glow */}
         <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
@@ -58,7 +57,7 @@ export default function RootLayout({
                 <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
                   <ShieldCheck className="w-5 h-5 text-blue-400" />
                 </div>
-                <span className="font-bold text-xl tracking-tight text-white font-['Plus_Jakarta_Sans']">Quantum Blue</span>
+                <span className="font-bold text-xl tracking-tight text-white font-[family-name:var(--font-plus-jakarta-sans)]">Quantum Blue</span>
               </div>
               <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
                 Open-source Go CLI for hybrid post-quantum signing, RFC 3161 timestamping, and CBOM generation. Built for Indian Evidence Act §65B(4) admissibility.
