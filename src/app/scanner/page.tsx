@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Search, ShieldAlert, ShieldCheck, ArrowRight, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 
 export default function ScannerPage() {
+  const { isSignedIn } = useAuth();
   const [domain, setDomain] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -146,10 +148,12 @@ export default function ScannerPage() {
                 <div className="mt-8 p-6 bg-accent-blue/5 border border-accent-blue/30 text-center space-y-4">
                   <h4 className="text-white font-bold">Fix this vulnerability.</h4>
                   <p className="text-sm text-zinc-400 max-w-lg mx-auto">
-                    Sign up to generate a complete Cryptographic Bill of Materials (CBOM) and let our AI Analyst write the exact migration configurations for your servers.
+                    {isSignedIn 
+                      ? "Use your dashboard to generate a Cryptographic Bill of Materials (CBOM) and let the Security AI provide exact migration configurations."
+                      : "Sign up to generate a complete Cryptographic Bill of Materials (CBOM) and let our AI Analyst write the exact migration configurations for your servers."}
                   </p>
-                  <Link href="/sign-up" className="inline-flex items-center gap-2 mt-2 px-6 py-3 bg-accent-blue text-black font-bold text-xs uppercase tracking-widest hover:bg-blue-400 transition-colors">
-                    Start Free Trial <ArrowRight className="w-4 h-4" />
+                  <Link href={isSignedIn ? "/dashboard" : "/sign-up"} className="inline-flex items-center gap-2 mt-2 px-6 py-3 bg-accent-blue text-black font-bold text-xs uppercase tracking-widest hover:bg-blue-400 transition-colors">
+                    {isSignedIn ? "Go to Dashboard" : "Start Free Trial"} <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               )}
