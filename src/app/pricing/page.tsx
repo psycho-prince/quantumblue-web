@@ -125,11 +125,16 @@ export default function PricingPage() {
                   {tier.button}
                 </Link>
               ) : (
-                <CheckoutButton 
-                  plan={tier.planKey} 
-                  buttonText={tier.button} 
-                  className={`mt-10 w-full btn-saas ${tier.highlight ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/5 text-white hover:bg-white/10'}`} 
-                />
+                <div className="mt-10 flex flex-col items-center">
+                  <CheckoutButton 
+                    plan={tier.planKey} 
+                    buttonText={tier.button} 
+                    className={`w-full btn-saas ${tier.highlight ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/5 text-white hover:bg-white/10'}`} 
+                  />
+                  <p className="text-[10px] text-zinc-500 text-center mt-3 font-mono">
+                    Renews automatically. Cancel anytime.
+                  </p>
+                </div>
               )}
             </motion.div>
           ))}
