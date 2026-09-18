@@ -68,26 +68,26 @@ export async function POST(req: Request) {
     }
 
     
-    const planAmounts: Record<string, number> = {
-      'STARTER': 999,
-      'PRO': 1999,
-      'BUSINESS': 4999
+    const planIds: Record<string, string> = {
+      'STARTER': 'plan_TdcxSyaILWtAMM',
+      'PRO': 'plan_Tdcy69p7jtVQie',
+      'BUSINESS': 'plan_TdcyjggCpTwsDa'
     };
     
-    if (!planAmounts[plan]) {
+    if (!planIds[plan]) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
-    // Create a Razorpay Order instead of a Subscription to allow UPI and all payment methods
-    const order = await razorpay.orders.create({
-      amount: planAmounts[plan] * 100, // paise
-      currency: "INR",
-      receipt: `rcpt_${internalOrgId.substring(0,8)}_${Date.now().toString().slice(-4)}`,
+    // Create a Razorpay Subscription
+    const subscription = await razorpay.subscriptions.create({
+      plan_id: planIds[plan],
+      customer_notify: 1,
+      total_count: 120, // 10 years duration
       notes: { clerkOrgId: internalOrgId, plan }
     });
 
     return NextResponse.json({ 
-      orderId: order.id,
+      subscriptionId: subscription.id,
       keyId: process.env.RAZORPAY_KEY_ID
     });
 

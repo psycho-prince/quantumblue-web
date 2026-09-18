@@ -45,7 +45,7 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
 
       const options = {
         key: data.keyId,
-        order_id: data.orderId,
+        subscription_id: data.subscriptionId,
         name: "QuantumBlue",
         description: `${plan} Plan`,
         image: "/icon.svg",
