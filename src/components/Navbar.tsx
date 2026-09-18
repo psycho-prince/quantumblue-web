@@ -12,7 +12,6 @@ export function Navbar() {
   const { isLoaded, userId } = useAuth();
 
   const NAV_LINKS = [
-    { label: 'Free Scanner', href: '/scanner' },
     { label: 'Features', href: '/#platform' },
     { label: 'API Docs', href: '/docs' },
     { label: 'Pricing', href: '/pricing' },
@@ -46,6 +45,9 @@ export function Navbar() {
 
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-4">
+              <Link href="/scanner" className="px-3 py-1.5 text-[10px] font-mono border border-accent-blue/50 text-accent-blue hover:bg-accent-blue/10 transition-colors uppercase tracking-widest font-bold hidden md:block">
+                Free Scanner
+              </Link>
               {!isLoaded ? null : !userId ? (
                 <>
                   <Link href="/sign-in" className="text-xs font-mono text-zinc-400 hover:text-white transition-colors uppercase tracking-widest">Sign In</Link>
