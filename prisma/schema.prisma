@@ -22,6 +22,7 @@ model Organization {
   payments        PaymentTransaction[]
   invoices        Invoice[]
   assets          Asset[]
+  settings        OrgSettings?
 }
 
 model ApiKey {
@@ -313,4 +314,18 @@ model OrgAWSAccount {
 
   @@unique([organizationId, accountId])
   @@index([organizationId])
+}
+
+// --- ORGANIZATION SETTINGS (AI & CONFIG) ---
+model OrgSettings {
+  id               String       @id @default(uuid())
+  organizationId   String       @unique
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  // AI Integration (BYOK - Bring Your Own Key)
+  aiProvider       String       @default("none") // "gemini", "openai", "claude", "jav-ai", "none"
+  aiApiKey         String?      // Stored securely
+  customAiEndpoint String?      // For custom JAV-AI webhooks
+
+  updatedAt        DateTime     @updatedAt
 }
