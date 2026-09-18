@@ -10,44 +10,48 @@ export default function PricingPage() {
   const tiers = [
     {
       name: "Starter",
-      price: "₹999",
+      price: "₹4,999",
+      period: "/ year",
       planKey: "STARTER",
-      description: "For individuals and small teams getting started with post-quantum security.",
+      description: "For small businesses starting their post-quantum journey.",
       features: [
-        "Up to 100k PQC Operations / mo",
-        "Basic Key Management",
-        "Community Support",
-        "Standard Encryption Algorithms"
+        "3 domains",
+        "Monthly scan",
+        "Basic crypto inventory",
+        "PDF report",
+        "Basic risk score"
       ],
       button: "Start Subscription",
       highlight: false
     },
     {
       name: "Pro",
-      price: "₹1,999",
+      price: "₹4,999",
+      period: "/ month",
       planKey: "PRO",
-      description: "For high-growth startups requiring military-grade cryptographic infrastructure.",
+      description: "For high-growth startups and SaaS companies.",
       features: [
-        "Up to 1M PQC Operations / mo",
-        "Centralized Key Management",
-        "Cloud-Hosted PQC Endpoints",
-        "Immutable Audit Logs",
-        "Standard SLA & Support"
+        "25 domains",
+        "Continuous monitoring",
+        "AI analyst & API access",
+        "GitHub/GitLab integration",
+        "Alerts & Compliance mapping"
       ],
       button: "Upgrade to Pro",
       highlight: true
     },
     {
       name: "Business",
-      price: "₹4,999",
+      price: "₹24,999",
+      period: "/ month",
       planKey: "BUSINESS",
-      description: "Dedicated infrastructure for financial institutions and mid-market companies.",
+      description: "For serious organizations requiring advanced security capabilities.",
       features: [
-        "Unlimited PQC Operations",
-        "Dedicated Sentinel Nodes",
-        "Hardware Security Module (HSM) Integrations",
-        "Continuous CBOM Scanning",
-        "24/7 Priority Engineering Support"
+        "100+ assets",
+        "Cloud connectors & Kubernetes",
+        "Advanced AI & SIEM integration",
+        "Migration planning",
+        "Priority support & Team access"
       ],
       button: "Deploy Business",
       highlight: false
@@ -98,7 +102,7 @@ export default function PricingPage() {
                   <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">{tier.name}</h3>
                   <div className="flex items-baseline gap-2">
                     <span className="text-5xl font-bold text-white tracking-tight">{tier.price}</span>
-                    {tier.price !== "Custom" && <span className="text-zinc-600 text-sm font-medium">/ month</span>}
+                    <span className="text-zinc-600 text-sm font-medium">{tier.period}</span>
                   </div>
                   <p className="text-zinc-500 font-medium text-sm leading-relaxed">{tier.description}</p>
                 </div>
