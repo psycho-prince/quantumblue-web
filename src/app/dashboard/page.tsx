@@ -38,6 +38,10 @@ export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
   const [anomalies, setAnomalies] = useState<any[]>([]);
   
+  // AI Settings State
+  const [aiSettings, setAiSettings] = useState({ aiProvider: "none", aiApiKey: "", customAiEndpoint: "" });
+  const [savingSettings, setSavingSettings] = useState(false);
+
   // AI Agent State
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([
     { role: "assistant", content: "EXECUTIVE_INTELLIGENCE_ACTIVE. HOW_CAN_I_ASSIST_WITH_YOUR_SECURITY_POSTURE_TODAY?" }
@@ -78,11 +82,19 @@ export default function Dashboard() {
     }
   };
 
+  const fetchSettings = async () => {
+    const headers: HeadersInit = process.env.NODE_ENV === "development" ? { "x-org-id": "org-test-001" } : {};
+    const res = await fetch("/api/settings", { headers });
+    if (res.ok) {
+      setAiSettings(await res.json());
+    }
+  };
+
   useEffect(() => {
     const initDashboard = async () => {
       const isDev = process.env.NODE_ENV === "development";
       if (user || isDev) {
-        await Promise.all([fetchKeys(), fetchAssets(), fetchStats()]);
+        await Promise.all([fetchKeys(), fetchAssets(), fetchStats(), fetchSettings()]);
         setLoading(false);
       }
     };
@@ -94,6 +106,26 @@ export default function Dashboard() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingSettings(true);
+    const headers: HeadersInit = process.env.NODE_ENV === "development" ? { "x-org-id": "org-test-001", "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+    try {
+      const res = await fetch("/api/settings", {
+        method: "POST",
+        headers,
+        body: JSON.stringify(aiSettings)
+      });
+      if (!res.ok) throw new Error("Failed to save settings");
+      alert("Settings saved successfully!");
+    } catch(err) {
+      alert("Error saving settings");
+    } finally {
+      setSavingSettings(false);
+    }
+  };
 
   const handleCreateKey = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,6 +217,7 @@ export default function Dashboard() {
               { id: "pqc-keys", label: "PQC_KEYS", icon: ShieldCheck },
               { id: "notary", label: "REGISTRY", icon: FileText },
               { id: "intelligence", label: "SECURITY_AI", icon: Cpu },
+             { id: "ai-settings", label: "AI_SETTINGS", icon: Sparkles },
             ].map((item) => (
               <button
                 key={item.id}
@@ -696,6 +729,71 @@ const signature = await qb.sign({ amount: 500M });
                 </form>
               </motion.div>
             )}
+
+            {activeTab === "ai-settings" && (
+              <motion.div 
+                key="ai-settings" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                className="space-y-8"
+              >
+                <div className="pb-6 border-b border-border-bright">
+                   <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">INTEGRATION</span>
+                   <h1 className="text-3xl font-bold tracking-tight font-mono">AI_SETTINGS</h1>
+                </div>
+                
+                <form onSubmit={handleSaveSettings} className="glass p-8 border border-border-bright max-w-2xl space-y-6">
+                  <div>
+                    <h3 className="text-lg font-bold font-mono">AI PROVIDER</h3>
+                    <p className="text-xs text-zinc-500 mb-4 font-mono">Select the AI engine for the Security AI Analyst. Bring your own key (BYOK).</p>
+                    <select 
+                      value={aiSettings.aiProvider}
+                      onChange={(e) => setAiSettings({...aiSettings, aiProvider: e.target.value})}
+                      className="w-full bg-black border border-border-bright p-3 text-sm text-white focus:border-accent-blue outline-none"
+                    >
+                      <option value="none">None</option>
+                      <option value="openai">OpenAI (GPT-4)</option>
+                      <option value="gemini">Google Gemini</option>
+                      <option value="claude">Anthropic Claude</option>
+                      <option value="jav-ai">Custom JAV-AI Webhook</option>
+                    </select>
+                  </div>
+
+                  {(aiSettings.aiProvider === "openai" || aiSettings.aiProvider === "gemini" || aiSettings.aiProvider === "claude") && (
+                    <div>
+                      <h3 className="text-sm font-bold font-mono mb-2">API KEY</h3>
+                      <input 
+                        type="password"
+                        value={aiSettings.aiApiKey || ""}
+                        onChange={(e) => setAiSettings({...aiSettings, aiApiKey: e.target.value})}
+                        placeholder="sk-..."
+                        className="w-full bg-black border border-border-bright p-3 text-sm text-white focus:border-accent-blue outline-none"
+                      />
+                    </div>
+                  )}
+
+                  {aiSettings.aiProvider === "jav-ai" && (
+                    <div>
+                      <h3 className="text-sm font-bold font-mono mb-2">JAV-AI WEBHOOK URL</h3>
+                      <input 
+                        type="url"
+                        value={aiSettings.customAiEndpoint || ""}
+                        onChange={(e) => setAiSettings({...aiSettings, customAiEndpoint: e.target.value})}
+                        placeholder="https://your-jav-ai-instance.com/api/chat"
+                        className="w-full bg-black border border-border-bright p-3 text-sm text-white focus:border-accent-blue outline-none"
+                      />
+                    </div>
+                  )}
+
+                  <button 
+                    type="submit" 
+                    disabled={savingSettings}
+                    className="px-6 py-3 bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 transition-colors"
+                  >
+                    {savingSettings ? "SAVING..." : "SAVE SETTINGS"}
+                  </button>
+                </form>
+              </motion.div>
+            )}
+
           </AnimatePresence>
         </main>
       </div>

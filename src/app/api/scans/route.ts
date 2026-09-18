@@ -21,11 +21,37 @@ export async function POST(req: NextRequest) {
 
   const bom = await req.json();
 
-  // Validate it's actually a CycloneDX document before trusting it —
-  // don't store garbage just because it was POSTed with a valid key
+  // Validate it's actually a CycloneDX document before trusting it
   if (bom.bomFormat !== "CycloneDX" || bom.specVersion !== "1.6") {
     return NextResponse.json({ error: "not a valid CycloneDX 1.6 document" }, { status: 400 });
   }
+
+  // --- ENTITLEMENT / SUBSCRIPTION ENFORCEMENT ---
+  const startOfMonth = new Date();
+  startOfMonth.setDate(1);
+  startOfMonth.setHours(0, 0, 0, 0);
+
+  const scanCount = await prisma.scan.count({
+    where: {
+      organizationId: apiKey.organizationId,
+      createdAt: { gte: startOfMonth },
+    }
+  });
+
+  const entitlement = await prisma.entitlement.findUnique({
+    where: { organizationId: apiKey.organizationId }
+  });
+
+  const maxScans = entitlement?.scansPerMonth ?? 3;
+
+  if (scanCount >= maxScans) {
+    return NextResponse.json({ 
+      error: "Subscription limit reached", 
+      message: `You have reached your plan limit of ${maxScans} scans this month. Please upgrade your subscription for continuous monitoring.` 
+    }, { status: 402 });
+  }
+  // ----------------------------------------------
+
 
   const scan = await prisma.scan.create({
     data: {
