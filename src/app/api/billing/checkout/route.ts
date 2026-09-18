@@ -86,6 +86,19 @@ export async function POST(req: Request) {
       notes: { clerkOrgId: internalOrgId, plan }
     });
 
+    await prisma.subscription.create({
+      data: {
+        clerkOrgId: internalOrgId,
+        razorpayCustomerId: billingCustomer.razorpayCustomerId,
+        razorpaySubscriptionId: subscription.id,
+        razorpayPlanId: planIds[plan],
+        planKey: plan,
+        status: 'created',
+        currentPeriodStart: new Date(),
+        currentPeriodEnd: new Date()
+      }
+    });
+
     return NextResponse.json({ 
       subscriptionId: subscription.id,
       keyId: process.env.RAZORPAY_KEY_ID
