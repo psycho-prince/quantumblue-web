@@ -363,7 +363,7 @@ export default function Dashboard() {
                               <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest font-mono">INITIALIZE_PROJECT</span>
                               <Copy className="w-3 h-3 text-zinc-700 cursor-pointer hover:text-white" />
                            </div>
-                           <code className="text-[11px] font-mono text-accent-blue block truncate">QB_INIT_--KEY_{keys[0]?.key.slice(0, 8)}...</code>
+                           <code className="text-[11px] font-mono text-accent-blue block truncate">QB_INIT_--KEY_{keys[0]?.key?.slice(0, 8)}...</code>
                         </div>
                      </div>
                      <button onClick={() => setActiveTab("quickstart")} className="w-full py-3 bg-accent-blue/10 border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-black transition-all text-xs font-bold uppercase tracking-widest font-mono">
@@ -656,7 +656,7 @@ const signature = await qb.sign({ amount: 500M });
                               <tr key={a.id} className="group border-b border-border-bright hover:bg-zinc-900 transition-colors">
                                 <td className="px-6 py-6 font-bold text-zinc-200">{a.filename}</td>
                                 <td className="px-6 py-6 font-mono text-zinc-500 text-[10px]">
-                                   <EncryptedText text={a.signatureHash.slice(0, 32) + "..."} />
+                                   <EncryptedText text={(a.signatureHash?.slice(0, 32) || "") + "..."} />
                                 </td>
                                 <td className="px-6 py-6">
                                    <span className="text-[10px] font-bold text-accent-green bg-accent-green/10 px-3 py-1 uppercase tracking-widest">VERIFIED</span>

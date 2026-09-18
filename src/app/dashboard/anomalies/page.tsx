@@ -90,14 +90,14 @@ export default function AnomaliesList() {
                       <span className="text-[10px] text-zinc-500 font-mono">{anomaly.kind}</span>
                     </div>
                     <p className="text-sm text-zinc-200 leading-relaxed">{anomaly.description}</p>
-                    <div className="flex items-center gap-6 text-[10px] text-zinc-500">
-                      <span className="flex items-center gap-1">
-                        <Hash className="w-3 h-3" /> Scan: {anomaly.scanId.slice(0, 8)}...
+                    <div className="flex gap-6 mt-4">
+                      <span className="flex items-center gap-2 text-zinc-500 font-mono text-xs">
+                         <Hash className="w-3 h-3" /> Scan: {anomaly.scanId?.slice(0, 8)}...
                       </span>
-                      <span className="flex items-center gap-1">
-                        <ArrowRight className="w-3 h-3" /> Baseline: {anomaly.baselineScanId.slice(0, 8)}...
+                      <span className="flex items-center gap-2 text-zinc-500 font-mono text-xs">
+                         <ArrowRight className="w-3 h-3" /> Baseline: {anomaly.baselineScanId?.slice(0, 8)}...
                       </span>
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1 text-[10px] text-zinc-500">
                         <Clock className="w-3 h-3" /> {new Date(anomaly.createdAt).toLocaleString()}
                       </span>
                     </div>
