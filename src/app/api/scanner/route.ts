@@ -46,13 +46,24 @@ export async function POST(req: Request) {
 
           const getStr = (val: string | string[] | undefined): string | undefined => Array.isArray(val) ? val[0] : val;
 
+          let pubkeyAlgorithm = 'Unknown';
+          try {
+            const crypto = require('crypto');
+            if ((cert as any).raw) {
+              const x509 = new crypto.X509Certificate((cert as any).raw);
+              pubkeyAlgorithm = x509.publicKey.asymmetricKeyType || 'Unknown';
+            }
+          } catch(e) {
+            // fallback
+          }
+
           resolve({
             subject: getStr(cert.subject.CN) || host,
             issuer: getStr(cert.issuer.O) || getStr(cert.issuer.CN) || 'Unknown',
             validFrom: cert.valid_from,
             validTo: cert.valid_to,
             bits: cert.bits || 0,
-            pubkeyAlgorithm: cert.pubkeyAlgorithm || 'Unknown',
+            pubkeyAlgorithm,
             protocol
           });
         } catch(e) {
