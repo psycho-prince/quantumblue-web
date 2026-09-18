@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
   try {
-    const authResult = await auth(req).catch(e => ({ error: e.message }));
+    const authResult = await auth().catch(e => ({ error: e.message }));
     if ('error' in authResult) {
       return NextResponse.json({ error: 'Auth failed' }, { status: 401 });
     }

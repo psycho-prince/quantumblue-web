@@ -104,11 +104,61 @@ export function ConnectorsClient({ hasGithub }: { hasGithub: boolean }) {
 }
 
 export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
-  const [roleArn, setRoleArn] = useState("");
-  const [externalId, setExternalId] = useState("");
+  const [accounts, setAccounts] = useState<Array<{ id: string; accountId: string; roleArn: string }>>([]);
+  const [selectedAccountId, setSelectedAccountId] = useState("");
+  const [newAccountId, setNewAccountId] = useState("");
+  const [newRoleArn, setNewRoleArn] = useState("");
   const [loading, setLoading] = useState(false);
+  const [registering, setRegistering] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const { getToken } = useAuth();
+
+  // Fetch registered accounts on mount
+  useState(() => {
+    fetch("/api/connectors/aws/scan")
+      .then(r => r.json())
+      .then(setAccounts)
+      .catch(() => {});
+  });
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!hasAws) return;
+    if (!newAccountId || !newRoleArn) {
+      setError("Account ID and Role ARN are required.");
+      return;
+    }
+    setError(null);
+    setRegistering(true);
+    try {
+      const authToken = await getToken();
+      const res = await fetch("/api/connectors/aws/accounts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ accountId: newAccountId, roleArn: newRoleArn }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Registration failed");
+      }
+      // Refresh account list
+      const accountsRes = await fetch("/api/connectors/aws/scan");
+      const accountsData = await accountsRes.json();
+      setAccounts(accountsData);
+      setSelectedAccountId(newAccountId);
+      setNewAccountId("");
+      setNewRoleArn("");
+      setResult({ message: `Account ${newAccountId} registered. External ID: ${data.externalId}` });
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setRegistering(false);
+    }
+  };
 
   const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,7 +166,12 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
       alert("Please upgrade to the Business plan to access the AWS connector.");
       return;
     }
+    if (!selectedAccountId) {
+      setError("Please select or register an AWS account first.");
+      return;
+    }
 
+    setError(null);
     setLoading(true);
     setResult(null);
 
@@ -126,9 +181,9 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${authToken}`
+          "Authorization": `Bearer ${authToken}`,
         },
-        body: JSON.stringify({ roleArn, externalId, regions: ["ap-south-1"] })
+        body: JSON.stringify({ accountId: selectedAccountId, regions: ["ap-south-1"] }),
       });
 
       const data = await res.json();
@@ -137,54 +192,105 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
       }
       setResult(data);
     } catch (err: any) {
-      alert(err.message);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleScan} className="space-y-4 mt-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm text-gray-400 mb-1">IAM Role ARN</label>
-          <input 
-            type="text" 
-            value={roleArn}
-            onChange={e => setRoleArn(e.target.value)}
-            disabled={!hasAws || loading}
-            placeholder="arn:aws:iam::123456789012:role/QuantumBlueAudit"
-            className="w-full bg-[#0a0a0a] border border-[#333] rounded px-3 py-2 text-white"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm text-gray-400 mb-1">External ID</label>
-          <input 
-            type="text" 
-            value={externalId}
-            onChange={e => setExternalId(e.target.value)}
-            disabled={!hasAws || loading}
-            placeholder="e.g. org-123"
-            className="w-full bg-[#0a0a0a] border border-[#333] rounded px-3 py-2 text-white"
-            required
-          />
+    <div className="space-y-6">
+      {/* Registered accounts */}
+      <div>
+        <h3 className="text-sm font-medium text-gray-400 mb-2">Registered AWS Accounts</h3>
+        {accounts.length === 0 && (
+          <p className="text-xs text-gray-600 mb-3">No accounts registered yet. Add one below.</p>
+        )}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {accounts.map((a) => (
+            <label
+              key={a.id}
+              className={`px-3 py-2 rounded-md text-sm border cursor-pointer transition-colors ${
+                selectedAccountId === a.accountId
+                  ? "bg-amber-900/30 border-amber-700 text-amber-200"
+                  : "bg-[#0a0a0a] border-[#333] text-gray-400 hover:border-[#555]"
+              }`}
+            >
+              <input
+                type="radio"
+                name="aws-account"
+                checked={selectedAccountId === a.accountId}
+                onChange={() => setSelectedAccountId(a.accountId)}
+                disabled={!hasAws || loading}
+                className="sr-only"
+              />
+              {a.accountId}
+            </label>
+          ))}
         </div>
       </div>
-      <button 
-        type="submit" 
-        disabled={!hasAws || loading}
-        className="bg-[#f90] text-black px-4 py-2 rounded font-medium disabled:opacity-50"
-      >
-        {loading ? "Assuming Role..." : "Run AWS Discovery"}
-      </button>
 
-      {result && (
-        <div className="mt-4 p-4 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
-          <p>Scan complete!</p>
-          <p>Discovered {result.assets?.length || 0} assets and {result.edges?.length || 0} relationships.</p>
-        </div>
+      {/* Register new account */}
+      {hasAws && (
+        <form onSubmit={handleRegister} className="space-y-3 p-4 bg-[#0a0a0a] border border-[#333] rounded-lg">
+          <h3 className="text-sm font-medium text-gray-400">Register AWS Account</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Account ID (12 digits)</label>
+              <input
+                type="text"
+                value={newAccountId}
+                onChange={e => setNewAccountId(e.target.value.replace(/\D/g, "").slice(0, 12))}
+                disabled={!hasAws || registering}
+                placeholder="123456789012"
+                className="w-full bg-[#111] border border-[#333] rounded px-3 py-2 text-white text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">IAM Role ARN</label>
+              <input
+                type="text"
+                value={newRoleArn}
+                onChange={e => setNewRoleArn(e.target.value)}
+                disabled={!hasAws || registering}
+                placeholder="arn:aws:iam::123456789012:role/QuantumBlueAudit"
+                className="w-full bg-[#111] border border-[#333] rounded px-3 py-2 text-white text-sm"
+              />
+            </div>
+          </div>
+          {error && <p className="text-xs text-red-400">{error}</p>}
+          <button
+            type="submit"
+            disabled={!hasAws || registering}
+            className="text-sm bg-[#f90] text-black px-4 py-2 rounded font-medium disabled:opacity-50"
+          >
+            {registering ? "Registering..." : "Register Account"}
+          </button>
+        </form>
       )}
-    </form>
+
+      {/* Scan form */}
+      <form onSubmit={handleScan} className="space-y-4 mt-4 p-4 bg-[#0a0a0a] border border-[#333] rounded-lg">
+        {error && <p className="text-sm text-red-400">{error}</p>}
+        <button
+          type="submit"
+          disabled={!hasAws || !selectedAccountId || loading}
+          className="bg-[#f90] text-black px-4 py-2 rounded font-medium disabled:opacity-50 w-full"
+        >
+          {loading ? "Scanning..." : "Run AWS Discovery"}
+        </button>
+
+        {result && result.message ? (
+          <div className="p-3 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
+            {result.message}
+          </div>
+        ) : result && (
+          <div className="p-3 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
+            <p>Scan complete!</p>
+            <p>Discovered {result.assets?.length || 0} assets and {result.edges?.length || 0} relationships.</p>
+          </div>
+        )}
+      </form>
+    </div>
   );
 }
