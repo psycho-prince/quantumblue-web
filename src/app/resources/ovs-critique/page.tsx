@@ -374,8 +374,8 @@ export default function OvsCritiquePage() {
                     <p className="text-xs text-zinc-500 font-medium">Auto-seal source code, Smart Contracts, & AI assets</p>
                   </div>
                 </div>
-                <a href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" className="px-3 py-1 text-[9px] font-bold uppercase bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 rounded flex items-center gap-1 cursor-pointer">
-                  CLI Repo <ExternalLink className="w-3 h-3" />
+                <a href="/docs" target="_blank" className="px-3 py-1 text-[9px] font-bold uppercase bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 rounded flex items-center gap-1 cursor-pointer">
+                  CLI DOCS <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
               <p className="text-zinc-500 text-sm font-medium leading-relaxed">

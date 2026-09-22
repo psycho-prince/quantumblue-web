@@ -13,7 +13,6 @@ export function Hero() {
 
   return (
     <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 pb-20 px-6 overflow-hidden bg-black">
-      {/* Background Elements */}
       <LatticeVisualization />
 
       <motion.div
@@ -68,12 +67,12 @@ export function Hero() {
             transition={{ delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center gap-4 w-full"
           >
-            <Link href="/contact" className="px-8 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono flex-1 text-center group flex items-center justify-center gap-2">
-              ENTERPRISE CLOUD <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <Link href="/pricing" className="px-8 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono flex-1 text-center group flex items-center justify-center gap-2">
+              START FREE TRIAL <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="px-8 py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest font-mono flex-1 text-center group flex items-center justify-center gap-2">
+            <Link href="/contact" className="px-8 py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest font-mono flex-1 text-center group flex items-center justify-center gap-2">
               <Terminal className="w-4 h-4" />
-              CLI TOOLKIT
+              ENTERPRISE DEMO
             </Link>
           </motion.div>
         </div>
@@ -84,7 +83,6 @@ export function Hero() {
           transition={{ delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
           className="relative group"
         >
-          {/* Subtle Glow behind terminal */}
           <div className="absolute -inset-10 bg-accent-blue/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
           <div className="relative glass-glow-blue rounded-none p-1 border-accent-blue/30 shadow-[0_0_50px_rgba(59,130,246,0.1)] overflow-hidden">

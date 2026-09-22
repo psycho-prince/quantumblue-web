@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { Shield, Fingerprint, Lock, Database, Clock, FileCheck } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -11,43 +12,43 @@ const FRAMEWORKS = [
     framework: "BSA §63",
     fullName: "Bharatiya Sakshya Adhiniyam, 2023 — Section 63",
     capability: "Electronic evidence + certificate workflow",
-    details: "SHA-256 evidence hashing, device metadata capture, chain-of-custody records, and BSA §63 certificate generation with production method, device particulars, and operating conditions."
+    details: "SHA-256 evidence hashing, device metadata capture, chain-of-custody records, and BSA §63 certificate generation with production method, device particulars, and operating conditions.",
   },
   {
     framework: "IT Act §43",
     fullName: "Information Technology Act, 2000 — Section 43",
     capability: "Access and data-integrity controls",
-    details: "Unauthorized access monitoring, data integrity verification, and tamper-evident logging. Cryptographic controls that support defenses against unauthorized access to computer systems and data."
+    details: "Unauthorized access monitoring, data integrity verification, and tamper-evident logging. Cryptographic controls that support defenses against unauthorized access to computer systems and data.",
   },
   {
     framework: "IT Act §66",
     fullName: "Information Technology Act, 2000 — Section 66",
     capability: "Security incident evidence",
-    details: "Computer-related offence evidence capture with cryptographic signatures, chain-of-custody integrity, and audit trails supporting incident response and investigation workflows."
+    details: "Computer-related offence evidence capture with cryptographic signatures, chain-of-custody integrity, and audit trails supporting incident response and investigation workflows.",
   },
   {
     framework: "IT Act §66C",
     fullName: "Information Technology Act, 2000 — Section 66C",
     capability: "Authentication and identity controls",
-    details: "Identity verification, MFA enrollment, session management, and credential security controls. Role-based access control (RBAC) with audited permission enforcement."
+    details: "Identity verification, MFA enrollment, session management, and credential security controls. Role-based access control (RBAC) with audited permission enforcement.",
   },
   {
     framework: "IT Act §66E",
     fullName: "Information Technology Act, 2000 — Section 66E",
     capability: "Sensitive-data protection",
-    details: "Privacy controls for personal and sensitive information — encryption at rest (AES-256-GCM), data classification, access logging, and restricted export capabilities for confidential data."
+    details: "Privacy controls for personal and sensitive information — encryption at rest (AES-256-GCM), data classification, access logging, and restricted export capabilities for confidential data.",
   },
   {
     framework: "IT Act §72 / 72A",
     fullName: "Information Technology Act, 2000 — Sections 72 & 72A",
     capability: "Confidentiality and information controls",
-    details: "Confidentiality protections for personal information, breach notification support, and controlled data handling with encryption and access controls aligned with information privacy obligations."
+    details: "Confidentiality protections for personal information, breach notification support, and controlled data handling with encryption and access controls aligned with information privacy obligations.",
   },
   {
     framework: "DPDP Framework",
     fullName: "Digital Personal Data Protection Act, 2023 + Rules, 2025",
     capability: "Personal-data governance",
-    details: "Data classification, encryption at rest, retention enforcement, soft-delete and controlled deletion workflows, and access logging — designed to support personal-data governance obligations under the DPDP framework."
+    details: "Data classification, encryption at rest, retention enforcement, soft-delete and controlled deletion workflows, and access logging — designed to support personal-data governance obligations under the DPDP framework.",
   },
 ];
 
@@ -55,7 +56,6 @@ export default function CompliancePage() {
   return (
     <div className="min-h-screen bg-black pt-32 pb-20 px-6">
       <div className="max-w-5xl mx-auto space-y-24">
-        {/* Header */}
         <div className="space-y-6">
           <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">COMPLIANCE & CONTROLS</span>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white font-mono">
@@ -66,7 +66,6 @@ export default function CompliancePage() {
           </p>
         </div>
 
-        {/* Disclaimer */}
         <div className="p-6 bg-accent-blue/5 border border-accent-blue/20 rounded-none">
           <p className="text-zinc-400 text-sm font-mono leading-relaxed">
             The mapping below describes technical controls implemented by QuantumBlue that <span className="text-white font-bold">support</span> the listed legal and regulatory frameworks.
@@ -76,7 +75,6 @@ export default function CompliancePage() {
           </p>
         </div>
 
-        {/* Framework Table */}
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-white font-mono tracking-widest border-b border-border-bright pb-4">
             Framework → Capability Mapping
@@ -101,7 +99,6 @@ export default function CompliancePage() {
           ))}
         </div>
 
-        {/* Technical Standards */}
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-white font-mono tracking-widest border-b border-border-bright pb-4">
             Technical Standards
@@ -129,26 +126,24 @@ export default function CompliancePage() {
           </div>
         </div>
 
-        {/* CTA */}
         <div className="pt-12 border-t border-border-bright text-center space-y-6">
           <p className="text-zinc-500 text-sm font-mono">
-            QuantumBlue is an open-source Go CLI. Review the source code and technical specification on GitHub.
+            QuantumBlue is a B2B SaaS platform and CLI for post-quantum cryptography and digital evidence integrity.
+            The technical specification and API reference are available at <Link href="/docs" className="text-accent-blue hover:underline">/docs</Link>.
           </p>
           <div className="flex gap-4 justify-center">
-            <a
-              href="https://github.com/psycho-prince/quantumblue-cli"
-              target="_blank"
-              rel="noopener"
+            <Link
+              href="/docs"
               className="px-8 py-4 bg-accent-blue text-black font-bold text-xs uppercase tracking-widest hover:bg-blue-400 transition-colors"
             >
-              VIEW ON GITHUB
-            </a>
-            <a
+              TECHNICAL SPECIFICATION
+            </Link>
+            <Link
               href="/"
               className="px-8 py-4 border border-accent-blue/50 text-accent-blue font-bold text-xs uppercase tracking-widest hover:bg-accent-blue/10 transition-colors"
             >
               BACK TO HOME
-            </a>
+            </Link>
           </div>
         </div>
       </div>

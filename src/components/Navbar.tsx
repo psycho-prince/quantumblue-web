@@ -31,11 +31,10 @@ export function Navbar() {
             <span className="font-bold text-lg tracking-tight text-white font-mono leading-none neon-text-blue">QUANTUM_BLUE</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex gap-8">
             {NAV_LINKS.map((nav) => (
-              <Link 
-                key={nav.label} 
+              <Link
+                key={nav.label}
                 href={nav.href}
                 className="text-xs font-mono text-zinc-400 hover:text-white hover:neon-text-blue transition-colors uppercase tracking-widest"
               >
@@ -63,8 +62,8 @@ export function Navbar() {
                 </>
               )}
             </div>
-            
-            <button 
+
+            <button
               className="lg:hidden p-2 text-accent-blue"
               onClick={() => setMobileMenuOpen(true)}
             >
@@ -74,18 +73,17 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileMenuOpen(false)}
               className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] lg:hidden"
             />
-            <motion.div 
+            <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -95,7 +93,7 @@ export function Navbar() {
               <div className="flex flex-col h-full font-mono">
                 <div className="flex items-center justify-between mb-12">
                   <span className="font-bold text-lg text-white">MENU</span>
-                  <button 
+                  <button
                     onClick={() => setMobileMenuOpen(false)}
                     className="p-2 text-accent-red"
                   >
@@ -105,8 +103,8 @@ export function Navbar() {
 
                 <nav className="flex-1 space-y-6">
                   {NAV_LINKS.map((nav) => (
-                    <Link 
-                      key={nav.label} 
+                    <Link
+                      key={nav.label}
                       href={nav.href}
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-2xl font-bold text-zinc-400 hover:text-accent-blue transition-colors"
@@ -117,22 +115,18 @@ export function Navbar() {
                 </nav>
 
                 <div className="pt-8 border-t border-accent-blue/30 space-y-4">
-                  <a 
-                    href="https://github.com/psycho-prince/quantumblue-cli" 
-                    target="_blank" 
-                    rel="noopener"
+                  <Link
+                    href="/pricing"
                     className="block w-full py-4 bg-accent-blue text-black font-bold uppercase tracking-widest text-center"
                   >
-                    VIEW ON GITHUB
-                  </a>
-                  <a 
-                    href="https://github.com/psycho-prince/quantumblue-cli#readme" 
-                    target="_blank" 
-                    rel="noopener"
+                    PRICING
+                  </Link>
+                  <Link
+                    href="/contact"
                     className="block w-full py-4 border border-accent-blue text-accent-blue font-bold uppercase tracking-widest text-center"
                   >
-                    README
-                  </a>
+                    CONTACT SALES
+                  </Link>
                 </div>
               </div>
             </motion.div>

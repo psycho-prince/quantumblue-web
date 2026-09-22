@@ -30,8 +30,8 @@ export function Stats() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-10 mt-20">
-          <Link href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="px-16 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono">
-            INSTALL CLI
+          <Link href="/pricing" className="px-16 py-4 bg-accent-blue text-black font-bold uppercase tracking-widest font-mono">
+            REQUEST ACCESS
           </Link>
           <Link href="/compliance" className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-white transition-all font-mono">
             COMPLIANCE & CONTROLS <ArrowRight className="w-4 h-4" />

@@ -27,7 +27,6 @@ export function TerminalWidget() {
       }, COMMANDS[currentIndex].delay);
       return () => clearTimeout(timer);
     } else {
-      // Loop sequence after a pause
       const loopTimer = setTimeout(() => {
         setLines([]);
         setCurrentIndex(0);
@@ -36,8 +35,8 @@ export function TerminalWidget() {
     }
   }, [currentIndex]);
 
-  const copyUrl = () => {
-    navigator.clipboard.writeText("go install github.com/psycho-prince/quantumblue-cli@latest");
+  const copyCmd = () => {
+    navigator.clipboard.writeText("qb keygen --scheme hybrid-mldsa65-ed25519");
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
@@ -45,17 +44,15 @@ export function TerminalWidget() {
   return (
     <div className="w-full max-w-2xl font-mono text-[10px] sm:text-xs">
       <div className="bg-black/40 backdrop-blur-xl border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
-        {/* Terminal Header */}
         <div className="bg-white/[0.02] border-b border-white/5 px-4 py-3 flex items-center justify-between">
           <div className="flex gap-2">
             <div className="w-2.5 h-2.5 rounded-full bg-zinc-800" />
             <div className="w-2.5 h-2.5 rounded-full bg-zinc-800" />
             <div className="w-2.5 h-2.5 rounded-full bg-zinc-800" />
           </div>
-          <div className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">quantum-blue-cli — 80x24</div>
+          <div className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">quantum-blue — 80x24</div>
         </div>
 
-        {/* Terminal Body */}
         <div className="p-6 min-h-[260px] space-y-2">
           <AnimatePresence>
             {lines.map((line, i) => (
@@ -68,14 +65,12 @@ export function TerminalWidget() {
                 <span className={`${line.color || "text-zinc-300"} tracking-tight`}>
                   {line.text}
                 </span>
-                {line.text.includes("https") && (
-                  <button 
-                    onClick={copyUrl}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/5 rounded"
-                  >
-                    {isCopied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3 text-zinc-700" />}
-                  </button>
-                )}
+                <button
+                  onClick={copyCmd}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/5 rounded"
+                >
+                  {isCopied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3 text-zinc-700" />}
+                </button>
               </motion.div>
             ))}
           </AnimatePresence>

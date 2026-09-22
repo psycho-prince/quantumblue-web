@@ -22,22 +22,20 @@ const schemaOrgScript = (
         "@graph": [
           {
             "@type": "SoftwareApplication",
-            name: "Quantum Blue CLI",
-            applicationCategory: "Security",
-            applicationSubCategory: "Cryptography",
-            operatingSystem: "Linux, macOS, Windows",
-            description: "Open-source Go CLI for post-quantum cryptography (ML-DSA-65, ML-KEM-768), RFC 3161 trusted timestamping, BSA §63 electronic evidence workflows, cryptographic evidence integrity, chain-of-custody verification, and CBOM generation.",
+            name: "Quantum Blue",
+            applicationCategory: "BusinessApplication",
+            applicationSubCategory: "Security",
+            operatingSystem: "Web, Linux, macOS, Windows",
+            description: "B2B SaaS platform for post-quantum cryptography (ML-DSA-65, ML-KEM-768), RFC 3161 trusted timestamping, BSA §63 electronic evidence workflows, cryptographic evidence integrity, chain-of-custody verification, and CBOM generation.",
             url: "https://quantum-blue.in",
-            downloadUrl: "https://github.com/psycho-prince/quantumblue-cli",
-            installUrl: "https://github.com/psycho-prince/quantumblue-cli#installation",
             softwareSuite: "Quantum Blue",
             offers: {
               "@type": "Offer",
-              price: "0",
+              price: "4999",
               priceCurrency: "INR",
               availability: "https://schema.org/InStock",
             },
-            license: "https://www.apache.org/licenses/LICENSE-2.0",
+            license: "https://quantum-blue.in/terms",
             processorRequirements: "x86_64, ARM64",
             provider: {
               "@type": "Organization",
@@ -55,7 +53,7 @@ const schemaOrgScript = (
             name: "Quantum Blue",
             alternateName: "Quantum Blue — Quantum-Safe Evidence & Security Platform",
             url: "https://quantum-blue.in",
-            description: "Open-source Go CLI and SaaS platform for post-quantum cryptography, digital evidence integrity (BSA §63), security controls, and privacy governance in India.",
+            description: "B2B SaaS platform for post-quantum cryptography, digital evidence integrity (BSA §63), security controls, and privacy governance in India.",
             publisher: {
               "@type": "Organization",
               name: "Quantum Blue",
@@ -78,8 +76,8 @@ const schemaOrgScript = (
 
 export const metadata: Metadata = {
   title: "Quantum Blue — Quantum-Safe Evidence & Security Platform",
-  description: "Open-source Go CLI for hybrid post-quantum signing (ML-DSA-65 + Ed25519), RFC 3161 trusted timestamping, BSA §63 electronic evidence workflows, cryptographic evidence integrity and chain-of-custody verification, CBOM generation, and PQC risk scanning. Designed for security researchers, compliance teams, and organizations in India.",
-  keywords: ["post-quantum cryptography", "ML-DSA-65", "ML-KEM-768", "FIPS 204", "FIPS 203", "RFC 3161", "BSA §63", "Bharatiya Sakshya Adhiniyam", "electronic evidence", "chain of custody", "CBOM", "cryptographic bill of materials", "PQC", "quantum-safe", "Ed25519", "hybrid signatures", "India", "Go CLI", "evidence verification"],
+  description: "B2B SaaS platform for hybrid post-quantum signing (ML-DSA-65 + Ed25519), RFC 3161 trusted timestamping, BSA §63 electronic evidence workflows, cryptographic evidence integrity and chain-of-custody verification, CBOM generation, and PQC risk scanning. Designed for security researchers, compliance teams, and organizations in India.",
+  keywords: ["post-quantum cryptography", "ML-DSA-65", "ML-KEM-768", "FIPS 204", "FIPS 203", "RFC 3161", "BSA §63", "Bharatiya Sakshya Adhiniyam", "electronic evidence", "chain of custody", "CBOM", "cryptographic bill of materials", "PQC", "quantum-safe", "Ed25519", "hybrid signatures", "India", "SaaS", "evidence verification"],
   authors: [{ name: "Prince T. Philip" }],
   creator: "Prince T. Philip",
   publisher: "Quantum Blue",
@@ -155,16 +153,16 @@ export default function RootLayout({
                   <span className="font-bold text-xl tracking-tight text-white">Quantum Blue</span>
                 </div>
                 <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
-                  Open-source Go CLI for hybrid post-quantum signing, trusted timestamping, cryptographic evidence integrity and CBOM generation. Designed for electronic-evidence and security workflows in India.
+                  B2B SaaS platform for hybrid post-quantum signing, trusted timestamping, cryptographic evidence integrity and CBOM generation. Designed for electronic-evidence and security workflows in India.
                 </p>
               </div>
 
               <div className="space-y-6">
-                <h4 className="text-white font-bold text-sm tracking-tight uppercase">CLI Tool & Specs</h4>
+                <h4 className="text-white font-bold text-sm tracking-tight uppercase">Platform</h4>
                 <ul className="space-y-3 text-zinc-500 text-sm">
-                  <li><a href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">GitHub Repository</a></li>
+                  <li><Link href="/docs" className="hover:text-blue-400 transition-colors">API Documentation</Link></li>
                   <li><Link href="/compliance" className="hover:text-blue-400 transition-colors">Compliance & Controls</Link></li>
-                  <li><a href="https://github.com/psycho-prince/quantumblue-web" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Web Platform Repo</a></li>
+                  <li><Link href="/scanner" className="hover:text-blue-400 transition-colors">Free PQC Scanner</Link></li>
                 </ul>
               </div>
 
@@ -172,25 +170,24 @@ export default function RootLayout({
                 <h4 className="text-white font-bold text-sm tracking-tight uppercase">Legal & Regulatory</h4>
                 <ul className="space-y-3 text-zinc-500 text-sm">
                   <li><Link href="/privacy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link></li>
-                  <li><Link href="/terms" className="hover:text-blue-400 transition-colors">User Permission Agreement</Link></li>
-                  <li><Link href="/compliance" className="hover:text-blue-400 transition-colors">Compliance & Controls</Link></li>
+                  <li><Link href="/terms" className="hover:text-blue-400 transition-colors">Terms of Service</Link></li>
+                  <li><Link href="/legal" className="hover:text-blue-400 transition-colors">Legal Hub</Link></li>
                 </ul>
               </div>
 
               <div className="space-y-6">
-                <h4 className="text-white font-bold text-sm tracking-tight uppercase">Project</h4>
+                <h4 className="text-white font-bold text-sm tracking-tight uppercase">Company</h4>
                 <ul className="space-y-3 text-zinc-500 text-sm">
-                  <li><a href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">License (Apache-2.0)</a></li>
-                  <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/SECURITY.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Security Policy</a></li>
-                  <li><a href="https://github.com/psycho-prince/quantumblue-cli/blob/main/CHANGELOG.md" target="_blank" rel="noopener" className="hover:text-blue-400 transition-colors">Changelog</a></li>
-                  <li><Link href="/contact" className="hover:text-blue-400 transition-colors">Contact</Link></li>
+                  <li><Link href="/pricing" className="hover:text-blue-400 transition-colors">Pricing</Link></li>
+                  <li><Link href="/contact" className="hover:text-blue-400 transition-colors">Contact Sales</Link></li>
+                  <li><Link href="/blog" className="hover:text-blue-400 transition-colors">Blog</Link></li>
                 </ul>
               </div>
             </div>
 
             <div className="max-w-7xl mx-auto px-6 pt-12 mt-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6">
               <div className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
-                &copy; 2026 Quantum Blue &mdash; a project by Prince T. Philip
+                &copy; 2026 Quantum Blue. All rights reserved.
               </div>
               <div className="flex gap-4 items-center">
                 <div className="opacity-[0.02] hover:opacity-10 transition-opacity cursor-default select-none" title="Novus Ordo Seclorum">
@@ -202,8 +199,8 @@ export default function RootLayout({
                 </div>
                 <span className="p-2 text-zinc-600 hover:text-blue-400 transition-all cursor-default select-none text-xs" title="Protected: Hamsa Hand & Star of David">🪬 ✡</span>
                 <a href="https://quantum-blue.in" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-white transition-all"><Globe className="w-4 h-4" /></a>
-                <a href="https://github.com/psycho-prince/quantumblue-cli" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-white transition-all"><Lock className="w-4 h-4" /></a>
-                <a href="https://github.com/psycho-prince/quantumblue-web" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-white transition-all"><Activity className="w-4 h-4" /></a>
+                <a href="/docs" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-white transition-all"><Lock className="w-4 h-4" /></a>
+                <a href="/blog" target="_blank" rel="noopener noreferrer" className="p-2 text-zinc-500 hover:text-white transition-all"><Activity className="w-4 h-4" /></a>
               </div>
             </div>
           </footer>

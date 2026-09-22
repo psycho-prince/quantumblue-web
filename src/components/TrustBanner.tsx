@@ -41,7 +41,7 @@ export function TrustBanner() {
       </Link>
 
       <Link
-        href="https://github.com/psycho-prince/quantumblue-cli/blob/main/docs"
+        href="/docs"
         target="_blank"
         rel="noopener"
         className="mt-4 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 hover:text-white transition-colors font-mono"
