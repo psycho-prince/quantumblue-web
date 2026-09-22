@@ -68,40 +68,82 @@ export async function POST(req: Request) {
     }
 
     
-    const planIds: Record<string, string> = {
-      'STARTER': process.env.RAZORPAY_PLAN_STARTER || 'plan_TdcxSyaILWtAMM',
-      'PRO': process.env.RAZORPAY_PLAN_PRO || 'plan_Tdcy69p7jtVQie',
-      'BUSINESS': process.env.RAZORPAY_PLAN_BUSINESS || 'plan_TdcyjggCpTwsDa'
+    // Plan configuration matching roadmap pricing:
+    // STARTER: ₹4,999/year (annual, one-time UPI friendly)
+    // PRO: ₹4,999/month (recurring subscription)
+    // BUSINESS: ₹24,999/month (recurring subscription)
+    const PLANS: Record<string, { price: number; interval: 'year' | 'month'; total_count?: number }> = {
+      'STARTER':   { price: 4999, interval: 'year', total_count: 10 },
+      'PRO':       { price: 4999, interval: 'month', total_count: 120 },
+      'BUSINESS':  { price: 24999, interval: 'month', total_count: 120 },
     };
-    
-    if (!planIds[plan]) {
+
+    const planConfig = PLANS[plan];
+    if (!planConfig) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
-    // Create a Razorpay Subscription
+    const planIds: Record<string, string> = {
+      'STARTER': process.env.RAZORPAY_PLAN_STARTER || 'plan_TdcxSyaILWtAMM',
+      'PRO': process.env.RAZORPAY_PLAN_PRO || 'plan_Tdcy69p7jtVQie',
+      'BUSINESS': process.env.RAZORPAY_PLAN_BUSINESS || 'plan_TdcyjggCpTwsDa',
+    };
+
+    // For Starter (annual), create a one-time order for UPI/card convenience.
+    // For Pro/Business (monthly), create a recurring subscription.
+    if (plan === 'STARTER') {
+      // One-time order for annual starter plan
+      const order = await razorpay.orders.create({
+        amount: planConfig.price,
+        currency: 'INR',
+        receipt: `qb-starter-${internalOrgId}-${Date.now()}`,
+        notes: { clerkOrgId: internalOrgId, plan: 'STARTER' },
+      });
+
+      await prisma.subscription.create({
+        data: {
+          organization: { connect: { id: internalOrgId } },
+          razorpayCustomerId: billingCustomer.razorpayCustomerId,
+          razorpayPlanId: planIds[plan],
+          planKey: plan,
+          status: 'created',
+          currentPeriodStart: new Date(),
+          currentPeriodEnd: new Date(),
+        },
+      });
+
+      return NextResponse.json({
+        orderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        keyId: process.env.RAZORPAY_KEY_ID,
+      });
+    }
+
+    // Recurring subscription for Pro/Business
     const subscription = await razorpay.subscriptions.create({
       plan_id: planIds[plan],
       customer_notify: 1,
-      total_count: plan === 'STARTER' ? 10 : 120, // 10 years duration (yearly vs monthly)
-      notes: { clerkOrgId: internalOrgId, plan }
+      total_count: planConfig.total_count,
+      notes: { clerkOrgId: internalOrgId, plan },
     });
 
     await prisma.subscription.create({
       data: {
-        clerkOrgId: internalOrgId,
+        organization: { connect: { id: internalOrgId } },
         razorpayCustomerId: billingCustomer.razorpayCustomerId,
         razorpaySubscriptionId: subscription.id,
         razorpayPlanId: planIds[plan],
         planKey: plan,
         status: 'created',
         currentPeriodStart: new Date(),
-        currentPeriodEnd: new Date()
-      }
+        currentPeriodEnd: new Date(),
+      },
     });
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       subscriptionId: subscription.id,
-      keyId: process.env.RAZORPAY_KEY_ID
+      keyId: process.env.RAZORPAY_KEY_ID,
     });
 
   } catch (error: any) {
