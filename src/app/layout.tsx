@@ -6,11 +6,75 @@ import { Navbar } from "@/components/Navbar";
 import { CookieBanner } from "@/components/CookieBanner";
 import { Inter, JetBrains_Mono, Fira_Code, Plus_Jakarta_Sans } from "next/font/google";
 import clsx from "clsx";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
-const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" });
-const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-plus-jakarta-sans" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: 'swap' });
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono", display: 'swap' });
+const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code", display: 'swap' });
+const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-plus-jakarta-sans", display: 'swap' });
+
+const schemaOrgScript = (
+  <script
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+      __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            name: "Quantum Blue CLI",
+            applicationCategory: "Security",
+            applicationSubCategory: "Cryptography",
+            operatingSystem: "Linux, macOS, Windows",
+            description: "Open-source Go CLI for post-quantum cryptography (ML-DSA-65, ML-KEM-768), RFC 3161 trusted timestamping, BSA §63 electronic evidence workflows, cryptographic evidence integrity, chain-of-custody verification, and CBOM generation.",
+            url: "https://quantum-blue.in",
+            downloadUrl: "https://github.com/psycho-prince/quantumblue-cli",
+            installUrl: "https://github.com/psycho-prince/quantumblue-cli#installation",
+            softwareSuite: "Quantum Blue",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "INR",
+              availability: "https://schema.org/InStock",
+            },
+            license: "https://www.apache.org/licenses/LICENSE-2.0",
+            processorRequirements: "x86_64, ARM64",
+            provider: {
+              "@type": "Organization",
+              name: "Quantum Blue",
+              url: "https://quantum-blue.in",
+              founder: {
+                "@type": "Person",
+                name: "Prince T. Philip",
+                jobTitle: "Founder",
+              },
+            },
+          },
+          {
+            "@type": "WebSite",
+            name: "Quantum Blue",
+            alternateName: "Quantum Blue — Quantum-Safe Evidence & Security Platform",
+            url: "https://quantum-blue.in",
+            description: "Open-source Go CLI and SaaS platform for post-quantum cryptography, digital evidence integrity (BSA §63), security controls, and privacy governance in India.",
+            publisher: {
+              "@type": "Organization",
+              name: "Quantum Blue",
+              url: "https://quantum-blue.in",
+            },
+            potentialAction: {
+              "@type": "SearchAction",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: "https://quantum-blue.in/search?q={search_term_string}",
+              },
+              "query-input": "required name=search_term_string",
+            },
+          },
+        ],
+      }),
+    }}
+  />
+);
 
 export const metadata: Metadata = {
   title: "Quantum Blue — Quantum-Safe Evidence & Security Platform",
@@ -58,104 +122,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const schemaOrg = JSON.stringify({
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "SoftwareApplication",
-        name: "Quantum Blue CLI",
-        applicationCategory: "Security",
-        applicationSubCategory: "Cryptography",
-        operatingSystem: "Linux, macOS, Windows",
-        description: "Open-source Go CLI for post-quantum cryptography (ML-DSA-65, ML-KEM-768), RFC 3161 trusted timestamping, BSA §63 electronic evidence workflows, cryptographic evidence integrity, chain-of-custody verification, and CBOM generation.",
-        url: "https://quantum-blue.in",
-        downloadUrl: "https://github.com/psycho-prince/quantumblue-cli",
-        installUrl: "https://github.com/psycho-prince/quantumblue-cli#installation",
-        softwareSuite: "Quantum Blue",
-        offers: {
-          "@type": "Offer",
-          price: "0",
-          priceCurrency: "INR",
-          availability: "https://schema.org/InStock",
-        },
-        license: "https://www.apache.org/licenses/LICENSE-2.0",
-        processorRequirements: "x86_64, ARM64",
-        provider: {
-          "@type": "Organization",
-          name: "Quantum Blue",
-          url: "https://quantum-blue.in",
-          founder: {
-            "@type": "Person",
-            name: "Prince T. Philip",
-            jobTitle: "Founder",
-          },
-        },
-      },
-      {
-        "@type": "WebSite",
-        name: "Quantum Blue",
-        alternateName: "Quantum Blue — Quantum-Safe Evidence & Security Platform",
-        url: "https://quantum-blue.in",
-        description: "Open-source Go CLI and SaaS platform for post-quantum cryptography, digital evidence integrity (BSA §63), security controls, and privacy governance in India.",
-        publisher: {
-          "@type": "Organization",
-          name: "Quantum Blue",
-          url: "https://quantum-blue.in",
-        },
-        potentialAction: {
-          "@type": "SearchAction",
-          target: {
-            "@type": "EntryPoint",
-            urlTemplate: "https://quantum-blue.in/search?q={search_term_string}",
-          },
-          "query-input": "required name=search_term_string",
-        },
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://quantum-blue.in/#webpage",
-        url: "https://quantum-blue.in/",
-        name: "Quantum Blue — Home",
-        isPartOf: {
-          "@id": "https://quantum-blue.in/#website",
-        },
-        about: {
-          "@id": "https://quantum-blue.in/#softwareapplication",
-        },
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://quantum-blue.in/#organization",
-        name: "Quantum Blue",
-        url: "https://quantum-blue.in",
-        logo: {
-          "@type": "ImageObject",
-          url: "https://quantum-blue.in/og-image.png",
-        },
-        sameAs: [
-          "https://github.com/psycho-prince/quantumblue-cli",
-          "https://github.com/psycho-prince/quantumblue-web",
-        ],
-        founder: {
-          "@type": "Person",
-          name: "Prince T. Philip",
-        },
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://quantum-blue.in/#breadcrumb",
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Home",
-            item: "https://quantum-blue.in/",
-          },
-        ],
-      },
-    ],
-  });
-
   return (
     <ClerkProvider
       signInUrl="/sign-in"
@@ -164,13 +130,9 @@ export default function RootLayout({
       signUpFallbackRedirectUrl="/dashboard"
     >
       <html lang="en" className={clsx(inter.variable, jetbrainsMono.variable, firaCode.variable, plusJakartaSans.variable, "dark scroll-smooth")}>
-        <head>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: schemaOrg }}
-          />
-        </head>
-        <body className="selection:bg-blue-500/30 bg-[#000] text-white">
+        <body className="selection:bg-blue-500/30 bg-[#000] text-white font-sans antialiased">
+          {schemaOrgScript}
+
           {/* Subtle Background Glow */}
           <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full" />
@@ -190,7 +152,7 @@ export default function RootLayout({
                   <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
                     <ShieldCheck className="w-5 h-5 text-blue-400" />
                   </div>
-                  <span className="font-bold text-xl tracking-tight text-white font-[family-name:var(--font-plus-jakarta-sans)]">Quantum Blue</span>
+                  <span className="font-bold text-xl tracking-tight text-white">Quantum Blue</span>
                 </div>
                 <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
                   Open-source Go CLI for hybrid post-quantum signing, trusted timestamping, cryptographic evidence integrity and CBOM generation. Designed for electronic-evidence and security workflows in India.
