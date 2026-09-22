@@ -15,13 +15,13 @@ export function Hero() {
     <section className="relative min-h-[90vh] flex flex-col items-center justify-center pt-20 pb-20 px-6 overflow-hidden bg-black">
       {/* Background Elements */}
       <LatticeVisualization />
-      
-      <motion.div 
+
+      <motion.div
         style={{ scale: heroScale, opacity: heroOpacity }}
         className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-20 items-center z-10"
       >
         <div className="flex flex-col items-start text-left">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-2 px-3 py-1 bg-accent-blue/10 border border-accent-blue/30 rounded-none mb-8"
@@ -31,36 +31,38 @@ export function Hero() {
           </motion.div>
 
           <div className="mb-8">
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="text-4xl md:text-6xl font-bold leading-[1.1] tracking-tight text-white font-mono uppercase"
             >
-              THE POST-QUANTUM <br />
-              <span className="neon-text-blue">SECURITY PLATFORM</span>
+              THE QUANTUM-SAFE <br />
+              <span className="neon-text-blue">EVIDENCE & SECURITY</span>
+              <br />
+              PLATFORM
             </motion.h1>
           </div>
-          
-          <motion.p 
+
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
             className="text-lg md:text-xl text-zinc-400 max-w-xl font-mono mb-6 leading-relaxed"
           >
-            Discover quantum risk. Migrate legacy cryptography. Protect critical data with standardized post-quantum cryptography.
+            Discover quantum risk. Protect critical data. Preserve digital evidence. Verify integrity with post-quantum cryptography.
           </motion.p>
 
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             className="text-sm md:text-md text-accent-blue font-bold tracking-widest font-mono mb-12"
           >
-            DISCOVER → MIGRATE → PROTECT → PROVE
+            DISCOVER → PROTECT → PRESERVE → VERIFY
           </motion.p>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6 }}
@@ -84,11 +86,11 @@ export function Hero() {
         >
           {/* Subtle Glow behind terminal */}
           <div className="absolute -inset-10 bg-accent-blue/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-          
+
           <div className="relative glass-glow-blue rounded-none p-1 border-accent-blue/30 shadow-[0_0_50px_rgba(59,130,246,0.1)] overflow-hidden">
-             <div className="bg-black/90 p-4">
-               <TerminalWidget />
-             </div>
+            <div className="bg-black/90 p-4">
+              <TerminalWidget />
+            </div>
           </div>
         </motion.div>
       </motion.div>

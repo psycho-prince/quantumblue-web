@@ -32,7 +32,7 @@ export default function PrivacyPolicyPage() {
 
         <h2>3. How We Use Your Data</h2>
         <p>
-          The data we collect is used strictly to provide, maintain, and improve the Quantum Blue platform. Cryptographic metadata is utilized solely for generating verifiable Evidence Records under the Indian Evidence Act §65B(4) and generating CBOMs.
+          The data we collect is used strictly to provide, maintain, and improve the Quantum Blue platform. Cryptographic metadata is utilized solely for generating verifiable Evidence Records under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023, and for generating CBOMs.
         </p>
 
         <h2>4. Data Retention and Security</h2>

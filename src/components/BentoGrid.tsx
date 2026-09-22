@@ -1,54 +1,36 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Lock, Cpu, Fingerprint, Terminal, Shield, Database } from "lucide-react";
+import { ShieldCheck, Fingerprint, Lock, Database, Upload, Hash, Clock, FileCheck, CheckCircle } from "lucide-react";
 
-const CARDS = [
+const PILLARS = [
   {
-    title: "HYBRID_PQC_SIGNATURES",
-    description: "COMBINES ML-DSA-65 (FIPS 204) WITH ED25519 FOR QUANTUM-RESISTANT SIGNATURES THAT REMAIN CLASSICALLY VERIFIABLE TODAY.",
-    icon: Cpu,
-    span: "md:col-span-8",
-    tags: ["FIPS_204", "ML-DSA-65"],
-    bg: "bg-accent-blue/10"
+    num: "01",
+    title: "POST-QUANTUM CRYPTOGRAPHY",
+    items: ["ML-DSA-65", "ML-KEM-768", "Hybrid Signatures", "Crypto-Agility"],
+    icon: ShieldCheck,
+    description: "NIST-standardized post-quantum algorithms. Hybrid signatures combining ML-DSA-65 and Ed25519 for post-quantum migration with classical verification compatibility."
   },
   {
-    title: "RFC_3161_TIMESTAMPING",
-    description: "BINDS FILES TO TRUSTED TSA CLOCK AUTHORITIES, CREATING IMMUTABLE PROOF OF EXISTENCE.",
-    icon: Lock,
-    span: "md:col-span-4",
-    status: "RFC_3161_COMPLIANT",
-    bg: "bg-accent-blue/10"
-  },
-  {
-    title: "§65B_EVIDENCE_RECORDS",
-    description: "GENERATES VERIFICATION LOGS AND CERTIFICATES FORMATTED FOR INDIAN EVIDENCE ACT §65B(4) ADMISSIBILITY.",
+    num: "02",
+    title: "DIGITAL EVIDENCE",
+    items: ["BSA §63", "Evidence Hashing", "Metadata", "Chain of Custody", "Certificate Workflows"],
     icon: Fingerprint,
-    span: "md:col-span-4",
-    live: true,
-    bg: "bg-accent-green/10"
+    description: "Cryptographic integrity, provenance, metadata capture and certificate-generation capabilities designed to support electronic-record workflows under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023."
   },
   {
-    title: "QUANTUM_BLUE_CLI",
-    description: "OPEN-SOURCE GO CLI. KEYGEN, SIGN, VERIFY, AND GENERATE CBOM FROM YOUR TERMINAL.",
-    icon: Terminal,
-    span: "md:col-span-8",
-    terminal: true,
-    bg: "bg-accent-blue/10"
+    num: "03",
+    title: "SECURITY",
+    items: ["Access Control", "Audit Trails", "Tamper Detection", "Incident Evidence"],
+    icon: Lock,
+    description: "IT Act-aligned controls for access monitoring, integrity verification, and tamper-evident logging. Security incident evidence captured with cryptographic signatures."
   },
   {
-    title: "CBOM_GENERATION",
-    description: "AUTOMATED CRYPTOGRAPHIC BILL OF MATERIALS IN CYCLONEDX JSON FORMAT FOR AUDIT TRAILS.",
-    icon: Shield,
-    span: "md:col-span-6",
-    bg: "bg-accent-blue/10"
-  },
-  {
-    title: "ML-KEM-768_KEY_EXCHANGE",
-    description: "MODULE-LATTICE KEY ENCAPSULATION (FIPS 203) FOR QUANTUM-SAFE KEY EXCHANGE OPERATIONS.",
+    num: "04",
+    title: "PRIVACY",
+    items: ["Encryption", "Data Classification", "Retention", "Controlled Deletion"],
     icon: Database,
-    span: "md:col-span-6",
-    bg: "bg-accent-blue/10"
+    description: "Personal-data governance with AES-256-GCM encryption at rest, data classification policies, retention enforcement, and controlled deletion workflows aligned with the DPDP framework."
   }
 ];
 
@@ -56,60 +38,51 @@ export function BentoGrid() {
   return (
     <section id="platform" className="py-32 max-w-7xl mx-auto px-6 bg-black">
       <div className="mb-20">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="space-y-4 max-w-2xl"
         >
-          <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">CLI_CAPABILITIES</span>
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white font-mono">CRYPTOGRAPHIC <br />TOOLCHAIN.</h2>
+          <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">FOUR_LAYERS</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white font-mono">
+            EVIDENCE <br />INTEGRITY.
+          </h2>
           <p className="text-zinc-400 text-lg font-mono leading-relaxed">
-            EVERY CAPABILITY AVAILABLE IN THE OPEN-SOURCE QUANTUMBLUE CLI TOOL.
+            FOUR LAYERS. ONE PLATFORM. POST-QUANTUM CRYPTOGRAPHY, DIGITAL EVIDENCE, SECURITY CONTROLS, AND PRIVACY GOVERNANCE.
           </p>
         </motion.div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-        {CARDS.map((card, i) => (
+      <div className="grid md:grid-cols-2 gap-6">
+        {PILLARS.map((pillar, i) => (
           <motion.div
-            key={card.title}
+            key={pillar.num}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
-            className={`${card.span} glass rounded-none p-8 md:p-10 min-h-[380px] flex flex-col justify-between group overflow-hidden relative border border-border-bright transition-all hover:border-accent-blue`}
+            className="glass rounded-none p-10 md:p-12 min-h-[320px] flex flex-col justify-between group overflow-hidden relative border border-border-bright transition-all hover:border-accent-blue"
           >
             <div className="relative z-10">
               <div className="w-12 h-12 bg-black border border-accent-blue/50 flex items-center justify-center mb-8 group-hover:bg-accent-blue group-hover:text-black transition-colors">
-                <card.icon className="w-5 h-5 text-accent-blue group-hover:text-black transition-colors" />
+                <pillar.icon className="w-5 h-5 text-accent-blue group-hover:text-black transition-colors" />
               </div>
-              <h3 className={`font-bold text-white tracking-tight mb-4 font-mono ${card.span.includes('col-span-8') ? 'text-3xl' : 'text-xl'}`}>
-                {card.title}
+              <span className="text-[10px] font-bold text-accent-blue uppercase tracking-widest font-mono">{pillar.num}</span>
+              <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-white font-mono mt-2">
+                {pillar.title}
               </h3>
-              <p className="text-zinc-400 text-sm font-mono leading-relaxed max-w-md">
-                {card.description}
+              <p className="text-zinc-400 text-sm font-mono leading-relaxed mt-6 max-w-md">
+                {pillar.description}
               </p>
             </div>
 
-            <div className="relative z-10 mt-8">
-              {card.tags && (
-                <div className="flex gap-2">
-                  {card.tags.map(tag => (
-                    <span key={tag} className="px-3 py-1 bg-accent-blue/10 border border-accent-blue/30 text-[9px] font-bold uppercase tracking-widest text-accent-blue font-mono">{tag}</span>
-                  ))}
-                </div>
-              )}
-              {card.status && <div className="font-mono text-[10px] text-zinc-600">{card.status}</div>}
-              {card.terminal && (
-                <div className="bg-black border border-accent-blue/30 p-6 font-mono text-[10px] sm:text-xs">
-                  <div className="space-y-2">
-                    <p className="flex gap-2"><span className="text-zinc-600">$</span> <span className="text-zinc-300">qb keygen --scheme hybrid-mldsa65-ed25519</span></p>
-                    <p className="text-accent-green ml-4 font-bold">✓ KEYPAIR_GENERATED</p>
-                    <p className="text-zinc-500 ml-4 font-bold">ML-DSA-65 + Ed25519 hybrid key saved to ~/.qb/keys/</p>
-                  </div>
-                </div>
-              )}
+            <div className="relative z-10 mt-8 flex flex-wrap gap-2">
+              {pillar.items.map((item) => (
+                <span key={item} className="px-3 py-1 bg-accent-blue/5 border border-accent-blue/20 text-[9px] font-bold uppercase tracking-widest text-accent-blue font-mono">
+                  {item}
+                </span>
+              ))}
             </div>
           </motion.div>
         ))}

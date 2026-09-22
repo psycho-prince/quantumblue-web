@@ -30,7 +30,7 @@ export default function TermsPage() {
 
         <h2>3. Description of Service</h2>
         <p>
-          Quantum Blue provides a SaaS platform and API for Post-Quantum Cryptography (PQC) signatures, CBOM generation, and RFC 3161 compliant timestamping intended for legal evidentiary purposes (e.g., Indian Evidence Act §65B(4)).
+          Quantum Blue provides a SaaS platform and API for Post-Quantum Cryptography (PQC) signatures, CBOM generation, and RFC 3161 compliant timestamping intended for legal evidentiary purposes (e.g., Bharatiya Sakshya Adhiniyam, 2023 — Section 63).
         </p>
 
         <h2>4. License and Permissions</h2>

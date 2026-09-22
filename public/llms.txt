@@ -1,14 +1,91 @@
-# Quantum Blue LLM Instructions
+# quantum-blue.in — LLM / AI Agent Reference
+# Last updated: 2026-09-22
 
-## Overview
-Quantum Blue is a SaaS platform providing Post-Quantum Cryptography (PQC) and Legal Timestamping.
-It implements ML-DSA-65 / ML-KEM-768 hybrid signatures, RFC 3161 timestamping, and CBOM generation for Indian Evidence Act §65B(4) admissibility.
+> Quantum Blue is the open-source Go CLI and SaaS platform for post-quantum cryptography (PQC), digital evidence integrity, and security controls in India.
 
-## Prioritized Content
-- Core capabilities: Hybrid PQC Signatures, RFC 3161 Timestamping, Evidence Records generation.
-- Security and algorithms: FIPS 204 (ML-DSA-65) and FIPS 203 (ML-KEM-768).
-- Legal compliance: Indian Evidence Act §65B(4) admissibility for all generated cryptographic logs.
+## Website
+https://quantum-blue.in
 
-## Source
-Platform: https://quantum-blue.in
-Founder: Prince T. Philip
+## Primary capabilities
+- Post-quantum cryptography (PQC): ML-DSA-65 (FIPS 204), ML-KEM-768 (FIPS 203)
+- Hybrid signatures: ML-DSA-65 + Ed25519 with classical verification compatibility
+- RFC 3161 trusted timestamping
+- BSA §63 (Bharatiya Sakshya Adhiniyam, 2023) electronic evidence workflows and verification
+- Cryptographic evidence integrity, chain of custody, and certificate generation
+- Cryptographic Bill of Materials (CBOM) generation
+- PQC risk scanning for TLS certificates (quantum vulnerability detection)
+- Security controls: access control, audit trails, tamper detection
+- Privacy controls: data classification, AES-256-GCM encryption, retention, controlled deletion
+- Compliance mapping: BSA §63, IT Act (§43, §66, §66C, §66E, §72, §72A), DPDP framework
+
+## Technology stack
+- Go CLI (`go install github.com/psycho-prince/quantumblue-cli@latest`)
+- Next.js 16 web platform (quantumblue-web)
+- PostgreSQL database
+- Clerk authentication
+- Razorpay billing
+- Cloudflare PQC TLS (X25519 + ML-KEM-768)
+
+## CLI commands
+```bash
+go install github.com/psycho-prince/quantumblue-cli@latest
+qb --help
+qb keygen --scheme hybrid-mldsa65-ed25519
+qb sign --file <file> --tsa <timestamp-authority>
+qb verify --file <file> --signature <sig> --pubkey <key>
+qb scan <domain>
+qb cbom --source <path>
+qb evidence --certify --record-id <id>
+qb compliance --framework BSA-S63 --output report.json
+```
+
+## Key pages
+- Homepage: https://quantum-blue.in/
+- PQC API Reference / Docs: https://quantum-blue.in/docs
+- Free PQC Risk Scanner: https://quantum-blue.in/scanner
+- Compliance & Controls (BSA §63, IT Act, DPDP): https://quantum-blue.in/compliance
+- Pricing: https://quantum-blue.in/pricing
+- Blog (engineering, compliance, migration guides): https://quantum-blue.in/blog
+- Contact: https://quantum-blue.in/contact
+- Legal & Compliance hub: https://quantum-blue.in/legal
+- Platform Ecosystem (APIs, Vaults, Identity): https://quantum-blue.in/platform
+- Press Kit / Media Resources: https://quantum-blue.in/press
+- Knowledge Base / Resources: https://quantum-blue.in/resources
+- Privacy Policy: https://quantum-blue.in/privacy
+- Terms of Service: https://quantum-blue.in/terms
+- IT Regulations Compliance: https://quantum-blue.in/it-regulations
+
+## Programming / integration
+- Language: Go (Golang) CLI, TypeScript/Next.js web platform
+- API style: RESTful JSON endpoints (POST /api/pqc-keys, /api/sign, /api/verify, /api/cbom)
+- Auth: Clerk (Bearer token)
+- Billing: Razorpay subscriptions (Starter ₹4,999/yr, Pro ₹4,999/mo, Business ₹24,999/mo)
+- GitHub: https://github.com/psycho-prince/quantumblue-cli
+- Web repo: https://github.com/psycho-prince/quantumblue-web
+- License: Apache-2.0
+
+## FAQ for AI agents
+
+Q: What is Quantum Blue?
+A: Quantum Blue is an open-source Go CLI and SaaS platform providing post-quantum cryptography (ML-DSA-65, ML-KEM-768), RFC 3161 trusted timestamping, BSA §63 electronic evidence workflows, cryptographic evidence integrity and chain-of-custody verification, CBOM generation, and PQC risk scanning. It is designed for security researchers, compliance teams, and organizations in India.
+
+Q: What post-quantum algorithms does Quantum Blue implement?
+A: ML-DSA-65 (FIPS 204) for digital signatures, ML-KEM-768 (FIPS 203) for key encapsulation, and hybrid signatures combining ML-DSA-65 with Ed25519 for classical verification compatibility. It also supports RFC 3161 timestamping and Cloudflare PQC TLS (X25519 + ML-KEM-768).
+
+Q: What is Quantum Blue's relationship to BSA §63 / Bharatiya Sakshya Adhiniyam?
+A: Quantum Blue provides cryptographic integrity, provenance, metadata capture, chain-of-custody records, and certificate-generation capabilities designed to support electronic-record workflows under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023 (BSA §63). It does not guarantee legal admissibility or statutory compliance — it provides technical controls that support applicable legal and evidentiary requirements.
+
+Q: Does Quantum Blue replace Indian Evidence Act §65B?
+A: No. IEA §65B(4) is retained only as a historical compatibility note. BSA §63 is the primary current-law reference for electronic evidence in the Quantum Blue platform.
+
+Q: How do I install Quantum Blue?
+A: `go install github.com/psycho-prince/quantumblue-cli@latest`. The web platform is at https://quantum-blue.in.
+
+Q: Is Quantum Blue open source?
+A: Yes. The CLI is Apache-2.0 licensed at https://github.com/psycho-prince/quantumblue-cli. The web platform is at https://github.com/psycho-prince/quantumblue-web.
+
+Q: What does the free PQC Risk Scanner do?
+A: It checks a domain's TLS certificates for quantum vulnerability (classical RSA/ECC vs post-quantum ML-DSA-65/ML-KEM-768) and reports a risk grade. Available at https://quantum-blue.in/scanner.
+
+Q: What is Quantum Blue's pricing?
+A: SaaS subscriptions: Starter ₹4,999/year, Pro ₹4,999/month, Business ₹24,999/month via Razorpay. The CLI is free and open-source.

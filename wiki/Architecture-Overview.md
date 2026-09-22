@@ -15,7 +15,7 @@ To provide a seamless developer experience and robust tenant isolation, we utili
 * **Proxy Routing:** Once authenticated, the BFF securely provisions a temporary, hashed internal token and proxies the request to the Go Engine. This ensures the Go Engine is completely shielded from public internet traffic.
 
 ## 🗄️ 3. PostgreSQL & Immutable Audit Logs
-Every operation within Quantum Blue is tracked to satisfy strict regulatory compliance frameworks (like the Indian Evidence Act §65B).
+Every operation within Quantum Blue is tracked to satisfy strict regulatory compliance frameworks (like the Bharatiya Sakshya Adhiniyam, 2023 — Section 63).
 
 * **Multi-Tenant Isolation:** The database uses strict relational integrity to separate keys, audit events, and assets by `Organization`.
 * **API Key Hashing:** API keys are never stored in plain text. They are hashed using `SHA-256` before being stored in the database, guaranteeing that a database breach does not result in compromised API access.

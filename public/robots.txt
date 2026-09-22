@@ -1,6 +1,13 @@
 User-agent: *
 Allow: /
-Allow: /api/
-Allow: /docs/
-
+Disallow: /api/
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /forgot-password
+Disallow: /checkout
+Disallow: /cancel
+Disallow: /shipping
+Crawl-delay: 1
 Sitemap: https://quantum-blue.in/sitemap.xml
