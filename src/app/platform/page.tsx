@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Cpu, Database, Fingerprint, ArrowRight, ShieldCheck, Zap, Globe, Lock } from "lucide-react";
+import { Cpu, Database, Fingerprint, ArrowRight, ShieldCheck, Zap, Lock } from "lucide-react";
 import Link from "next/link";
 
 const MODULES = [

@@ -102,17 +102,23 @@ export default function OvsCritiquePage() {
   const ordersDiff = Math.abs(Math.round(logOvs - logRw));
 
   // Console terminal states — useRef to track active intervals/timeouts for cleanup
-  const [terminalLines, setTerminalLines] = useState<string[]>([]);
+  const [terminalLines, setTerminalLines] = useState<string[]>([
+    "// Welcome to QuantumBlue CLI Console",
+    "// Select a command below to trigger simulation...",
+    "kali@resilience-node:$"
+  ]);
+  const [testbenchLines, setTestbenchLines] = useState<string[]>([
+    "// Testbench ready.",
+    "// Press 'Run Diagnostics' to execute the standard controls sequence."
+  ]);
+
   const [cliActiveKey, setCliActiveKey] = useState<string | null>(null);
   const cliIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const cliTimeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   // Testbench diagnostic states
-  const [testbenchLines, setTestbenchLines] = useState<string[]>([]);
   const [isTestbenchRunning, setIsTestbenchRunning] = useState(false);
   const testbenchTimeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
-
-  // Copy Citation state
   const [copied, setCopied] = useState(false);
 
   // Cleanup all async timers on unmount
@@ -122,18 +128,6 @@ export default function OvsCritiquePage() {
       cliTimeoutRefs.current.forEach(t => clearTimeout(t));
       testbenchTimeoutRefs.current.forEach(t => clearTimeout(t));
     };
-  }, []);
-
-  useEffect(() => {
-    setTerminalLines([
-      "// Welcome to QuantumBlue CLI Console",
-      "// Select a command below to trigger simulation...",
-      "kali@resilience-node:~$"
-    ]);
-    setTestbenchLines([
-      "// Testbench ready.",
-      "// Press 'Run Diagnostics' to execute the standard controls sequence."
-    ]);
   }, []);
 
   const getSuperscript = (num: number) => {
@@ -518,21 +512,21 @@ export default function OvsCritiquePage() {
                 <div className="space-y-2">
                   <span className="block text-[9px] font-bold text-zinc-500 uppercase tracking-widest">2. Deconstructing the CLT Fallacy</span>
                   <p className="leading-relaxed text-justify text-zinc-400">
-                    The OVS model applies the Classical Central Limit Theorem (CLT) to quantum foam. Given parameters: σ_Planck ~ 10-³5, contributions N = 105, scaling S = 10⁴⁰, OVS claims σ_macro = √N × σ_Planck × S ~ 3.16 × 10⁷ m/s^2. This calculation is physically invalid because spacetime geometry at quantum scales is not a pre-existing classical background, and metric fluctuations are fundamentally entangled rather than independent. Standard quantum gravity models scale non-linearly (Random Walk alpha=1/2, Holographic alpha=2/3), resulting in metric fluctuations on the order of 10-^1⁹ to 10-^2⁴ m for biological scales—incomparable to OVS's claim.
+                    The OVS model applies the Classical Central Limit Theorem (CLT) to quantum foam. Given parameters: σ_Planck ~ 10-³5, contributions N = 105, scaling S = 10⁴⁰, OVS claims σ_macro = √N × σ_Planck × S ~ 3.16 × 10⁷ m/s^2. This calculation is physically invalid because spacetime geometry at quantum scales is not a pre-existing classical background, and metric fluctuations are fundamentally entangled rather than independent. Standard quantum gravity models scale non-linearly (Random Walk alpha=1/2, Holographic alpha=2/3), resulting in metric fluctuations on the order of 10-^1⁹ to 10-^2⁴ m for biological scales—incomparable to OVS&apos;s claim.
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <span className="block text-[9px] font-bold text-zinc-500 uppercase tracking-widest">3. Astrophysical Contradictions</span>
                   <p className="leading-relaxed text-justify text-zinc-400">
-                    If spacetime foam generated macroscopic variance of 10⁷ m/s^2, photons propagating across cosmological distances would undergo random diffusion, producing massive phase fluctuations. However, Hubble and Chandra images of cosmologically distant quasars display exceptional sharpness, indicating that the universe does not exhibit large-scale metric volatility. Lorentz invariance tests of gamma-ray bursts further establish that time-of-flight differences are infinitesimally small (~10-^1⁹ s), directly falsifying OVS.
+                    If spacetime foam generated macroscopic variance of 10⁷ m/s^2, photons propagating across cosmological distances would undergo random diffusion, producing massive phase fluctuations. However, Hubble and Chandra images of cosmologically distant quasars display exceptional sharpness, indicating that the universe does not exhibit large-scale metric volatility. Lorentz invariance tests of gamma-ray bursts further establish that time-of-flight differences are infinitesimally small (~10-^1⁹ s), directly falsifying OVS&apos;.
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <span className="block text-[9px] font-bold text-zinc-500 uppercase tracking-widest">4. Equivalence Principle Violation</span>
                   <p className="leading-relaxed text-justify text-zinc-400">
-                    The Weak Equivalence Principle (WEP) asserts inertial mass equals passive gravitational mass (m_i = m_g), meaning the trajectory of a freely falling body is independent of its structure. Einstein's elevator thought experiment shows that it is impossible to shield gravity because gravity is spacetime geometry, not a force propagating through a medium. Faraday cages work for electromagnetism due to negative and positive charges, but gravity has only a single positive charge type, meaning gravitational shielding cannot exist.
+                    The Weak Equivalence Principle (WEP) asserts inertial mass equals passive gravitational mass (m_i = m_g), meaning the trajectory of a freely falling body is independent of its structure. Einstein&amp;rsquo;s elevator thought experiment shows that it is impossible to shield gravity because gravity is spacetime geometry, not a force propagating through a medium. Faraday cages work for electromagnetism due to negative and positive charges, but gravity has only a single positive charge type, meaning gravitational shielding cannot exist.
                   </p>
                 </div>
 

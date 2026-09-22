@@ -1,19 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 export function CookieBanner() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    if (!localStorage.getItem("cookie_consent")) {
-      setIsVisible(true);
+  const [isVisible, setIsVisible] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("cookie_consent") ? true : false;
     }
-  }, []);
+    return false;
+  });
 
   const handleAccept = () => {
-    localStorage.setItem("cookie_consent", "true");
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("cookie_consent", "true");
+    }
     setIsVisible(false);
   };
 
@@ -29,7 +30,7 @@ export function CookieBanner() {
           onClick={handleAccept}
           className="whitespace-nowrap px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-full transition-colors"
         >
-          Accept & Continue
+          Accept &amp; Continue
         </button>
       </div>
     </div>

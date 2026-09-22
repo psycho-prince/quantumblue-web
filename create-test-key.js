@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const crypto = require('crypto');
+import { PrismaClient } from '@prisma/client';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 

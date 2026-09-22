@@ -41,7 +41,7 @@ export default function ITRegulationsPage() {
 
         <h2>4. DIFC / UAE</h2>
         <p>
-          Quantum Blue's output format has been mapped to DIFC Electronic Transactions Law (DIFC Law No. 2 of 2017) and DIFC Courts (RDC Parts 28 & 29) requirements, alongside the UAE National Encryption Policy (NEP 2025). [Status: complete — legal review pending].
+          Quantum Blue&apos;s output format has been mapped to DIFC Electronic Transactions Law (DIFC Law No. 2 of 2017) and DIFC Courts (RDC Parts 28 & 29) requirements, alongside the UAE National Encryption Policy (NEP 2025). [Status: complete — legal review pending].
         </p>
 
         <h2>5. Audit Trails & CBOM</h2>

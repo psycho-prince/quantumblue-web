@@ -1,5 +1,4 @@
-import { ShieldCheck, Fingerprint, Lock, Database, Upload, Hash, Clock, FileCheck, CheckCircle, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { BriefingShield } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { BentoGrid } from "@/components/BentoGrid";
 import { BriefingShield } from "@/components/BriefingShield";

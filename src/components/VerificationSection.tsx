@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Upload, CheckCircle, Loader2, ShieldCheck } from "lucide-react";
 
 interface CheckResult {
@@ -8,13 +8,14 @@ interface CheckResult {
   status: "pass" | "fail" | "pending";
 }
 
+
+
 function useDemoUploaded() {
-  const [demoUploaded, setDemoUploaded] = useState(false);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setDemoUploaded(!!localStorage.getItem("qb_demo_uploaded"));
-    }
-  }, []);
+  const [demoUploaded] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("qb_demo_uploaded") === "true";
+  });
+
   return demoUploaded;
 }
 

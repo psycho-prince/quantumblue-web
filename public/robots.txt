@@ -1,5 +1,26 @@
 User-agent: *
 Allow: /
+
+# Canonical host
+Host: https://quantum-blue.in
+
+# Sitemaps
+Sitemap: https://quantum-blue.in/sitemap.xml
+Sitemap: https://quantum-blue.in/llms.txt
+
+# Strip tracking params — avoid duplicate content in index
+Clean-param: utm_source / .
+Clean-param: utm_medium / .
+Clean-param: utm_campaign / .
+Clean-param: utm_term / .
+Clean-param: utm_content / .
+Clean-param: fbclid / .
+Clean-param: gclid / .
+Clean-param: mc_eid / .
+Clean-param: _ga / .
+Clean-param: _gl / .
+
+# Internal / authenticated paths — not for crawling
 Disallow: /api/
 Disallow: /sign-in
 Disallow: /sign-up
@@ -9,5 +30,8 @@ Disallow: /forgot-password
 Disallow: /checkout
 Disallow: /cancel
 Disallow: /shipping
+Disallow: /verify
+Disallow: /api-docs
+
+# Crawl tuning
 Crawl-delay: 1
-Sitemap: https://quantum-blue.in/sitemap.xml

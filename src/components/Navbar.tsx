@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ShieldCheck, Menu, X, Cpu } from "lucide-react";
+import { Menu, X, Cpu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { UserButton, useAuth } from "@clerk/nextjs";

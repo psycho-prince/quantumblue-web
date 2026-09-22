@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { UserButton, useUser, useClerk, useOrganization } from "@clerk/nextjs";
+import { UserButton, useUser, useClerk,  } from "@clerk/nextjs";
 import Link from "next/link";
-import { ShieldCheck, Key, RefreshCw, FileText, Copy, Send, Sparkles, Zap, Menu, X, Activity, Cpu, Library, LogOut, ScanLine, AlertTriangle, LayoutDashboard, Trash } from "lucide-react";
+import { ShieldCheck, Key, RefreshCw, FileText, Copy, Send, Sparkles, Zap, Menu, X, Cpu, Library, LogOut, ScanLine, AlertTriangle, LayoutDashboard, Trash } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe } from "@/components/Globe";
 import { EncryptedText } from "@/components/EncryptedText";
@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 type ApiKey = {
   id: string;
   name: string;
+  label: string;
   key: string;
   createdAt: string;
 };
@@ -26,7 +27,7 @@ type Asset = {
 export default function Dashboard() {
   const { user } = useUser();
   const { signOut } = useClerk();
-  const { organization } = useOrganization();
+  
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [newKeyName, setNewKeyName] = useState("");
@@ -35,8 +36,8 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [pqcKey, setPqcKey] = useState<{ public_key: string } | null>(null);
   const [generatingPqc, setGeneratingPqc] = useState(false);
-  const [stats, setStats] = useState<any>(null);
-  const [anomalies, setAnomalies] = useState<any[]>([]);
+  const [stats, setStats] = useState<unknown>(null);
+  const [anomalies, setAnomalies] = useState<unknown[]>([]);
   
   // AI Settings State
   const [aiSettings, setAiSettings] = useState({ aiProvider: "none", aiApiKey: "", customAiEndpoint: "" });
@@ -112,16 +113,43 @@ export default function Dashboard() {
     e.preventDefault();
     setSavingSettings(true);
     const headers: HeadersInit = process.env.NODE_ENV === "development" ? { "x-org-id": "org-test-001", "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+
+    // Validate: provider must be selected
+    if (!aiSettings.aiProvider || aiSettings.aiProvider === "none") {
+      alert("Please select an AI provider.");
+      setSavingSettings(false);
+      return;
+    }
+
+    // Validate: API key required for cloud providers
+    if ((aiSettings.aiProvider === "openai" || aiSettings.aiProvider === "gemini" || aiSettings.aiProvider === "claude") && !aiSettings.aiApiKey.trim()) {
+      alert("Please enter an API key for " + aiSettings.aiProvider + ".");
+      setSavingSettings(false);
+      return;
+    }
+
+    // Validate: webhook URL required for custom JAV-AI
+    if (aiSettings.aiProvider === "jav-ai" && !aiSettings.customAiEndpoint.trim()) {
+      alert("Please enter a JAV-AI webhook URL.");
+      setSavingSettings(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/settings", {
         method: "POST",
         headers,
         body: JSON.stringify(aiSettings)
       });
-      if (!res.ok) throw new Error("Failed to save settings");
-      alert("Settings saved successfully!");
-    } catch(err) {
-      alert("Error saving settings");
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to save settings");
+      }
+      alert("Settings saved successfully.");
+      // Refresh settings to confirm
+      await fetchSettings();
+    } catch (err) {
+      alert("Error saving settings: " + (err?.message || "unknown error"));
     } finally {
       setSavingSettings(false);
     }
@@ -162,16 +190,109 @@ export default function Dashboard() {
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
-      let response = "SECURITY_AUDIT_COMPLETE. ASSET_INTEGRITY_VERIFIED_AT_100%. NO_VULNERABILITIES_DETECTED.";
-      if (userMsg.toLowerCase().includes("risk")) {
-        response = "MARKET_ANALYSIS: PREDICTIVE_MODELS_SHOW_STABLE_ASSET_PERFORMANCE. INSTITUTIONAL_EXPOSURE_IS_WITHIN_SECURE_THRESHOLDS.";
-      } else if (userMsg.toLowerCase().includes("seal")) {
-        response = "ADVANCED_PROTECTION_PROTOCOL_INITIATED. NOTARIZING_ASSET_REGISTRY.";
+    // Build system prompt from current settings context
+    const provider = aiSettings.aiProvider;
+    const systemPrompt = "You are the Quantum Blue Security AI Analyst. " +
+      "You assist with post-quantum cryptography (PQC) guidance, " +
+      "BSA §63 electronic evidence workflows, CBOM analysis, " +
+      "and security posture assessment for Indian organizations. " +
+      "Respond in concise UPPERCASE_CODE style. " +
+      "If asked about capabilities, cite ML-DSA-65, ML-KEM-768, RFC 3161, BSA §63.";
+
+    try {
+      let response: string;
+
+      if (provider === "none") {
+        response = "AI_PROVIDER_NOT_CONFIGURED. NAVIGATE_TO_AI_SETTINGS_AND_CONFIGURE_A_PROVIDER_TO_ENABLE_SECURITY_ANALYSIS.";
+      } else if (provider === "openai") {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${aiSettings.aiApiKey}`
+          },
+          body: JSON.stringify({
+            model: "gpt-4",
+            messages: [
+              { role: "system", content: systemPrompt },
+              ...messages.filter(m => m.role === "user" || m.role === "assistant").map(m => ({ role: m.role, content: m.content })),
+              { role: "user", content: userMsg }
+            ],
+            max_tokens: 512,
+            temperature: 0.3
+          })
+        });
+        if (!res.ok) throw new Error(`OpenAI returned ${res.status}`);
+        const data = await res.json();
+        response = data.choices?.[0]?.message?.content || "NO_RESPONSE_FROM_API.";
+      } else if (provider === "gemini") {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${aiSettings.aiApiKey}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [
+              { role: "user", parts: [{ text: systemPrompt }] },
+              ...messages.filter(m => m.role === "user" || m.role === "assistant").map(m => ({
+                role: m.role === "assistant" ? "model" : "user",
+                parts: [{ text: m.content }]
+              })),
+              { role: "user", parts: [{ text: userMsg }] }
+            ]
+          })
+        });
+        if (!res.ok) throw new Error(`Gemini returned ${res.status}`);
+        const data = await res.json();
+        response = data.candidates?.[0]?.content?.parts?.[0]?.text || "NO_RESPONSE_FROM_API.";
+      } else if (provider === "claude") {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": aiSettings.aiApiKey,
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model: "claude-3-5-sonnet-20241022",
+            max_tokens: 512,
+            system: systemPrompt,
+            messages: messages.filter(m => m.role === "user" || m.role === "assistant").map(m => ({
+              role: m.role,
+              content: [{ type: "text", text: m.content }]
+            })),
+            user_message: userMsg
+          })
+        });
+        if (!res.ok) throw new Error(`Claude returned ${res.status}`);
+        const data = await res.json();
+        response = data.content?.[0]?.text || "NO_RESPONSE_FROM_API.";
+      } else if (provider === "jav-ai") {
+        const res = await fetch(aiSettings.customAiEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [
+              { role: "system", content: systemPrompt },
+              ...messages.filter(m => m.role === "user" || m.role === "assistant").map(m => ({ role: m.role, content: m.content })),
+              { role: "user", content: userMsg }
+            ]
+          })
+        });
+        if (!res.ok) throw new Error(`JAV-AI returned ${res.status}`);
+        const data = await res.json();
+        response = data.response || data.content || data.text || "NO_RESPONSE_FROM_WEBHOOK.";
+      } else {
+        response = "UNKNOWN_AI_PROVIDER.";
       }
-      setMessages(prev => [...prev, { role: "assistant", content: response }]);
+
+      // Normalize response to uppercase code style
+      const normalized = response.replace(/\s+/g, "_").toUpperCase().slice(0, 500);
+      setMessages(prev => [...prev, { role: "assistant", content: normalized }]);
+    } catch (err) {
+      const errorMsg = "AI_ERROR: " + (err?.message || "Request failed. Check your API key and network connectivity.").replace(/\s+/g, "_").toUpperCase();
+      setMessages(prev => [...prev, { role: "assistant", content: errorMsg }]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const isDev = process.env.NODE_ENV === "development";
@@ -327,7 +448,7 @@ export default function Dashboard() {
                                 <span className="text-[10px] text-zinc-500 uppercase tracking-widest">LAST_7_DAYS</span>
                               </div>
                               <div className="h-48 flex items-end gap-2">
-                                {stats?.dailyOps && Object.entries(stats.dailyOps).map(([date, count]: [string, any]) => (
+                                {stats?.dailyOps && Object.entries(stats.dailyOps).map(([date, count]: [string, number]) => (
                                   <div key={date} className="flex-1 flex flex-col items-center gap-2 group">
                                     <div className="w-full bg-accent-blue/20 relative group-hover:bg-accent-blue/40 transition-colors" style={{ height: `${Math.max((count / Math.max(...Object.values(stats.dailyOps) as number[], 1)) * 100, 2)}%` }}>
                                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black border border-border-bright text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
@@ -394,7 +515,7 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      {stats?.recentScans?.map((scan: any) => (
+                      {stats?.recentScans?.map((scan: Record<string, unknown>) => (
                         <div key={scan.id} className="flex items-center justify-between p-4 border border-border-bright hover:border-accent-blue transition-all">
                           <div>
                             <span className="text-sm font-bold text-white block">{scan.targetName}</span>
@@ -434,7 +555,7 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      {anomalies.map((anomaly: any) => (
+                      {anomalies.map((anomaly: Record<string, unknown>) => (
                          <div key={anomaly.id} className="p-4 bg-black border border-accent-red/30 space-y-2">
                            <div className="flex justify-between">
                               <span className="text-[10px] font-bold text-accent-red uppercase tracking-widest font-mono">{anomaly.kind} - {anomaly.severity}</span>
@@ -549,7 +670,7 @@ const signature = await qb.sign({ amount: 500M });
                          {keys.map(k => (
                            <div key={k.id} className="p-5 bg-black border border-border-bright hover:border-accent-blue transition-all flex items-center justify-between gap-4">
                              <div className="space-y-1 overflow-hidden">
-                                <span className="text-xs font-bold text-white uppercase tracking-wider block font-mono">{k.name}</span>
+                                <span className="text-xs font-bold text-white uppercase tracking-wider block font-mono">{k.label}</span>
                                 <code className="text-[10px] font-mono text-zinc-500 truncate block">{k.key}</code>
                              </div>
                              <div className="flex items-center gap-2">
@@ -758,12 +879,12 @@ const signature = await qb.sign({ amount: 500M });
                   </div>
 
                   {(aiSettings.aiProvider === "openai" || aiSettings.aiProvider === "gemini" || aiSettings.aiProvider === "claude") && (
-                    <div>
-                      <h3 className="text-sm font-bold font-mono mb-2">API KEY</h3>
-                      <input 
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-bold font-mono">API KEY</h3>
+                      <input
                         type="password"
-                        value={aiSettings.aiApiKey || ""}
-                        onChange={(e) => setAiSettings({...aiSettings, aiApiKey: e.target.value})}
+                        value={aiSettings.aiApiKey}
+                        onChange={(e) => setAiSettings({ ...aiSettings, aiApiKey: e.target.value })}
                         placeholder="sk-..."
                         className="w-full bg-black border border-border-bright p-3 text-sm text-white focus:border-accent-blue outline-none"
                       />

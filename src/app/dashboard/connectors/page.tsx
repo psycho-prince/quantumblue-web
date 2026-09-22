@@ -18,7 +18,7 @@ export default async function ConnectorsPage() {
   let hasGithub = false;
   let hasAws = false;
   if (entitlement && entitlement.features) {
-    const features = entitlement.features as any;
+    const features = entitlement.features as Record<string, unknown>;
     hasGithub = features.github_connector === true;
     hasAws = features.aws_connector === true;
   }

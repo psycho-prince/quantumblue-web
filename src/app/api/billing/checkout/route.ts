@@ -1,28 +1,31 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { auth, verifyToken } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/prisma';
 import { razorpay } from '@/lib/razorpay';
 
 export async function POST(req: Request) {
   try {
-    const authResult: any = await auth().catch(e => ({ error: String(e) }));
-    let userId: string | null = authResult?.userId || null;
-    let orgId: string | null = authResult?.orgId || null;
+    const authResult = await auth().catch(e => ({ error: String(e) }));
+    let userId: string | null = null;
+    let orgId: string | null = null;
+    if ('userId' in authResult) {
+      userId = authResult.userId;
+      orgId = authResult.orgId;
+    }
     
     if (!userId) {
       const authHeader = req.headers.get('authorization');
       if (authHeader && authHeader.startsWith('Bearer ')) {
         const token = authHeader.replace('Bearer ', '');
         try {
-          const { verifyToken } = require('@clerk/nextjs/server');
           if (!process.env.CLERK_SECRET_KEY) {
              return NextResponse.json({ error: 'CLERK_SECRET_KEY is missing on server' }, { status: 500 });
           }
           const verified = await verifyToken(token, { secretKey: process.env.CLERK_SECRET_KEY });
           userId = verified.sub as string;
-          orgId = (verified as any).org_id as string || null;
-        } catch (err: any) {
-          return NextResponse.json({ 
+          orgId = (verified as Record<string, unknown>).org_id as string || null;
+        } catch (err) {
+          return NextResponse.json({
             error: 'Manual token verification failed: ' + String(err.message || err),
             debug: { tokenPrefix: token.substring(0, 15) }
           }, { status: 401 });
@@ -146,7 +149,7 @@ export async function POST(req: Request) {
       keyId: process.env.RAZORPAY_KEY_ID,
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Checkout error:', error);
     return NextResponse.json({ error: 'Internal server error: ' + (error.message || String(error)) }, { status: 500 });
   }

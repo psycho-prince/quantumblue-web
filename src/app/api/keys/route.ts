@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import crypto from "crypto";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const authResult: any = await auth().catch(e => ({ error: String(e) }));
-    const orgId = authResult?.orgId || authResult?.userId;
-
-    if (!orgId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const { userId, orgId } = await auth();
+    if (!userId) {
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
+    const organizationId = orgId ?? userId;
+
     const keys = await prisma.apiKey.findMany({
-      where: { organizationId: orgId, revokedAt: null },
-      orderBy: { createdAt: "desc" },
+      where: { organizationId, revokedAt: null },
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         label: true,
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
     }));
 
     return NextResponse.json(keysWithPreview);
-  } catch (err: any) {
+  } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
 
     // Return the raw key once — it cannot be retrieved again
     return NextResponse.json({ id: key.id, name: key.label, label: key.label, key: rawKey, createdAt: key.createdAt.toISOString() });
-  } catch (err: any) {
+  } catch (err) {
     return new NextResponse(err.message, { status: 500 });
   }
 }
@@ -97,7 +97,7 @@ export async function DELETE(req: Request) {
     });
 
     return NextResponse.json({ success: true, message: "Key revoked" });
-  } catch (err: any) {
+  } catch (err) {
     return new NextResponse(err.message, { status: 500 });
   }
 }

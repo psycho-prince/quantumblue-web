@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Shield, Fingerprint, Lock, Database, Clock, FileCheck } from "lucide-react";
+import { FileCheck } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Compliance & Controls | Quantum Blue",

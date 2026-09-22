@@ -61,8 +61,8 @@ export async function POST(req: NextRequest) {
       rawBom: bom,
       findings: {
         create: (bom.components ?? [])
-          .filter((c: any) => c.type === "cryptographic-asset")
-          .map((c: any) => ({
+          .filter((c) => c.type === "cryptographic-asset")
+          .map((c) => ({
             bomRef: c["bom-ref"],
             name: c.name,
             primitive: c.cryptoProperties?.algorithmProperties?.primitive ?? "unknown",

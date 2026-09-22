@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Upload, Hash, Key, Clock, ShieldCheck, CheckCircle, FileCheck } from "lucide-react";
 

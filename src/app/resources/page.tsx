@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileText, BookOpen, ShieldAlert, Download, ExternalLink, ArrowRight, Library } from "lucide-react";
+import { FileText, BookOpen, ShieldAlert, ExternalLink, Library } from "lucide-react";
 import Link from "next/link";
 
 const RESOURCES = [

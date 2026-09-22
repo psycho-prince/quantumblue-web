@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Cpu, Terminal } from "lucide-react";
+import { ArrowRight, Terminal } from "lucide-react";
 import Link from "next/link";
 import { TerminalWidget } from "./TerminalWidget";
 import { LatticeVisualization } from "./LatticeVisualization";

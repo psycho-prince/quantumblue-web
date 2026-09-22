@@ -10,7 +10,23 @@ export default function ScannerPage() {
   const { isSignedIn } = useAuth();
   const [domain, setDomain] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<{
+    success: boolean;
+    domain: string;
+    certificate: {
+      protocol: string | null;
+      issuer: string;
+      pubkeyAlgorithm: string;
+      bits: number;
+    };
+    analysis: {
+      isPQC: boolean;
+      isVulnerable: boolean;
+      riskLevel: string;
+      message: string;
+      grade: string;
+    };
+  } | null>(null);
   const [error, setError] = useState("");
 
   const handleScan = async (e: React.FormEvent) => {
@@ -34,7 +50,7 @@ export default function ScannerPage() {
       } else {
         setResult(data);
       }
-    } catch(err) {
+    } catch {
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
@@ -52,7 +68,7 @@ export default function ScannerPage() {
             PQC RISK SCANNER
           </h1>
           <p className="text-zinc-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            Enter a domain to instantly check if its TLS certificates are vulnerable to "Harvest Now, Decrypt Later" quantum attacks.
+            Enter a domain to instantly check if its TLS certificates are vulnerable to &quot;Harvest Now, Decrypt Later&quot; quantum attacks.
           </p>
         </div>
 

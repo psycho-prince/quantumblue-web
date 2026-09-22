@@ -8,7 +8,7 @@ export function ConnectorsClient({ hasGithub }: { hasGithub: boolean }) {
   const [repo, setRepo] = useState("");
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<unknown>(null);
   const { getToken } = useAuth();
 
   const handleScan = async (e: React.FormEvent) => {
@@ -38,7 +38,7 @@ export function ConnectorsClient({ hasGithub }: { hasGithub: boolean }) {
         throw new Error(data.error || "Scan failed");
       }
       setResult(data);
-    } catch (err: any) {
+    } catch (err) {
       alert(err.message);
     } finally {
       setLoading(false);
@@ -110,7 +110,7 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
   const [newRoleArn, setNewRoleArn] = useState("");
   const [loading, setLoading] = useState(false);
   const [registering, setRegistering] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<unknown>(null);
   const [error, setError] = useState<string | null>(null);
   const { getToken } = useAuth();
 
@@ -153,7 +153,7 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
       setNewAccountId("");
       setNewRoleArn("");
       setResult({ message: `Account ${newAccountId} registered. External ID: ${data.externalId}` });
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message);
     } finally {
       setRegistering(false);
@@ -191,7 +191,7 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
         throw new Error(data.error || "Scan failed");
       }
       setResult(data);
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);

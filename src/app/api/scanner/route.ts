@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import tls from 'tls';
+import crypto from 'crypto';
 
 export const runtime = 'nodejs';
 
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
       pubkeyAlgorithm: string;
       protocol: string | null;
     }>((resolve, reject) => {
-      let timeoutId: NodeJS.Timeout;
+      let timeoutId: NodeJS.Timeout; // eslint-disable-line prefer-const
       
       const socket = tls.connect(443, host, { 
         servername: host, 
@@ -48,14 +49,11 @@ export async function POST(req: Request) {
 
           let pubkeyAlgorithm = 'Unknown';
           try {
-            const crypto = require('crypto');
-            if ((cert as any).raw) {
-              const x509 = new crypto.X509Certificate((cert as any).raw);
+            if ((cert as Record<string, unknown>).raw) {
+              const x509 = new crypto.X509Certificate((cert as Record<string, unknown>).raw);
               pubkeyAlgorithm = x509.publicKey.asymmetricKeyType || 'Unknown';
             }
-          } catch(e) {
-            // fallback
-          }
+          } catch {}
 
           resolve({
             subject: getStr(cert.subject?.CN) || host,
@@ -108,7 +106,7 @@ export async function POST(req: Request) {
       }
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Scanner Error:", error);
     return NextResponse.json({ 
       success: false, 

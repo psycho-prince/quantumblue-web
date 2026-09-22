@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Upload, Hash, Key, Clock, ShieldCheck, CheckCircle, FileCheck } from "lucide-react";
 
 export function EvidenceFunnel() {
   const steps = [

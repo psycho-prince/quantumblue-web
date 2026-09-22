@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { ShieldCheck, ScanLine, AlertTriangle, Activity, Cpu } from "lucide-react";
+import { ShieldCheck, ScanLine, AlertTriangle, Activity } from "lucide-react";
 
 type Scan = {
   id: string;
@@ -35,19 +34,18 @@ export default function LocalDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
-  const fetchData = async () => {
-    const headers = { "x-org-id": "org-test-001" };
-    const [scansRes, anomaliesRes, statsRes] = await Promise.all([
-      fetch("/api/scans/index", { headers }),
-      fetch("/api/anomalies", { headers }),
-      fetch("/api/dashboard/stats", { headers }),
-    ]);
-    if (scansRes.ok) setScans(await scansRes.json());
-    if (anomaliesRes.ok) setAnomalies(await anomaliesRes.json());
-    if (statsRes.ok) setStats(await statsRes.json());
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const headers = { "x-org-id": "org-test-001" };
+      const [scansRes, anomaliesRes, statsRes] = await Promise.all([
+        fetch("/api/scans/index", { headers }),
+        fetch("/api/anomalies", { headers }),
+        fetch("/api/dashboard/stats", { headers }),
+      ]);
+      if (scansRes.ok) setScans(await scansRes.json());
+      if (anomaliesRes.ok) setAnomalies(await anomaliesRes.json());
+      if (statsRes.ok) setStats(await statsRes.json());
+    };
     fetchData();
   }, []);
 

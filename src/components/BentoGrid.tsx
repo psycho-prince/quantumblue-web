@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldCheck, Fingerprint, Lock, Database, Upload, Hash, Clock, FileCheck, CheckCircle } from "lucide-react";
-
+import { ShieldCheck, Fingerprint, Lock, Database } from "lucide-react";
 const PILLARS = [
   {
     num: "01",

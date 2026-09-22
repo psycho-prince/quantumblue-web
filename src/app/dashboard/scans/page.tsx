@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
+import {  } from "@clerk/nextjs";
 import Link from "next/link";
 import { ShieldCheck, ScanLine, Clock, MapPin, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
 
 type Scan = {
   id: string;
@@ -15,7 +14,7 @@ type Scan = {
 };
 
 export default function ScansList() {
-  const { user } = useUser();
+  
   const [scans, setScans] = useState<Scan[]>([]);
   const [loading, setLoading] = useState(true);
 

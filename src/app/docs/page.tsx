@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Terminal, Shield, Key, FileText, Cpu, CheckCircle } from "lucide-react";
+import { Terminal, Shield, Key, FileText, Cpu } from "lucide-react";
 import Link from "next/link";
 
 export default function DocsPage() {
@@ -113,7 +113,7 @@ export default function DocsPage() {
             <div className="glass p-8 border border-border-bright space-y-4">
               <Shield className="w-8 h-8 text-accent-blue" />
               <h3 className="text-lg font-bold font-mono text-white">Quantum-Safe Core</h3>
-              <p className="text-zinc-400 font-mono text-sm">NIST-approved ML-DSA-65 algorithms to protect against "Store Now, Decrypt Later" attacks.</p>
+              <p className="text-zinc-400 font-mono text-sm">NIST-approved ML-DSA-65 algorithms to protect against &quot;Store Now, Decrypt Later&quot; attacks.</p>
             </div>
             <div className="glass p-8 border border-border-bright space-y-4">
               <FileText className="w-8 h-8 text-accent-green" />

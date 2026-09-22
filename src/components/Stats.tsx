@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { ShieldCheck, Globe, Lock, Activity } from "lucide-react";
+import {  } from "lucide-react";
 
 export function Stats() {
   return (

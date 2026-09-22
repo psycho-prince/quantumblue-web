@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
+import {  } from "@clerk/nextjs";
 import Link from "next/link";
 import { ShieldCheck, Activity, AlertTriangle, ScanLine, TrendingUp, Clock } from "lucide-react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type OrgStats = {
@@ -21,7 +20,7 @@ type OrgStats = {
 };
 
 export default function OrgOverview() {
-  const { user } = useUser();
+  
   const [stats, setStats] = useState<OrgStats | null>(null);
   const [loading, setLoading] = useState(true);
 

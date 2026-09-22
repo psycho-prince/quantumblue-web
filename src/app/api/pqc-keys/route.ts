@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { prisma } from '@/lib/prisma';
-import crypto from 'crypto';
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+import crypto from "crypto";
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
-    let { userId, orgId } = await auth().catch(() => ({ userId: null, orgId: null }));
+    const { userId, orgId } = await auth().catch(() => ({ userId: null, orgId: null }));
     
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

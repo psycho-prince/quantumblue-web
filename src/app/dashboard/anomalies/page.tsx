@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
-import Link from "next/link";
+import {  } from "@clerk/nextjs";
 import { ShieldCheck, AlertTriangle, ArrowRight, Clock, Hash } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -18,7 +17,7 @@ type Anomaly = {
 };
 
 export default function AnomaliesList() {
-  const { user } = useUser();
+  
   const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
   const [loading, setLoading] = useState(true);
 

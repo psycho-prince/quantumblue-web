@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
+import {  } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ShieldCheck, ArrowLeft, MapPin, Hash, Layers, AlertTriangle } from "lucide-react";
-import { motion } from "framer-motion";
 
 type Finding = {
   id: string;
@@ -26,7 +25,7 @@ type ScanDetail = {
 };
 
 export default function ScanDetail() {
-  const { user } = useUser();
+  
   const params = useParams();
   const scanId = params?.id as string;
   const [scan, setScan] = useState<ScanDetail | null>(null);
