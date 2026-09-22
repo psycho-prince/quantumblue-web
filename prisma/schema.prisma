@@ -106,7 +106,7 @@ model Subscription {
   clerkOrgId             String
   organization           Organization @relation(fields: [clerkOrgId], references: [id])
   razorpayCustomerId     String
-  razorpaySubscriptionId String       @unique
+  razorpaySubscriptionId String?     @unique
   razorpayPlanId         String
   planKey                String
   status                 String

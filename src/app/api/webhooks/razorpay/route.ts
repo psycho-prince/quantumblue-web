@@ -119,8 +119,9 @@ export async function POST(req: Request) {
       // Sync entitlement so customer gets features immediately on activation
       const notes = sub.notes || {};
       const orgId = notes.clerkOrgId || sub.customer_notes?.clerkOrgId;
+      const planKey = notes.plan || 'PRO'; // Default to PRO if plan not in notes
       if (orgId) {
-        await syncEntitlement(orgId, sub.plan_id ? 'PRO' : 'STARTER');
+        await syncEntitlement(orgId, planKey);
       }
     }
 
