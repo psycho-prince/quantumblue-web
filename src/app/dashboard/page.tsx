@@ -293,7 +293,7 @@ export default function Dashboard() {
         // Multi-Agent Pipeline Execution
         // 1. Analyst
         const analystPrompt = "You are the Quantum Blue Security AI Analyst. Analyze this request and provide a high-level PQC migration strategy.";
-        let res1;
+        let res1: string = "";
         if (provider === "gemini") {
           const r1 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${activeModel || "gemini-flash-latest"}:generateContent?key=${aiSettings.aiApiKey.trim()}`, {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -313,7 +313,7 @@ export default function Dashboard() {
         // 2. Auditor
         setMessages(prev => [...prev.slice(0, -1), { role: "assistant", content: "Pipeline Step 1/3: Analyst generated strategy. Passing to Auditor..." }]);
         const auditorPrompt = "You are a Cryptographic Compliance Auditor. Review the following strategy against FIPS 203/204 and NIST standards. Correct any compliance issues.";
-        let res2;
+        let res2: string = "";
         if (provider === "gemini") {
           const r2 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${activeModel || "gemini-flash-latest"}:generateContent?key=${aiSettings.aiApiKey.trim()}`, {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -333,7 +333,7 @@ export default function Dashboard() {
         // 3. Developer
         setMessages(prev => [...prev.slice(0, -1), { role: "assistant", content: "Pipeline Step 2/3: Auditor validated compliance. Passing to Integration Engineer..." }]);
         const devPrompt = "You are an Integration Engineer. Take the following audited strategy and provide actionable implementation steps or code snippets using Quantum Blue SDKs.";
-        let res3;
+        let res3: string = "";
         if (provider === "gemini") {
           const r3 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${activeModel || "gemini-flash-latest"}:generateContent?key=${aiSettings.aiApiKey.trim()}`, {
             method: "POST", headers: { "Content-Type": "application/json" },
