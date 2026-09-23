@@ -257,7 +257,7 @@ export default function Dashboard() {
         const data = await res.json();
         response = data.choices?.[0]?.message?.content || "NO_RESPONSE_FROM_API.";
       } else if (provider === "gemini") {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=${aiSettings.aiApiKey.trim()}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${aiSettings.aiApiKey.trim()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -915,7 +915,7 @@ const signature = await qb.sign({ amount: 500M });
                     >
                       <option value="none">None</option>
                       <option value="openai">OpenAI (GPT-4)</option>
-                      <option value="gemini">Google Gemini</option>
+                      <option value="gemini">Google Gemini (3.5 Flash)</option>
                       <option value="claude">Anthropic Claude</option>
                       <option value="jav-ai">Custom JAV-AI Webhook</option>
                     </select>
