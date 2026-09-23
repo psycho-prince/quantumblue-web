@@ -69,7 +69,7 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
       });
       rzp.open();
 
-    } catch (err) {
+    } catch {
       alert("Something went wrong");
     } finally {
       setLoading(false);

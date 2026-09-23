@@ -1,7 +1,5 @@
-import { BriefingShield } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { BentoGrid } from "@/components/BentoGrid";
-import { BriefingShield } from "@/components/BriefingShield";
 import { Stats } from "@/components/Stats";
 import { TrustBanner } from "@/components/TrustBanner";
 import { HowItWorks } from "@/components/HowItWorks";
