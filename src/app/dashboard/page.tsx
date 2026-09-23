@@ -47,6 +47,33 @@ export default function Dashboard() {
   const [aiSettings, setAiSettings] = useState({ aiProvider: "none", aiApiKey: "", customAiEndpoint: "" });
   const [savingSettings, setSavingSettings] = useState(false);
 
+  const [testingKey, setTestingKey] = useState(false);
+  const [testResult, setTestResult] = useState<{status: 'idle'|'success'|'error', msg: string}>({status: 'idle', msg: ''});
+
+  const handleTestKey = async () => {
+    setTestingKey(true);
+    setTestResult({status: 'idle', msg: ''});
+    try {
+      if (aiSettings.aiProvider === "openai") {
+        const res = await fetch("https://api.openai.com/v1/models", {
+          headers: { "Authorization": `Bearer ${aiSettings.aiApiKey}` }
+        });
+        if (res.ok) setTestResult({status: 'success', msg: 'Key is valid.'});
+        else setTestResult({status: 'error', msg: 'Invalid key.'});
+      } else if (aiSettings.aiProvider === "claude") {
+         setTestResult({status: 'success', msg: 'Test not implemented for Claude. Try sending a chat.'});
+      } else if (aiSettings.aiProvider === "gemini") {
+         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${aiSettings.aiApiKey}`);
+         if (res.ok) setTestResult({status: 'success', msg: 'Key is valid.'});
+         else setTestResult({status: 'error', msg: 'Invalid key.'});
+      }
+    } catch (e) {
+      setTestResult({status: 'error', msg: 'Connection failed.'});
+    }
+    setTestingKey(false);
+  };
+
+
   // AI Agent State
   const [messages, setMessages] = useState<{ role: "user" | "assistant"; content: string }[]>([
     { role: "assistant", content: "EXECUTIVE_INTELLIGENCE_ACTIVE. HOW_CAN_I_ASSIST_WITH_YOUR_SECURITY_POSTURE_TODAY?" }
@@ -578,7 +605,7 @@ export default function Dashboard() {
                               <span className="text-[10px] text-zinc-500 font-mono">{new Date(anomaly.createdAt).toLocaleDateString()}</span>
                            </div>
                            <p className="text-[11px] font-mono text-zinc-400">{anomaly.description}</p>
-                           <p className="text-[10px] font-mono text-zinc-600">Scan: {anomaly.scan.targetName}</p>
+                           <p className="text-[10px] font-mono text-zinc-600">Scan: {anomaly.scan?.targetName || "Unknown Scan"}</p>
                          </div>
                       ))}
                     </div>
@@ -920,13 +947,32 @@ const signature = await qb.sign({ amount: 500M });
                     </div>
                   )}
 
-                  <button 
-                    type="submit" 
-                    disabled={savingSettings}
-                    className="px-6 py-3 bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 transition-colors"
-                  >
-                    {savingSettings ? "SAVING..." : "SAVE SETTINGS"}
-                  </button>
+                  
+                  <div className="flex gap-4 items-center">
+                    <button 
+                      type="submit" 
+                      disabled={savingSettings}
+                      className="px-6 py-3 bg-white text-black font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 transition-colors"
+                    >
+                      {savingSettings ? "SAVING..." : "SAVE SETTINGS"}
+                    </button>
+                    {(aiSettings.aiProvider === "openai" || aiSettings.aiProvider === "gemini") && aiSettings.aiApiKey && (
+                      <button 
+                        type="button" 
+                        onClick={handleTestKey}
+                        disabled={testingKey}
+                        className="px-6 py-3 bg-accent-blue/10 text-accent-blue border border-accent-blue/50 font-bold text-xs uppercase tracking-widest hover:bg-accent-blue/20 transition-colors"
+                      >
+                        {testingKey ? "TESTING..." : "TEST KEY"}
+                      </button>
+                    )}
+                    {testResult.msg && (
+                      <span className={`text-xs font-mono font-bold ${testResult.status === 'success' ? 'text-accent-green' : 'text-accent-red'}`}>
+                        {testResult.msg}
+                      </span>
+                    )}
+                  </div>
+
                 </form>
               </motion.div>
             )}
