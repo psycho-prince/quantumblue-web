@@ -239,6 +239,8 @@ model OrgSettings {
   aiProvider       String       @default("none")
   aiApiKey         String?
   customAiEndpoint String?
+  aiModel          String?
+  aiAgent          String?
   updatedAt        DateTime     @updatedAt
 }
 
