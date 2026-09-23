@@ -257,7 +257,7 @@ export default function Dashboard() {
         const data = await res.json();
         response = data.choices?.[0]?.message?.content || "NO_RESPONSE_FROM_API.";
       } else if (provider === "gemini") {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${aiSettings.aiApiKey}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${aiSettings.aiApiKey}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
