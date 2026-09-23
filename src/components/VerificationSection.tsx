@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Upload, CheckCircle, Loader2, ShieldCheck } from "lucide-react";
 
 interface CheckResult {
@@ -11,10 +11,11 @@ interface CheckResult {
 
 
 function useDemoUploaded() {
-  const [demoUploaded] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem("qb_demo_uploaded") === "true";
-  });
+  const [demoUploaded, setDemoUploaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    setDemoUploaded(localStorage.getItem("qb_demo_uploaded") === "true");
+  }, []);
 
   return demoUploaded;
 }

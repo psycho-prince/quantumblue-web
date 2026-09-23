@@ -1,24 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export function CookieBanner() {
-  const [isVisible, setIsVisible] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("cookie_consent") ? true : false;
+  const [isVisible, setIsVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (!localStorage.getItem("cookie_consent")) {
+      setIsVisible(true); // Show banner if no consent
     }
-    return false;
-  });
+  }, []);
 
   const handleAccept = () => {
-    if (typeof localStorage !== "undefined") {
-      localStorage.setItem("cookie_consent", "true");
-    }
+    localStorage.setItem("cookie_consent", "true");
     setIsVisible(false);
   };
 
-  if (!isVisible) return null;
+  if (!mounted || !isVisible) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 p-4 bg-black/90 backdrop-blur-md border-t border-white/10 z-50">
