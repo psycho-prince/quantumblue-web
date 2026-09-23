@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { FileCheck, Shield, Database, Clock, Lock } from "lucide-react";
 
