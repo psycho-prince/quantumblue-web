@@ -137,7 +137,7 @@ export default function Dashboard() {
         
         const storedModel = localStorage.getItem("qb_active_model");
         const storedAgent = localStorage.getItem("qb_active_agent");
-        if (storedModel) setActiveModel(storedModel);
+        if (storedModel && storedModel !== "gemini-3.5-flash") setActiveModel(storedModel);
         if (storedAgent) setActiveAgent(storedAgent);
         setLoading(false);
       }
