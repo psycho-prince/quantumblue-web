@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function GET() {
   try {
-    const authResult = await auth().catch(e => ({ error: String(e) }));
+    const authResult = await auth().catch((e: any) => ({ error: String(e) })) as any;
     const orgId = authResult?.orgId || authResult?.userId;
 
     if (!orgId) {
@@ -24,7 +24,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const authResult = await auth().catch(e => ({ error: String(e) }));
+    const authResult = await auth().catch((e: any) => ({ error: String(e) })) as any;
     const orgId = authResult?.orgId || authResult?.userId;
 
     if (!orgId) {

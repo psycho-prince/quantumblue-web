@@ -96,7 +96,7 @@ export function ConnectorsClient({ hasGithub }: { hasGithub: boolean }) {
       {result && (
         <div className="mt-4 p-4 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
           <p>Scan complete!</p>
-          <p>Discovered {result.assets?.length || 0} assets and {result.edges?.length || 0} relationships.</p>
+          <p>Discovered {(result as any).assets?.length || 0} assets and {(result as any).edges?.length || 0} relationships.</p>
         </div>
       )}
     </form>
@@ -280,14 +280,14 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
           {loading ? "Scanning..." : "Run AWS Discovery"}
         </button>
 
-        {result && result.message ? (
+        {result && (result as any).message ? (
           <div className="p-3 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
-            {result.message}
+            {(result as any).message}
           </div>
         ) : result && (
           <div className="p-3 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
             <p>Scan complete!</p>
-            <p>Discovered {result.assets?.length || 0} assets and {result.edges?.length || 0} relationships.</p>
+            <p>Discovered {(result as any).assets?.length || 0} assets and {(result as any).edges?.length || 0} relationships.</p>
           </div>
         )}
       </form>

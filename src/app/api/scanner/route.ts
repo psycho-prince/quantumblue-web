@@ -49,8 +49,8 @@ export async function POST(req: Request) {
 
           let pubkeyAlgorithm = 'Unknown';
           try {
-            if ((cert as Record<string, unknown>).raw) {
-              const x509 = new crypto.X509Certificate((cert as Record<string, unknown>).raw);
+            if ((cert as any).raw) {
+              const x509 = new crypto.X509Certificate((cert as any).raw);
               pubkeyAlgorithm = x509.publicKey.asymmetricKeyType || 'Unknown';
             }
           } catch {}

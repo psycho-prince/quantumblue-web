@@ -36,8 +36,8 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [pqcKey, setPqcKey] = useState<{ public_key: string } | null>(null);
   const [generatingPqc, setGeneratingPqc] = useState(false);
-  const [stats, setStats] = useState<unknown>(null);
-  const [anomalies, setAnomalies] = useState<unknown[]>([]);
+  const [stats, setStats] = useState<any>(null);
+  const [anomalies, setAnomalies] = useState<any[]>([]);
   
   // AI Settings State
   const [aiSettings, setAiSettings] = useState({ aiProvider: "none", aiApiKey: "", customAiEndpoint: "" });
@@ -515,7 +515,7 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      {stats?.recentScans?.map((scan: Record<string, unknown>) => (
+                      {stats?.recentScans?.map((scan: any) => (
                         <div key={scan.id} className="flex items-center justify-between p-4 border border-border-bright hover:border-accent-blue transition-all">
                           <div>
                             <span className="text-sm font-bold text-white block">{scan.targetName}</span>
@@ -555,7 +555,7 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      {anomalies.map((anomaly: Record<string, unknown>) => (
+                      {anomalies.map((anomaly: any) => (
                          <div key={anomaly.id} className="p-4 bg-black border border-accent-red/30 space-y-2">
                            <div className="flex justify-between">
                               <span className="text-[10px] font-bold text-accent-red uppercase tracking-widest font-mono">{anomaly.kind} - {anomaly.severity}</span>
