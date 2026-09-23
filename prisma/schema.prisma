@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ===== Core identity & billing (defined first — referenced by everything) =====
+
 model Organization {
   id          String       @id @default(uuid())
   name        String
@@ -14,8 +16,6 @@ model Organization {
   apiKeys     ApiKey[]
   scans       Scan[]
   auditEvents AuditEvent[]
-
-  // Billing Relations
   billingCustomer BillingCustomer?
   awsAccounts     OrgAWSAccount[]
   subscriptions   Subscription[]
@@ -23,6 +23,9 @@ model Organization {
   invoices        Invoice[]
   assets          Asset[]
   settings        OrgSettings?
+  migrationEvents MigrationEvent[]
+  evidenceArtifacts EvidenceArtifact[]
+  migrationPolicies MigrationPolicy[]
 }
 
 model ApiKey {
@@ -45,13 +48,12 @@ model Scan {
   createdAt       DateTime     @default(now())
   findings        Finding[]
   anomalies       Anomaly[]
-
-  scanType    String    @default("source")
-  status      String    @default("complete")
-  startedAt   DateTime?
-  completedAt DateTime?
-  errorText   String?
-  riskSummary Json      @default("{}")
+  scanType        String    @default("source")
+  status          String    @default("complete")
+  startedAt       DateTime?
+  completedAt     DateTime?
+  errorText       String?
+  riskSummary     Json      @default("{}")
 }
 
 model Finding {
@@ -85,8 +87,6 @@ model AuditEvent {
   details        Json
   createdAt      DateTime     @default(now())
 }
-
-// --- BILLING MODELS ---
 
 model BillingCustomer {
   id                 String       @id @default(uuid())
@@ -146,8 +146,8 @@ model Invoice {
   currency          String
   status            String
   invoiceUrl        String?
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
 }
 
 model WebhookEvent {
@@ -162,86 +162,6 @@ model WebhookEvent {
   receivedAt  DateTime  @default(now())
 }
 
-model Asset {
-  id             String       @id @default(uuid())
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  kind           String
-  identifier     String
-  displayName    String?
-  source         String
-  criticality    String       @default("unknown")
-  firstSeenAt    DateTime     @default(now())
-  lastSeenAt     DateTime     @updatedAt
-  active         Boolean      @default(true)
-  metadata       Json         @default("{}")
-
-  outgoing     AssetEdge[]         @relation("FromAsset")
-  incoming     AssetEdge[]         @relation("ToAsset")
-  cryptoUses   CryptoUse[]
-  certificates CertificateRecord[]
-
-  @@unique([organizationId, kind, identifier])
-  @@index([organizationId, kind])
-}
-
-model AssetEdge {
-  id          String   @id @default(uuid())
-  fromAssetId String
-  toAssetId   String
-  fromAsset   Asset    @relation("FromAsset", fields: [fromAssetId], references: [id])
-  toAsset     Asset    @relation("ToAsset", fields: [toAssetId], references: [id])
-  relation    String
-  confidence  Float    @default(1.0)
-  createdAt   DateTime @default(now())
-
-  @@unique([fromAssetId, toAssetId, relation])
-}
-
-model CryptoUse {
-  id             String  @id @default(uuid())
-  organizationId String
-  assetId        String
-  asset          Asset   @relation(fields: [assetId], references: [id])
-  scanId         String?
-
-  primitive     String
-  role          String
-  keyBits       Int?
-  curve         String?
-  parameterSet  String?
-  quantumStatus String
-  location      String
-  evidence      Json     @default("{}")
-  detectedAt    DateTime @default(now())
-
-  @@index([organizationId, primitive])
-  @@index([organizationId, quantumStatus])
-}
-
-model CertificateRecord {
-  id                 String   @id @default(uuid())
-  organizationId     String
-  assetId            String
-  asset              Asset    @relation(fields: [assetId], references: [id])
-  serialNumber       String
-  fingerprintSHA256  String
-  subject            String
-  issuer             String
-  sans               String[]
-  notBefore          DateTime
-  notAfter           DateTime
-  signatureAlgorithm String
-  publicKeyAlgorithm String
-  publicKeyBits      Int?
-  isCA               Boolean  @default(false)
-  chainPosition      Int      @default(0)
-  selfSigned         Boolean  @default(false)
-
-  @@unique([organizationId, fingerprintSHA256])
-  @@index([organizationId, notAfter])
-}
-
 model DomainVerification {
   id             String    @id @default(uuid())
   organizationId String
@@ -251,7 +171,6 @@ model DomainVerification {
   verifiedAt     DateTime?
   lastCheckedAt  DateTime?
   createdAt      DateTime  @default(now())
-
   @@unique([organizationId, domain])
 }
 
@@ -281,7 +200,6 @@ model ScheduledJob {
   lockedBy       String?
   failureCount   Int       @default(0)
   enabled        Boolean   @default(true)
-
   @@index([enabled, nextRunAt])
 }
 
@@ -297,7 +215,6 @@ model Alert {
   deliveredAt    DateTime?
   acknowledgedAt DateTime?
   createdAt      DateTime  @default(now())
-
   @@index([organizationId, createdAt])
 }
 
@@ -311,21 +228,160 @@ model OrgAWSAccount {
   enabled        Boolean      @default(true)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
-
   @@unique([organizationId, accountId])
   @@index([organizationId])
 }
 
-// --- ORGANIZATION SETTINGS (AI & CONFIG) ---
 model OrgSettings {
   id               String       @id @default(uuid())
   organizationId   String       @unique
   organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  // AI Integration (BYOK - Bring Your Own Key)
-  aiProvider       String       @default("none") // "gemini", "openai", "claude", "jav-ai", "none"
-  aiApiKey         String?      // Stored securely
-  customAiEndpoint String?      // For custom JAV-AI webhooks
-
+  aiProvider       String       @default("none")
+  aiApiKey         String?
+  customAiEndpoint String?
   updatedAt        DateTime     @updatedAt
+}
+
+// ===== Cryptographic asset inventory (Proof of Migration foundation) =====
+
+model Asset {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  kind           String
+  identifier     String
+  displayName    String?
+  source         String
+  criticality    String       @default("unknown")
+  firstSeenAt    DateTime     @default(now())
+  lastSeenAt     DateTime     @updatedAt
+  active         Boolean      @default(true)
+  metadata       Json         @default("{}")
+  outgoing       AssetEdge[]         @relation("FromAsset")
+  incoming       AssetEdge[]         @relation("ToAsset")
+  cryptoUses     CryptoUse[]
+  certificates   CertificateRecord[]
+  migrationEvents MigrationEvent[]
+  @@unique([organizationId, kind, identifier])
+  @@index([organizationId, kind])
+}
+
+model AssetEdge {
+  id          String   @id @default(uuid())
+  fromAssetId String
+  toAssetId   String
+  fromAsset   Asset    @relation("FromAsset", fields: [fromAssetId], references: [id])
+  toAsset     Asset    @relation("ToAsset", fields: [toAssetId], references: [id])
+  relation    String
+  confidence  Float    @default(1.0)
+  createdAt   DateTime @default(now())
+  @@unique([fromAssetId, toAssetId, relation])
+}
+
+model CryptoUse {
+  id             String  @id @default(uuid())
+  organizationId String
+  assetId        String
+  asset          Asset   @relation(fields: [assetId], references: [id])
+  scanId         String?
+  primitive      String
+  role           String
+  keyBits        Int?
+  curve          String?
+  parameterSet   String?
+  quantumStatus  String
+  location       String
+  evidence       Json    @default("{}")
+  detectedAt     DateTime @default(now())
+  @@index([organizationId, primitive])
+  @@index([organizationId, quantumStatus])
+}
+
+model CertificateRecord {
+  id                 String   @id @default(uuid())
+  organizationId     String
+  assetId            String
+  asset              Asset    @relation(fields: [assetId], references: [id])
+  serialNumber       String
+  fingerprintSHA256  String
+  subject            String
+  issuer             String
+  sans               String[]
+  notBefore          DateTime
+  notAfter           DateTime
+  signatureAlgorithm String
+  publicKeyAlgorithm String
+  publicKeyBits      Int?
+  isCA               Boolean  @default(false)
+  chainPosition      Int      @default(0)
+  selfSigned         Boolean  @default(false)
+  @@unique([organizationId, fingerprintSHA256])
+  @@index([organizationId, notAfter])
+}
+
+// ===== Proof of Migration: events, evidence, policy =====
+
+model MigrationEvent {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  assetId        String?
+  asset          Asset?       @relation(fields: [assetId], references: [id])
+  migrationType  String
+  beforeState    Json
+  afterState     Json
+  status         String       @default("pending")
+  description    String?
+  initiatedBy    String?
+  startedAt      DateTime?
+  completedAt    DateTime?
+  verifiedAt     DateTime?
+  evidence       EvidenceArtifact?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  @@index([organizationId, status])
+  @@index([organizationId, createdAt])
+}
+
+model EvidenceArtifact {
+  id               String          @id @default(uuid())
+  organizationId   String
+  organization     Organization    @relation(fields: [organizationId], references: [id])
+  migrationEvent   MigrationEvent? @relation(fields: [migrationEventId], references: [id])
+  migrationEventId String?         @unique
+  evidenceType     String
+  payload          Json
+  contentHash      String
+  signature        String?
+  signatureAlgorithm String?
+  publicKey        String?
+  keyId            String?
+  timestampedAt    DateTime?
+  timestampAuthority String?
+  timestampToken   String?
+  custodyChain     Json            @default("[]")
+  bsaCertificate   String?
+  bsaCertificateNumber String?
+  verified         Boolean         @default(false)
+  verificationError String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  @@index([organizationId, evidenceType])
+  @@index([organizationId, verified])
+}
+
+model MigrationPolicy {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  name           String
+  description    String?
+  rule           String
+  assetFilter    Json?
+  targetAlgorithm String?
+  deadline       DateTime?
+  status         String       @default("active")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  @@index([organizationId, status])
 }

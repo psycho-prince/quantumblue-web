@@ -10,9 +10,9 @@ export async function POST(req: Request) {
     let orgId: string | null = null;
     if ('userId' in authResult) {
       userId = authResult.userId;
-      orgId = authResult.orgId;
+      orgId = authResult.orgId ?? null;
     }
-    
+
     if (!userId) {
       const authHeader = req.headers.get('authorization');
       if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
           orgId = (verified as Record<string, unknown>).org_id as string || null;
         } catch (err) {
           return NextResponse.json({
-            error: 'Manual token verification failed: ' + String(err.message || err),
+            error: 'Manual token verification failed: ' + String((err as Error).message || err),
             debug: { tokenPrefix: token.substring(0, 15) }
           }, { status: 401 });
         }
@@ -36,26 +36,30 @@ export async function POST(req: Request) {
     }
 
     const { plan } = await req.json();
-    
-    const internalOrgId = orgId || userId;
 
-    let org = await prisma.organization.findUnique({ where: { id: internalOrgId } });
-    if (!org) {
-      org = await prisma.organization.create({
-        data: { id: internalOrgId, name: orgId ? "Clerk Org" : "Personal Workspace" }
-      });
+    if (!plan || !['STARTER', 'PRO', 'BUSINESS'].includes(plan)) {
+      return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
-    let billingCustomer = await prisma.billingCustomer.findUnique({
+    const internalOrgId = orgId || userId!;
+    if (!internalOrgId) {
+      return NextResponse.json({ error: 'Missing organization' }, { status: 400 });
+    }
 
+    let billingCustomer: { id: string; razorpayCustomerId: string } | null = null;
+
+    // Check if billing customer exists for this org
+    const existingCustomer = await prisma.billingCustomer.findFirst({
       where: { clerkOrgId: internalOrgId }
     });
 
-    if (!billingCustomer) {
+    if (existingCustomer) {
+      billingCustomer = existingCustomer;
+    } else {
       // Create Razorpay customer
       const rzpCustomer = await razorpay.customers.create({
         name: `Org ${internalOrgId}`,
-        email: `billing-${internalOrgId}@quantum-blue.in`, // Fallback email
+        email: `billing-${internalOrgId}@quantum-blue.in`,
         notes: { clerkOrgId: internalOrgId }
       });
 
@@ -70,11 +74,7 @@ export async function POST(req: Request) {
       });
     }
 
-    
     // Plan configuration matching roadmap pricing:
-    // STARTER: ₹4,999/year (annual, one-time UPI friendly)
-    // PRO: ₹4,999/month (recurring subscription)
-    // BUSINESS: ₹24,999/month (recurring subscription)
     const PLANS: Record<string, { price: number; interval: 'year' | 'month'; total_count?: number }> = {
       'STARTER':   { price: 4999, interval: 'year', total_count: 10 },
       'PRO':       { price: 4999, interval: 'month', total_count: 120 },
@@ -82,9 +82,6 @@ export async function POST(req: Request) {
     };
 
     const planConfig = PLANS[plan];
-    if (!planConfig) {
-      return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
-    }
 
     const planIds: Record<string, string> = {
       'STARTER': process.env.RAZORPAY_PLAN_STARTER || 'plan_TdcxSyaILWtAMM',
@@ -92,44 +89,17 @@ export async function POST(req: Request) {
       'BUSINESS': process.env.RAZORPAY_PLAN_BUSINESS || 'plan_TdcyjggCpTwsDa',
     };
 
-    // For Starter (annual), create a one-time order for UPI/card convenience.
-    // For Pro/Business (monthly), create a recurring subscription.
-    if (plan === 'STARTER') {
-      // One-time order for annual starter plan
-      const order = await razorpay.orders.create({
-        amount: planConfig.price,
-        currency: 'INR',
-        receipt: `qb-starter-${internalOrgId}-${Date.now()}`,
-        notes: { clerkOrgId: internalOrgId, plan: 'STARTER' },
-      });
-
-      await prisma.subscription.create({
-        data: {
-          organization: { connect: { id: internalOrgId } },
-          razorpayCustomerId: billingCustomer.razorpayCustomerId,
-          razorpayPlanId: planIds[plan],
-          planKey: plan,
-          status: 'created',
-          currentPeriodStart: new Date(),
-          currentPeriodEnd: new Date(),
-        },
-      });
-
-      return NextResponse.json({
-        orderId: order.id,
-        amount: order.amount,
-        currency: order.currency,
-        keyId: process.env.RAZORPAY_KEY_ID,
-      });
+    if (!['STARTER', 'PRO', 'BUSINESS'].includes(plan)) {
+      return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
     // Recurring subscription for Pro/Business
     const subscription = await razorpay.subscriptions.create({
       plan_id: planIds[plan],
       customer_notify: 1,
-      total_count: planConfig.total_count,
+      total_count: planConfig.total_count ?? 120,
       notes: { clerkOrgId: internalOrgId, plan },
-    });
+    }) as { id: string };
 
     await prisma.subscription.create({
       data: {
@@ -151,6 +121,42 @@ export async function POST(req: Request) {
 
   } catch (error) {
     console.error('Checkout error:', error);
-    return NextResponse.json({ error: 'Internal server error: ' + (error.message || String(error)) }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error: ' + String((error as Error).message || error) }, { status: 500 });
+  }
+}
+
+export async function GET(_req: Request) {
+  try {
+    const authResult = await auth().catch(e => ({ error: String(e) }));
+    let userId: string | null = null;
+    let orgId: string | null = null;
+
+    if ('userId' in authResult) {
+      userId = authResult.userId;
+      orgId = authResult.orgId ?? null;
+    }
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const internalOrgId = orgId || userId;
+    const subscriptions = await prisma.subscription.findMany({
+      where: { clerkOrgId: internalOrgId },
+      orderBy: { createdAt: 'desc' },
+      take: 10
+    });
+
+    const customers = await prisma.billingCustomer.findMany({
+      where: { clerkOrgId: internalOrgId },
+      orderBy: { createdAt: 'desc' },
+      take: 5
+    });
+
+    return NextResponse.json({ subscriptions, customers });
+
+  } catch (error) {
+    console.error('Billing history error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

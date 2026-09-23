@@ -7,15 +7,16 @@ function parseFrontmatter(fileContent: string) {
   const match = fileContent.match(frontmatterRegex);
   if (!match) return { data: {}, content: fileContent };
 
-  const data: any = {};
+  const data: Record<string, string | string[]> = {};
   match[1].split('\n').forEach(line => {
     const [key, ...valueParts] = line.split(':');
     if (key && valueParts.length > 0) {
-      let val: any = valueParts.join(':').trim().replace(/^["']|["']$/g, '');
+      const val = valueParts.join(':').trim().replace(/^["']|["']$/g, '');
       if (val.startsWith('[') && val.endsWith(']')) {
-        val = val.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, '')) ;
+        data[key.trim()] = val.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
+      } else {
+        data[key.trim()] = val;
       }
-      data[key.trim()] = val;
     }
   });
 

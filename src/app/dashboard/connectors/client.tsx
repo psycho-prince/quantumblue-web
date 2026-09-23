@@ -39,7 +39,7 @@ export function ConnectorsClient({ hasGithub }: { hasGithub: boolean }) {
       }
       setResult(data);
     } catch (err) {
-      alert(err.message);
+      alert((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -93,12 +93,12 @@ export function ConnectorsClient({ hasGithub }: { hasGithub: boolean }) {
         {loading ? "Scanning..." : "Run GitHub Discovery"}
       </button>
 
-      {result && (
+      {(result && (
         <div className="mt-4 p-4 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
           <p>Scan complete!</p>
-          <p>Discovered {(result as any).assets?.length || 0} assets and {(result as any).edges?.length || 0} relationships.</p>
+          <p>Discovered {(result as unknown as { assets?: unknown[]; edges?: unknown[] }).assets?.length || 0} assets and {(result as unknown as { assets?: unknown[]; edges?: unknown[] }).edges?.length || 0} relationships.</p>
         </div>
-      )}
+      )) as React.ReactNode}
     </form>
   );
 }
@@ -154,7 +154,7 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
       setNewRoleArn("");
       setResult({ message: `Account ${newAccountId} registered. External ID: ${data.externalId}` });
     } catch (err) {
-      setError(err.message);
+      setError((err as Error).message);
     } finally {
       setRegistering(false);
     }
@@ -192,7 +192,7 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
       }
       setResult(data);
     } catch (err) {
-      setError(err.message);
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -280,16 +280,16 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
           {loading ? "Scanning..." : "Run AWS Discovery"}
         </button>
 
-        {result && (result as any).message ? (
+        {typeof result === "object" && result !== null && (result as unknown as { message?: string }).message ? (
           <div className="p-3 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
-            {(result as any).message}
+            {(result as unknown as { message?: string }).message}
           </div>
-        ) : result && (
+        ) : typeof result === "object" && result !== null ? (
           <div className="p-3 bg-green-900/20 border border-green-800 rounded text-sm text-green-200">
             <p>Scan complete!</p>
-            <p>Discovered {(result as any).assets?.length || 0} assets and {(result as any).edges?.length || 0} relationships.</p>
+            <p>Discovered {(result as unknown as { assets?: unknown[]; edges?: unknown[] }).assets?.length || 0} assets and {(result as unknown as { assets?: unknown[]; edges?: unknown[] }).edges?.length || 0} relationships.</p>
           </div>
-        )}
+        ) : null}
       </form>
     </div>
   );

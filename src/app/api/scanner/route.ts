@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from 'next/server';
 import tls from 'tls';
 import crypto from 'crypto';
@@ -110,7 +111,7 @@ export async function POST(req: Request) {
     console.error("Scanner Error:", error);
     return NextResponse.json({ 
       success: false, 
-      error: error.message || 'Failed to scan domain. Check if the domain is reachable on port 443.' 
+      error: String(error) || 'Failed to scan domain. Check if the domain is reachable on port 443.' 
     }, { status: 500 });
   }
 }

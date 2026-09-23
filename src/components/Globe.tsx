@@ -11,7 +11,7 @@ export function Globe({ className }: { className?: string }) {
 
     if (!canvasRef.current) return;
 
-    const globe = (createGlobe as any)(canvasRef.current, {
+    const globe = (createGlobe as unknown as (canvas: HTMLCanvasElement, config: Record<string, unknown>) => { destroy: () => void })(canvasRef.current, {
       devicePixelRatio: 2,
       width: 600 * 2,
       height: 600 * 2,
@@ -30,7 +30,7 @@ export function Globe({ className }: { className?: string }) {
         { location: [19.076, 72.8777], size: 0.05 },
         { location: [35.6762, 139.6503], size: 0.08 },
       ],
-      onRender: (state: any) => {
+      onRender: (state: { phi: number }) => {
         state.phi = phi;
         phi += 0.01;
       },

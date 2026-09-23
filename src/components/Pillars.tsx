@@ -1,38 +1,5 @@
-"use client";
-
 import { motion } from "framer-motion";
-import { Shield, Fingerprint, Lock, Database } from "lucide-react";
-
-const PILLARS = [
-  {
-    num: "01",
-    title: "POST-QUANTUM CRYPTOGRAPHY",
-    subtitle: "ML-DSA-65 · ML-KEM-768 · Hybrid Signatures · Crypto-Agility",
-    icon: Shield,
-    description: "NIST-standardized post-quantum algorithms protecting against \"Store Now, Decrypt Later\" attacks. Hybrid signatures combining ML-DSA-65 and Ed25519 for post-quantum migration with classical verification compatibility."
-  },
-  {
-    num: "02",
-    title: "DIGITAL EVIDENCE",
-    subtitle: "BSA §63 · Evidence Hashing · Metadata · Chain of Custody · Certificates",
-    icon: Fingerprint,
-    description: "Cryptographic integrity, provenance, metadata capture and certificate-generation capabilities designed to support electronic-record workflows under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023."
-  },
-  {
-    num: "03",
-    title: "SECURITY",
-    subtitle: "Access Control · Audit Trails · Tamper Detection · Incident Evidence",
-    icon: Lock,
-    description: "IT Act-aligned controls for access monitoring, integrity verification, and tamper-evident logging. Security incident evidence captured with cryptographic signatures and chain-of-custody integrity."
-  },
-  {
-    num: "04",
-    title: "PRIVACY",
-    subtitle: "Encryption · Data Classification · Retention · Controlled Deletion",
-    icon: Database,
-    description: "Personal-data governance with AES-256-GCM encryption at rest, data classification policies, retention enforcement, and controlled deletion workflows aligned with the DPDP framework."
-  }
-];
+import { Shield, Fingerprint, Lock, Database, CheckCircle2 } from "lucide-react";
 
 export function Pillars() {
   return (
@@ -52,17 +19,56 @@ export function Pillars() {
             <p className="text-zinc-400 text-lg font-mono leading-relaxed">
               QUANTUMBLUE COMBINES POST-QUANTUM CRYPTOGRAPHY, DIGITAL EVIDENCE INTEGRITY, SECURITY CONTROLS, AND PRIVACY GOVERNANCE IN A SINGLE PLATFORM.
             </p>
+            <p className="text-zinc-600 text-sm font-mono mt-4 max-w-xl">
+              The Cryptographic Digital Twin continuously models your organization&apos;s cryptographic surface — what exists, where it lives, what data it protects, and whether migration has been verified. This is what makes the platform hard to replace.
+            </p>
           </motion.div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {PILLARS.map((pillar, i) => (
+          {[
+            {
+              num: "01",
+              title: "POST-QUANTUM CRYPTOGRAPHY",
+              subtitle: "ML-DSA-65 · ML-KEM-768 · Hybrid Signatures · Crypto-Agility",
+              icon: Shield,
+              description: "NIST-standardized post-quantum algorithms protecting against \"Store Now, Decrypt Later\" attacks. Hybrid signatures combining ML-DSA-65 and Ed25519 for post-quantum migration with classical verification compatibility.",
+            },
+            {
+              num: "02",
+              title: "DIGITAL EVIDENCE",
+              subtitle: "BSA §63 · Evidence Hashing · Metadata · Chain of Custody · Certificates",
+              icon: Fingerprint,
+              description: "Cryptographic integrity, provenance, metadata capture and certificate-generation capabilities designed to support electronic-record workflows under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023.",
+            },
+            {
+              num: "03",
+              title: "SECURITY",
+              subtitle: "Access Control · Audit Trails · Tamper Detection · Incident Evidence",
+              icon: Lock,
+              description: "IT Act-aligned controls for access monitoring, integrity verification, and tamper-evident logging. Security incident evidence captured with cryptographic signatures and chain-of-custody integrity.",
+            },
+            {
+              num: "04",
+              title: "PRIVACY",
+              subtitle: "Encryption · Data Classification · Retention · Controlled Deletion",
+              icon: Database,
+              description: "Personal-data governance with AES-256-GCM encryption at rest, data classification policies, retention enforcement, and controlled deletion workflows aligned with the DPDP framework.",
+            },
+            {
+              num: "05",
+              title: "PROOF_OF_MIGRATION",
+              subtitle: "Digital Twin · Risk Scoring · Evidence Artifacts · Public Verification",
+              icon: CheckCircle2,
+              description: "The highest-value layer: a continuously updated Cryptographic Digital Twin that scores quantum risk, tracks migration events, produces independently verifiable evidence, and lets anyone verify integrity without trusting the platform.",
+            },
+          ].map((pillar) => (
             <motion.div
               key={pillar.num}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
+              transition={{ delay: 0.1, duration: 0.6 }}
               className="glass p-10 rounded-none border border-border-bright hover:border-accent-blue transition-all group relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-accent-blue/5 rounded-full blur-3xl -mr-20 -mt-20 transition-all group-hover:bg-accent-blue/10" />

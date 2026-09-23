@@ -35,7 +35,7 @@ export async function GET() {
 
     return NextResponse.json(keysWithPreview);
   } catch (err) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
 }
 
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
     // Return the raw key once — it cannot be retrieved again
     return NextResponse.json({ id: key.id, name: key.label, label: key.label, key: rawKey, createdAt: key.createdAt.toISOString() });
   } catch (err) {
-    return new NextResponse(err.message, { status: 500 });
+    return new NextResponse((err as Error).message, { status: 500 });
   }
 }
 
@@ -98,6 +98,6 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({ success: true, message: "Key revoked" });
   } catch (err) {
-    return new NextResponse(err.message, { status: 500 });
+    return new NextResponse((err as Error).message, { status: 500 });
   }
 }

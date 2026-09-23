@@ -11,7 +11,7 @@ function parseFrontmatter(fileContent: string) {
   match[1].split('\n').forEach(line => {
     const [key, ...valueParts] = line.split(':');
     if (key && valueParts.length > 0) {
-      let val: any = valueParts.join(':').trim().replace(/^["']|["']$/g, '');
+      let val: string | string[] = valueParts.join(':').trim().replace(/^["']|["']$/g, '');
       if (val.startsWith('[') && val.endsWith(']')) {
         val = val.slice(1, -1).split(',').map(s => s.trim().replace(/^["']|["']$/g, '')) ;
       }

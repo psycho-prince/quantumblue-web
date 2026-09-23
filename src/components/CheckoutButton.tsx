@@ -53,7 +53,7 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
           email: user?.primaryEmailAddress?.emailAddress || "",
           name: user?.fullName || ""
         },
-        handler: function (response: any) {
+        handler: function (response: { razorpay_payment_id?: string }) {
           alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
           // You can redirect to billing dashboard here
           window.location.href = "/dashboard/settings/billing";
@@ -63,8 +63,8 @@ export function CheckoutButton({ plan, buttonText, className }: { plan: string, 
         }
       };
 
-      const rzp = new (window as any).Razorpay(options);
-      rzp.on("payment.failed", function (response: any) {
+      const rzp = new (window as unknown as { Razorpay: new (opts: Record<string, unknown>) => { open: () => void; on: (event: string, cb: (response: { error: { description: string } }) => void) => void; } }).Razorpay(options);
+      rzp.on("payment.failed", function (response: { error: { description: string } }) {
         alert(`Payment failed: ${response.error.description}`);
       });
       rzp.open();

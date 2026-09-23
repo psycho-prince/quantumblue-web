@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -7,6 +8,9 @@ import { ShieldCheck, Key, RefreshCw, FileText, Copy, Send, Sparkles, Zap, Menu,
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe } from "@/components/Globe";
 import { EncryptedText } from "@/components/EncryptedText";
+import { ComplianceSection } from "@/components/ComplianceSection";
+import { Pillars } from "@/components/Pillars";
+import { SovereignVault } from "@/app/dashboard/inventory/SovereignVault";
 import { cn } from "@/lib/utils";
 
 type ApiKey = {
@@ -149,7 +153,7 @@ export default function Dashboard() {
       // Refresh settings to confirm
       await fetchSettings();
     } catch (err) {
-      alert("Error saving settings: " + (err?.message || "unknown error"));
+      alert("Error saving settings: " + ((err as Error).message || "unknown error"));
     } finally {
       setSavingSettings(false);
     }
@@ -288,7 +292,7 @@ export default function Dashboard() {
       const normalized = response.replace(/\s+/g, "_").toUpperCase().slice(0, 500);
       setMessages(prev => [...prev, { role: "assistant", content: normalized }]);
     } catch (err) {
-      const errorMsg = "AI_ERROR: " + (err?.message || "Request failed. Check your API key and network connectivity.").replace(/\s+/g, "_").toUpperCase();
+      const errorMsg = "AI_ERROR: " + ((err as Error).message || "Request failed. Check your API key and network connectivity.").replace(/\s+/g, "_").toUpperCase();
       setMessages(prev => [...prev, { role: "assistant", content: errorMsg }]);
     } finally {
       setIsTyping(false);
@@ -448,7 +452,7 @@ export default function Dashboard() {
                                 <span className="text-[10px] text-zinc-500 uppercase tracking-widest">LAST_7_DAYS</span>
                               </div>
                               <div className="h-48 flex items-end gap-2">
-                                {stats?.dailyOps && Object.entries(stats.dailyOps).map(([date, count]: [string, number]) => (
+                                {stats?.dailyOps && (Object.entries(stats.dailyOps) as [string, number][]).map(([date, count]) => (
                                   <div key={date} className="flex-1 flex flex-col items-center gap-2 group">
                                     <div className="w-full bg-accent-blue/20 relative group-hover:bg-accent-blue/40 transition-colors" style={{ height: `${Math.max((count / Math.max(...Object.values(stats.dailyOps) as number[], 1)) * 100, 2)}%` }}>
                                       <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black border border-border-bright text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
@@ -490,6 +494,18 @@ export default function Dashboard() {
                      <button onClick={() => setActiveTab("quickstart")} className="w-full py-3 bg-accent-blue/10 border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-black transition-all text-xs font-bold uppercase tracking-widest font-mono">
                         VIEW_DOCUMENTATION
                      </button>
+                  </div>
+                  <div className="space-y-8 pt-6 border-t border-border-bright">
+                    <ComplianceSection />
+                    <div className="border-t border-border-bright">
+                      <SovereignVault vault={{ items: [
+                        { id: "vt-1", label: "ML-KEM-768 Root Key", fingerprint: "sha256:7f8a...c3d2", status: "verified" },
+                        { id: "vt-2", label: "ML-DSA-65 Signing Key", fingerprint: "sha256:2b1e...9f4a", status: "pending" },
+                        { id: "vt-3", label: "Hybrid TLS Certificate", fingerprint: "sha256:e9c7...1a6d", status: "migration_required" },
+                        { id: "vt-4", label: "RS 2048 Legacy WIIT", fingerprint: "sha256:4d2f...8e3b", status: "migration_required" },
+                      ] }} />
+                    </div>
+                    <Pillars />
                   </div>
                 </div>
               </motion.div>

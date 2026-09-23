@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { detectAnomalies } from "@/lib/anomaly-detection";
@@ -61,8 +62,7 @@ export async function POST(req: NextRequest) {
       rawBom: bom,
       findings: {
         create: (bom.components ?? [])
-          .filter((c) => c.type === "cryptographic-asset")
-          .map((c) => ({
+          .filter((c: any) => c.type === "cryptographic-asset").map((c: any) => ({
             bomRef: c["bom-ref"],
             name: c.name,
             primitive: c.cryptoProperties?.algorithmProperties?.primitive ?? "unknown",

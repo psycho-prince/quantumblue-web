@@ -1,15 +1,5 @@
-"use client";
-
 import { motion } from "framer-motion";
-import { Shield, FileCheck, Clock, Lock, Database } from "lucide-react";
-
-const FRAMEWORKS = [
-  { name: "BSA §63", desc: "Electronic Evidence", icon: FileCheck },
-  { name: "IT Act", desc: "Security Controls", icon: Shield },
-  { name: "DPDP", desc: "Data Governance", icon: Database },
-  { name: "RFC 3161", desc: "Trusted Timestamping", icon: Clock },
-  { name: "FIPS 203/204", desc: "Post-Quantum Crypto", icon: Lock },
-];
+import { FileCheck, Shield, Database, Clock, Lock } from "lucide-react";
 
 export function ComplianceSection() {
   return (
@@ -23,13 +13,19 @@ export function ComplianceSection() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
-          {FRAMEWORKS.map((fw, i) => (
+          {[
+            { name: "BSA §63", desc: "Electronic Evidence", icon: FileCheck },
+            { name: "IT Act", desc: "Security Controls", icon: Shield },
+            { name: "DPDP", desc: "Data Governance", icon: Database },
+            { name: "RFC 3161", desc: "Trusted Timestamping", icon: Clock },
+            { name: "FIPS 203/204", desc: "Post-Quantum Crypto", icon: Lock },
+          ].map((fw) => (
             <motion.div
               key={fw.name}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: 0.1 }}
               className="glass p-10 flex flex-col items-center justify-center border border-border-bright group hover:border-accent-blue/50 transition-all"
             >
               <fw.icon className="w-6 h-6 text-accent-blue mb-4 group-hover:scale-110 transition-transform" />
@@ -43,6 +39,9 @@ export function ComplianceSection() {
           <p className="text-zinc-400 text-xs font-mono leading-relaxed">
             Control mapping — not a representation that QuantumBlue itself guarantees statutory compliance or legal admissibility.
             QuantumBlue provides technical controls that support applicable legal and evidentiary requirements.
+          </p>
+          <p className="text-zinc-600 text-[10px] font-mono leading-relaxed mt-3">
+            The Proof of Migration framework produces independently verifiable evidence artifacts — SHA-256 integrity hashes, digital signatures, RFC 3161 timestamps, and full chain-of-custody records — that auditable regulatory frameworks can reference without requiring trust in QuantumBlue&apos;s internal logs.
           </p>
         </div>
       </div>
