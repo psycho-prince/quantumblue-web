@@ -260,7 +260,7 @@ export default function Dashboard() {
         const data = await res.json();
         response = data.choices?.[0]?.message?.content || "NO_RESPONSE_FROM_API.";
       } else if (provider === "gemini") {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${aiSettings.aiApiKey.trim()}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${aiSettings.aiApiKey.trim()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
