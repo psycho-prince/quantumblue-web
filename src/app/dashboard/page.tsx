@@ -56,14 +56,14 @@ export default function Dashboard() {
     try {
       if (aiSettings.aiProvider === "openai") {
         const res = await fetch("https://api.openai.com/v1/models", {
-          headers: { "Authorization": `Bearer ${aiSettings.aiApiKey}` }
+          headers: { "Authorization": `Bearer ${aiSettings.aiApiKey.trim()}` }
         });
         if (res.ok) setTestResult({status: 'success', msg: 'Key is valid.'});
         else setTestResult({status: 'error', msg: 'Invalid key.'});
       } else if (aiSettings.aiProvider === "claude") {
          setTestResult({status: 'success', msg: 'Test not implemented for Claude. Try sending a chat.'});
       } else if (aiSettings.aiProvider === "gemini") {
-         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${aiSettings.aiApiKey}`);
+         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${aiSettings.aiApiKey.trim()}`);
          if (res.ok) setTestResult({status: 'success', msg: 'Key is valid.'});
          else setTestResult({status: 'error', msg: 'Invalid key.'});
       }
@@ -240,7 +240,7 @@ export default function Dashboard() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${aiSettings.aiApiKey}`
+            "Authorization": `Bearer ${aiSettings.aiApiKey.trim()}`
           },
           body: JSON.stringify({
             model: "gpt-4",
@@ -257,7 +257,7 @@ export default function Dashboard() {
         const data = await res.json();
         response = data.choices?.[0]?.message?.content || "NO_RESPONSE_FROM_API.";
       } else if (provider === "gemini") {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${aiSettings.aiApiKey}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${aiSettings.aiApiKey.trim()}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
