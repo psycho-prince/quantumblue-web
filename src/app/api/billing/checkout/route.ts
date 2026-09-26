@@ -46,6 +46,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing organization' }, { status: 400 });
     }
 
+    // Ensure Organization exists in Prisma to prevent foreign key constraint failures
+    await prisma.organization.upsert({
+      where: { id: internalOrgId },
+      update: {},
+      create: {
+        id: internalOrgId,
+        name: `Org ${internalOrgId}`
+      }
+    });
+
     let billingCustomer: { id: string; razorpayCustomerId: string } | null = null;
 
     // Check if billing customer exists for this org
