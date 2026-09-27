@@ -72,12 +72,25 @@ export async function POST(req: Request) {
     if (existingCustomer) {
       billingCustomer = existingCustomer;
     } else {
-      // Create Razorpay customer
-      const rzpCustomer = await razorpay.customers.create({
-        name: `Org ${internalOrgId}`,
-        email: `billing-${internalOrgId}@quantum-blue.in`,
-        notes: { clerkOrgId: internalOrgId }
-      });
+      // Create Razorpay customer — handle "already exists" gracefully
+      let rzpCustomer;
+      try {
+        rzpCustomer = await razorpay.customers.create({
+          name: `Org ${internalOrgId}`,
+          email: `billing-${internalOrgId}@quantum-blue.in`,
+          notes: { clerkOrgId: internalOrgId }
+        });
+      } catch (rerr) {
+        const rzperr = rerr as { error?: { description?: string; code?: string } };
+        const desc = rzperr.error?.description || '';
+        if (desc.includes('Customer already exists for the merchant')) {
+          console.error('Checkout error: Razorpay customer already exists — DB record missing');
+          return NextResponse.json({
+            error: 'Billing customer already exists. Please contact support.',
+          }, { status: 409 });
+        }
+        throw rerr; // re-throw unknown errors
+      }
 
       billingCustomer = await prisma.billingCustomer.create({
         data: {
