@@ -85,7 +85,7 @@ export async function POST(req: Request) {
 
     // Idempotency check
     const existingEvent = await prisma.webhookEvent.findUnique({
-      where: { eventId: event.event_id || event.id }, // Note: razorpay uses 'event_id' but some payloads have 'id'
+      where: { eventId: event.event_id || event.id },
     });
 
     if (existingEvent) {
@@ -105,31 +105,39 @@ export async function POST(req: Request) {
     const payload = event.payload;
 
     if (event.event === 'subscription.activated' || event.event === 'subscription.authenticated') {
-      const sub = payload.subscription.entity;
+      // Real Razorpay webhook sends subscription.entity wrapper
+      const sub = (payload.subscription && payload.subscription.entity)
+        ? payload.subscription.entity
+        : payload.subscription;
+
+      if (!sub || !sub.id) {
+        console.error('Webhook: missing subscription entity in payload');
+        return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+      }
 
       await prisma.subscription.updateMany({
         where: { razorpaySubscriptionId: sub.id },
         data: {
           status: 'active',
-          currentPeriodStart: new Date(sub.current_start * 1000),
-          currentPeriodEnd: new Date(sub.current_end * 1000),
+          currentPeriodStart: new Date((sub.current_start || sub.current_start) * 1000),
+          currentPeriodEnd: new Date((sub.current_end || sub.current_end) * 1000),
         },
       });
 
       // Sync entitlement so customer gets features immediately on activation
-      const notes = sub.notes || {};
-      const orgId = notes.clerkOrgId || sub.customer_notes?.clerkOrgId;
-      const planKey = notes.plan || 'PRO'; // Default to PRO if plan not in notes
+      const notes = (sub.notes || payload.subscription?.notes || {}) as Record<string, string>;
+      const orgId = notes.clerkOrgId || (payload.subscription?.customer_notes as Record<string, string>)?.clerkOrgId;
+      const planKey = notes.plan || (payload.subscription?.customer_notes as Record<string, string>)?.plan || 'PRO';
       if (orgId) {
         await syncEntitlement(orgId, planKey);
       }
     }
 
     if (event.event === 'payment.captured') {
-      const payment = payload.payment.entity;
-      const orgIdNotes = payment.notes?.orgId;
+      const payment = payload.payment?.entity || payload.payment;
+      const orgIdNotes = (payment.notes || {})?.orgId;
 
-      if (orgIdNotes) {
+      if (orgIdNotes && payment.id) {
         await prisma.paymentTransaction.upsert({
           where: { razorpayPaymentId: payment.id },
           create: {
@@ -148,7 +156,7 @@ export async function POST(req: Request) {
         });
 
         // For one-time Starter payments, sync entitlement on payment capture
-        const notePlan = payment.notes?.plan;
+        const notePlan = (payment.notes || {})?.plan;
         if (notePlan) {
           await syncEntitlement(orgIdNotes, notePlan);
         }

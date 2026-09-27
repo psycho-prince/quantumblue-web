@@ -26,11 +26,11 @@ export async function POST(req: Request) {
           orgId = (verified as Record<string, unknown>).org_id as string || null;
         } catch (err) {
           return NextResponse.json({
-            error: 'Manual token verification failed: ' + String((err as Error).message || err)
+            error: 'Invalid token'
           }, { status: 401 });
         }
       } else {
-        return NextResponse.json({ error: 'Unauthorized and no Bearer token provided' }, { status: 401 });
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
     }
 
