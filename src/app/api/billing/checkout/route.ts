@@ -36,6 +36,11 @@ export async function POST(req: Request) {
           if (!process.env.CLERK_SECRET_KEY) {
             return NextResponse.json({ error: 'Service not configured' }, { status: 503 });
           }
+          // Fast-fail: JWT must have 3 dot-separated parts
+          const parts = token.split('.');
+          if (parts.length !== 3 || parts[0].length === 0) {
+            return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+          }
           const verified = await verifyToken(token, { secretKey: process.env.CLERK_SECRET_KEY }).catch(() => null);
           if (!verified) {
             return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
