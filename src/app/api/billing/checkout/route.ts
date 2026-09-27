@@ -26,8 +26,7 @@ export async function POST(req: Request) {
           orgId = (verified as Record<string, unknown>).org_id as string || null;
         } catch (err) {
           return NextResponse.json({
-            error: 'Manual token verification failed: ' + String((err as Error).message || err),
-            debug: { tokenPrefix: token.substring(0, 15) }
+            error: 'Manual token verification failed: ' + String((err as Error).message || err)
           }, { status: 401 });
         }
       } else {
