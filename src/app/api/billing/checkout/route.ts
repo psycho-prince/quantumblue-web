@@ -153,7 +153,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(_req: Request) {
+export async function GET() {
   try {
     const authResult = await auth().catch(e => ({ error: String(e) }));
     let userId: string | null = null;
