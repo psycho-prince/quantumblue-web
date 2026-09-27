@@ -21,5 +21,17 @@ services:
         sync: false
       - key: CLERK_SECRET_KEY
         sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
+      - key: RAZORPAY_PLAN_STARTER
+        sync: false
+      - key: RAZORPAY_PLAN_PRO
+        sync: false
+      - key: RAZORPAY_PLAN_BUSINESS
+        sync: false
       - key: NODE_VERSION
         value: 20.18.0
