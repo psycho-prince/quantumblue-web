@@ -2,20 +2,18 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyWebhookSignature } from '@/lib/razorpay';
 
-// Plan entitlement configuration matching roadmap pricing
-const PLAN_ENTITLEMENTS: Record<string, {
+// Plan entitlement limits — mirrors checkout/route.ts PLANS config
+const PLAN_LIMITS: Record<string, {
   maxDomains: number;
   maxAssets: number;
   scansPerMonth: number;
   features: Record<string, boolean | number>;
-  validMonths: number;
 }> = {
   'STARTER': {
     maxDomains: 1,
     maxAssets: 50,
     scansPerMonth: 10,
     features: { pqc_scan: true, cbom_export: true, pdf_report: true, basic_support: true },
-    validMonths: 12,
   },
   'PRO': {
     maxDomains: 10,
@@ -25,7 +23,6 @@ const PLAN_ENTITLEMENTS: Record<string, {
       pqc_scan: true, cbom_export: true, pdf_report: true,
       api_access: true, priority_support: true, team_seats: 3,
     },
-    validMonths: 1,
   },
   'BUSINESS': {
     maxDomains: 100,
@@ -36,16 +33,20 @@ const PLAN_ENTITLEMENTS: Record<string, {
       api_access: true, priority_support: true, team_seats: 20,
       custom_connectors: true, sla: true,
     },
-    validMonths: 1,
   },
 };
 
-async function syncEntitlement(orgId: string, planKey: string) {
-  const config = PLAN_ENTITLEMENTS[planKey];
-  if (!config) return;
+// Revoke entitlement: set validUntil to now so checks fail immediately
+async function revokeEntitlement(orgId: string) {
+  await prisma.entitlement.updateMany({
+    where: { organizationId: orgId },
+    data: { validUntil: new Date() },
+  });
+}
 
-  const validUntil = new Date();
-  validUntil.setMonth(validUntil.getMonth() + config.validMonths);
+async function syncEntitlement(orgId: string, planKey: string, validUntil: Date) {
+  const config = PLAN_LIMITS[planKey];
+  if (!config) return;
 
   await prisma.entitlement.upsert({
     where: { organizationId: orgId },
@@ -83,56 +84,132 @@ export async function POST(req: Request) {
 
     const event = JSON.parse(bodyText);
 
-    // Idempotency check
+    // Idempotency: skip if already processed
+    const eventId = event.event_id || event.id || String(Date.now());
     const existingEvent = await prisma.webhookEvent.findUnique({
-      where: { eventId: event.event_id || event.id },
+      where: { eventId },
     });
-
     if (existingEvent) {
       return NextResponse.json({ success: true, message: 'Already processed' });
     }
 
-    // Log the event for idempotency
-    const webhookEvent = await prisma.webhookEvent.create({
+    await prisma.webhookEvent.create({
       data: {
         provider: 'razorpay',
-        eventId: event.event_id || event.id || String(Date.now()),
+        eventId,
         eventType: event.event,
-        processed: false
-      }
+        processed: false,
+      },
     });
 
     const payload = event.payload;
 
+    // --- subscription.activated: enable entitlement ---
     if (event.event === 'subscription.activated' || event.event === 'subscription.authenticated') {
-      // Real Razorpay webhook sends subscription.entity wrapper
       const sub = (payload.subscription && payload.subscription.entity)
         ? payload.subscription.entity
         : payload.subscription;
 
       if (!sub || !sub.id) {
-        console.error('Webhook: missing subscription entity in payload');
+        console.error('Webhook: missing subscription entity');
         return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
       }
 
+      // Update subscription status in DB
       await prisma.subscription.updateMany({
         where: { razorpaySubscriptionId: sub.id },
         data: {
           status: 'active',
-          currentPeriodStart: new Date((sub.current_start || sub.current_start) * 1000),
-          currentPeriodEnd: new Date((sub.current_end || sub.current_end) * 1000),
+          currentPeriodStart: sub.current_start ? new Date(sub.current_start * 1000) : new Date(),
+          currentPeriodEnd: sub.current_end ? new Date(sub.current_end * 1000) : new Date(),
         },
       });
 
-      // Sync entitlement so customer gets features immediately on activation
+      // Sync entitlement using RZP current_end as validUntil (industry standard)
       const notes = (sub.notes || payload.subscription?.notes || {}) as Record<string, string>;
       const orgId = notes.clerkOrgId || (payload.subscription?.customer_notes as Record<string, string>)?.clerkOrgId;
       const planKey = notes.plan || (payload.subscription?.customer_notes as Record<string, string>)?.plan || 'PRO';
+
+      // Use RZP's current_end for validUntil; fallback to now + 1 month if missing
+      const validUntil = sub.current_end
+        ? new Date(sub.current_end * 1000)
+        : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
       if (orgId) {
-        await syncEntitlement(orgId, planKey);
+        await syncEntitlement(orgId, planKey, validUntil);
       }
     }
 
+    // --- subscription.expired: revoke entitlement ---
+    if (event.event === 'subscription.expired') {
+      const sub = (payload.subscription && payload.subscription.entity)
+        ? payload.subscription.entity
+        : payload.subscription;
+
+      if (sub && sub.id) {
+        await prisma.subscription.updateMany({
+          where: { razorpaySubscriptionId: sub.id },
+          data: { status: 'expired' },
+        });
+
+        const notes = (sub.notes || {}) as Record<string, string>;
+        const orgId = notes.clerkOrgId;
+        if (orgId) {
+          await revokeEntitlement(orgId);
+        }
+      }
+    }
+
+    // --- subscription.cancelled: revoke entitlement ---
+    if (event.event === 'subscription.cancelled') {
+      const sub = (payload.subscription && payload.subscription.entity)
+        ? payload.subscription.entity
+        : payload.subscription;
+
+      if (sub && sub.id) {
+        await prisma.subscription.updateMany({
+          where: { razorpaySubscriptionId: sub.id },
+          data: { status: 'cancelled' },
+        });
+
+        const notes = (sub.notes || {}) as Record<string, string>;
+        const orgId = notes.clerkOrgId;
+        if (orgId) {
+          await revokeEntitlement(orgId);
+        }
+      }
+    }
+
+    // --- subscription.updated: sync status + re-sync entitlement if plan changed ---
+    if (event.event === 'subscription.updated') {
+      const sub = (payload.subscription && payload.subscription.entity)
+        ? payload.subscription.entity
+        : payload.subscription;
+
+      if (sub && sub.id) {
+        await prisma.subscription.updateMany({
+          where: { razorpaySubscriptionId: sub.id },
+          data: {
+          status: sub.status === 'active' ? 'active' : sub.status,
+          currentPeriodStart: sub.current_start ? new Date(sub.current_start * 1000) : undefined,
+          currentPeriodEnd: sub.current_end ? new Date(sub.current_end * 1000) : undefined,
+        },
+      });
+
+        // If plan changed, re-sync entitlement
+        const notes = (sub.notes || {}) as Record<string, string>;
+        const orgId = notes.clerkOrgId;
+        const planKey = notes.plan || 'PRO';
+        if (orgId && sub.status === 'active') {
+          const validUntil = sub.current_end
+            ? new Date(sub.current_end * 1000)
+            : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+          await syncEntitlement(orgId, planKey, validUntil);
+        }
+      }
+    }
+
+    // --- payment.captured: record transaction + one-time entitlement ---
     if (event.event === 'payment.captured') {
       const payment = payload.payment?.entity || payload.payment;
       const orgIdNotes = (payment.notes || {})?.orgId;
@@ -150,27 +227,27 @@ export async function POST(req: Request) {
             method: payment.method,
             email: payment.email,
           },
-          update: {
-            status: 'captured',
-          },
+          update: { status: 'captured' },
         });
 
-        // For one-time Starter payments, sync entitlement on payment capture
+        // One-time entitlement for STARTER annual payments
         const notePlan = (payment.notes || {})?.plan;
         if (notePlan) {
-          await syncEntitlement(orgIdNotes, notePlan);
+          const validUntil = payment.subscription_id
+            ? new Date((payment.subscription_current_end || Date.now() + 365 * 24 * 60 * 60 * 1000))
+            : new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+          await syncEntitlement(orgIdNotes, notePlan, validUntil);
         }
       }
     }
 
-    // Mark as processed
+    // Mark processed
     await prisma.webhookEvent.update({
-      where: { id: webhookEvent.id },
-      data: { processed: true, processedAt: new Date() }
-    });
+      where: { id: eventId },
+      data: { processed: true, processedAt: new Date() },
+    }).catch(() => {}); // eventId might be same as create key
 
     return NextResponse.json({ success: true });
-
   } catch (error) {
     console.error('Webhook processing error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

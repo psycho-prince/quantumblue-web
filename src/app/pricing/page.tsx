@@ -15,8 +15,8 @@ export default function PricingPage() {
       planKey: "STARTER",
       description: "For small businesses starting their post-quantum journey.",
       features: [
-        "3 domains",
-        "Monthly scan",
+        "1 domain",
+        "Annual scan (₹4,999/yr)",
         "Basic crypto inventory",
         "PDF report",
         "Basic risk score"
@@ -31,11 +31,12 @@ export default function PricingPage() {
       planKey: "PRO",
       description: "For high-growth startups and SaaS companies.",
       features: [
-        "25 domains",
+        "10 domains",
         "Continuous monitoring",
         "AI analyst & API access",
         "GitHub/GitLab integration",
-        "Alerts & Compliance mapping"
+        "Alerts & compliance mapping",
+        "Priority support (3 seats)"
       ],
       button: "Upgrade to Pro",
       highlight: true
@@ -47,11 +48,12 @@ export default function PricingPage() {
       planKey: "BUSINESS",
       description: "For serious organizations requiring advanced security capabilities.",
       features: [
-        "100+ assets",
+        "100+ domains",
         "Cloud connectors & Kubernetes",
         "Advanced AI & SIEM integration",
         "Migration planning",
-        "Priority support & Team access"
+        "Priority support & 20 team seats",
+        "Custom connectors & SLA"
       ],
       button: "Deploy Business",
       highlight: false

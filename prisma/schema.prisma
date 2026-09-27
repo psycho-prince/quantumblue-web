@@ -109,6 +109,7 @@ model Subscription {
   razorpaySubscriptionId String?     @unique
   razorpayPlanId         String
   planKey                String
+  idempotencyKey         String?      @unique
   status                 String
   currentPeriodStart     DateTime
   currentPeriodEnd       DateTime

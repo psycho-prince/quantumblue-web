@@ -4,7 +4,15 @@ import { getOrganizationEntitlements } from '@/lib/entitlements';
 
 export async function GET() {
   try {
-    const { userId, orgId } = await auth();
+    const authResult = await auth().catch(e => ({ error: String(e) }));
+    let userId: string | null = null;
+    let orgId: string | null = null;
+
+    if ('userId' in authResult) {
+      userId = authResult.userId;
+      orgId = authResult.orgId ?? null;
+    }
+
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
