@@ -41,6 +41,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
     }
 
+    // Validate Razorpay credentials
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      console.error('Checkout error: RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET is missing');
+      return NextResponse.json({ error: 'Payment service not configured' }, { status: 503 });
+    }
+
     const internalOrgId = orgId || userId!;
     if (!internalOrgId) {
       return NextResponse.json({ error: 'Missing organization' }, { status: 400 });
@@ -113,7 +119,7 @@ export async function POST(req: Request) {
 
     await prisma.subscription.create({
       data: {
-        organization: { connect: { id: internalOrgId } },
+        clerkOrgId: internalOrgId,
         razorpayCustomerId: billingCustomer.razorpayCustomerId,
         razorpaySubscriptionId: subscription.id,
         razorpayPlanId: planIds[plan],
