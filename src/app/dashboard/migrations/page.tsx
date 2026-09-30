@@ -34,7 +34,7 @@ export default async function MigrationDashboardPage() {
       <h1 className="text-2xl font-bold font-mono mb-6 tracking-tight">Migration Dashboard</h1>
       <div className="flex items-center gap-3 mb-1">
         <div className="h-px flex-1 bg-gradient-to-r from-accent-blue/30 via-accent-green/30 to-accent-yellow/30" />
-        <p className="text-zinc-500 text-sm font-mono max-w-2xl text-right">Track every cryptographic migration from assessment through verified completion.</p>
+        <p className="text-zinc-500 text-sm font-mono max-w-2xl text-right">Track every cryptographic migration from assessment through verified completion — with one-click rollback safety nets for Envoy, Istio, and Kong deployments.</p>
         <div className="h-px flex-1 bg-gradient-to-r from-accent-yellow/30 via-accent-green/30 to-accent-blue/30" />
       </div>
 

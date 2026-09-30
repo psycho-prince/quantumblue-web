@@ -1,4 +1,12 @@
+import { Metadata } from "next";
 import { UserProfile } from "@clerk/nextjs";
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function ProfilePage() {
   return (

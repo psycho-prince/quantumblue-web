@@ -4,6 +4,8 @@ title: Technical Spec & Compliance Checklist
 
 # QuantumBlue CLI — Compliance & Control Checklist
 
+QuantumBlue is a **Continuous Cryptographic Posture Management (CCPM)** platform. The CLI is the command-line interface to the platform — it performs hybrid PQC signing, CBOM generation, TLS surface scanning, and (in Phase 2+) eBPF runtime discovery. This page maps the CLI's technical controls to relevant compliance frameworks.
+
 ## Post-Quantum Cryptography
 
 - **ML-DSA-65 (FIPS 204)**: Digital signature standard
@@ -38,6 +40,16 @@ IEA §65B(4) is retained solely as a historical compatibility note. The primary 
 - **Retention Enforcement**: Per-classification retention periods
 - **Controlled Deletion**: Soft-delete and permanent-purge workflows
 
+## CCPM Platform Controls
+
+- **External Attack Surface Scanner**: TLS certificate scanning with HNDL risk grading (Phase 1, live)
+- **eBPF Runtime Discovery**: Zero-instrumentation production crypto observation (Phase 2)
+- **Cryptographic Asset Graph**: Single source of truth for what crypto runs in production
+- **Shift-Left Guardrail**: GitHub/GitLab PR blocking for legacy crypto (Phase 4)
+- **Migration Engine**: Envoy/Istio/Kong PQC routing with one-click rollback (Phase 3)
+- **Proof of Migration**: Auditable artifact for every completed migration
+- **DSPM Integration**: Automated HNDL prioritization from data-sensitivity tags (Phase 4)
+
 ## Control Mapping
 
 | Framework | QuantumBlue Capability |
@@ -49,5 +61,7 @@ IEA §65B(4) is retained solely as a historical compatibility note. The primary 
 | IT Act §66E | Sensitive-data protection |
 | IT Act §72/72A | Confidentiality & information controls |
 | DPDP Framework | Personal-data governance |
+| NIST FIPS 203/204 | ML-KEM-768 / ML-DSA-65 implementation |
+| CCPA / GDPR | Data classification + controlled deletion |
 
 > **Disclaimer**: Control mapping — not a representation that QuantumBlue itself guarantees statutory compliance or legal admissibility. QuantumBlue provides technical controls that support applicable legal and evidentiary requirements.

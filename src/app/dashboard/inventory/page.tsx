@@ -30,9 +30,9 @@ export default async function InventoryPage() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="mb-10">
           <span className="text-accent-blue font-bold text-[10px] uppercase tracking-[0.2em] block font-mono">CRYPTOGRAPHIC_DIGITAL_TWIN</span>
-          <h1 className="text-3xl font-bold font-mono tracking-tight text-white mt-2">Cryptographic Inventory</h1>
+          <h1 className="text-3xl font-bold font-mono tracking-tight">Cryptographic Inventory</h1>
           <p className="text-zinc-500 text-sm font-mono mt-2 max-w-2xl">
-            Every cryptographic asset your organization depends on — where it lives, what it protects, and its quantum exposure.
+            Every cryptographic asset your organization depends on — discovered via eBPF runtime sensor, cloud connectors, and CI/CD integrations. This is the Cryptographic Asset Graph: the single source of truth for what crypto is actually running in production, not what static analysis guesses is there.
           </p>
         </div>
 

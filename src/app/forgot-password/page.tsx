@@ -23,7 +23,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         <div className="glass p-1 rounded-[2.5rem] overflow-hidden shadow-2xl">
-          <SignIn 
+          <SignIn
             routing="hash"
             appearance={{
               elements: {
@@ -38,14 +38,14 @@ export default function ForgotPasswordPage() {
                 formFieldInput: "bg-white/5 border-white/10 text-white focus:border-blue-500 focus:ring-blue-500",
                 dividerLine: "bg-white/5",
                 dividerText: "text-zinc-500",
-              }
+              },
             }}
           />
         </div>
 
         <div className="text-center">
-          <Link 
-            href="/dashboard" 
+          <Link
+            href="/dashboard"
             className="inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-sm font-medium"
           >
             <ArrowLeft className="w-4 h-4" />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+import { Workflow, Database, ShieldCheck } from "lucide-react";
 
 export function ConnectorsClient({ hasGithub }: { hasGithub: boolean }) {
   const [owner, setOwner] = useState("");
@@ -291,6 +292,69 @@ export function AWSConnectorsClient({ hasAws }: { hasAws: boolean }) {
           </div>
         ) : null}
       </form>
+
+      {/* eBPF Runtime Discovery */}
+      <div className="bg-[#111] border border-[#222] p-6 rounded-xl mt-6">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h2 className="text-xl font-semibold flex items-center gap-2">
+              <Workflow className="w-6 h-6 text-blue-500" />
+              eBPF Runtime Discovery
+              <span className="text-xs bg-green-900/50 text-green-200 px-2 py-1 rounded-full border border-green-800">
+                Phase 2
+              </span>
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Attach the eBPF sensor to your Linux hosts to observe real cryptographic library calls in production -- OpenSSL, BoringSSL, Java Crypto -- without agents or code changes.
+            </p>
+          </div>
+        </div>
+        <p className="text-xs text-blue-300 font-mono leading-relaxed">
+          The eBPF sensor builds the Cryptographic Asset Graph from production ground truth. No static guessing. No language-specific agents. Just kernel-level observation of what crypto is actually running. Deploy via DaemonSet on Kubernetes or systemd on bare metal.
+        </p>
+      </div>
+
+      {/* DSPM Integration */}
+      <div className="bg-[#111] border border-[#222] p-6 rounded-xl mt-6">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h2 className="text-xl font-semibold flex items-center gap-2">
+              <Database className="w-6 h-6 text-yellow-500" />
+              DSPM Integration
+              <span className="text-xs bg-yellow-900/50 text-yellow-200 px-2 py-1 rounded-full border border-yellow-800">
+                Phase 4
+              </span>
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Connect QuantumBlue to your Data Security Posture Management tool to automatically ingest data-sensitivity tags and power HNDL prioritization.
+            </p>
+          </div>
+        </div>
+        <p className="text-xs text-yellow-300 font-mono leading-relaxed">
+          When your DSPM flags a database as containing PII with 10-year compliance retention, QuantumBlue auto-ingests that tag, checks the encryption in use (e.g. AES-128), and elevates the asset to P0 HNDL risk. No manual data classification needed. Risk = Data Sensitivity x Retention x Cryptographic Weakness.
+        </p>
+      </div>
+
+      {/* Shift-Left CI/CD Guardrail */}
+      <div className="bg-[#111] border border-[#222] p-6 rounded-xl mt-6">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h2 className="text-xl font-semibold flex items-center gap-2">
+              <ShieldCheck className="w-6 h-6" />
+              Shift-Left CI/CD Guardrail
+              <span className="text-xs bg-red-900/50 text-red-200 px-2 py-1 rounded-full border border-red-800">
+                Phase 4
+              </span>
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Block pull requests that introduce legacy cryptography -- RSA-2048, ECDSA, SHA-1 -- before they reach production. Available as a GitHub App, GitLab MR integration, and CLI for any CI pipeline.
+            </p>
+          </div>
+        </div>
+        <p className="text-xs text-red-300 font-mono leading-relaxed">
+          While you're mapping production debt, developers are committing new RSA-2048. The shift-left guardrail stops the bleeding at the source. Phase 4 adds AI Copilot auto-remediation suggestions for flagged PRs. Prevents new cryptographic debt from entering your codebase.
+        </p>
+      </div>
     </div>
   );
 }

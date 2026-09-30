@@ -20,6 +20,6 @@ If the quantum algorithm is found to have a flaw, the classical algorithm still 
 ## Automating the Migration
 Updating thousands of code repositories to use Hybrid Signatures is a massive undertaking. 
 
-With the **[QuantumBlue CLI](/scanner)**, you can automatically scan your entire codebase, generate a Cryptographic Bill of Materials (CBOM), and pinpoint exactly where legacy ECDSA signatures are being used in your application.
+With the **[QuantumBlue CLI](/scanner)**, you can automatically scan your entire codebase, generate a Cryptographic Bill of Materials (CBOM), and pinpoint exactly where legacy ECDSA signatures are being used in your application. The CLI is the shift-left guardrail component of the QuantumBlue CCPM platform — it blocks legacy crypto from entering production when integrated into your CI/CD pipeline.
 
 > Start mapping your cryptographic risk today with a **[Free QuantumBlue Account](/sign-up)**.

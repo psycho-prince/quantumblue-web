@@ -25,6 +25,7 @@ export default function ScannerPage() {
       riskLevel: string;
       message: string;
       grade: string;
+      pqcAlgorithms: string[];
     };
   } | null>(null);
   const [error, setError] = useState("");
@@ -32,7 +33,7 @@ export default function ScannerPage() {
   const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!domain) return;
-    
+
     setLoading(true);
     setError("");
     setResult(null);
@@ -44,7 +45,7 @@ export default function ScannerPage() {
         body: JSON.stringify({ domain })
       });
       const data = await res.json();
-      
+
       if (!data.success) {
         setError(data.error || "Failed to scan domain.");
       } else {
@@ -62,29 +63,29 @@ export default function ScannerPage() {
       <div className="max-w-3xl w-full space-y-12">
         <div className="text-center space-y-4">
           <div className="inline-block px-3 py-1 border border-accent-blue/30 bg-accent-blue/5 text-accent-blue text-xs font-bold tracking-widest uppercase mb-4">
-            Free Tool
+            Free Lead-Gen Tool — No Login Required
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
-            PQC RISK SCANNER
+            EXTERNAL ATTACK SURFACE SCANNER
           </h1>
           <p className="text-zinc-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            Enter a domain to instantly check if its TLS certificates are vulnerable to &quot;Harvest Now, Decrypt Later&quot; quantum attacks.
+            Enter any domain to instantly map its TLS certificate posture, detect classical vs post-quantum cryptography, and get a prioritized HNDL (Harvest Now, Decrypt Later) risk grade. This is the entry point to QuantumBlue's Continuous Cryptographic Posture Management (CCPM) platform.
           </p>
         </div>
 
         <form onSubmit={handleScan} className="relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-accent-blue/20 to-accent-red/20 blur opacity-75 group-hover:opacity-100 transition duration-1000"></div>
           <div className="relative flex bg-black border border-border-bright p-2 rounded-none">
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={domain}
               onChange={(e) => setDomain(e.target.value)}
               placeholder="example.com"
               className="flex-1 bg-transparent px-4 py-3 text-white placeholder:text-zinc-700 focus:outline-none"
               autoFocus
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={loading}
               className="bg-white text-black px-8 font-bold text-xs uppercase tracking-widest hover:bg-zinc-200 transition-colors flex items-center gap-2"
             >
@@ -96,7 +97,7 @@ export default function ScannerPage() {
 
         <AnimatePresence mode="wait">
           {error && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
               className="p-4 bg-accent-red/10 border border-accent-red/30 text-accent-red text-sm text-center"
             >
@@ -105,7 +106,7 @@ export default function ScannerPage() {
           )}
 
           {result && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className="glass p-8 border border-border-bright space-y-8"
             >
@@ -121,7 +122,7 @@ export default function ScannerPage() {
                 <div className={`flex items-center gap-4 px-6 py-4 border ${result.analysis.isPQC ? 'bg-accent-green/10 border-accent-green' : 'bg-accent-red/10 border-accent-red'}`}>
                   <span className="text-4xl font-bold">{result.analysis.grade}</span>
                   <div className="flex flex-col">
-                    <span className="text-[10px] uppercase tracking-widest text-zinc-400">Risk Level</span>
+                    <span className="text-[10px] uppercase tracking-widest text-zinc-400">HNDL Risk Level</span>
                     <span className={`font-bold ${result.analysis.isPQC ? 'text-accent-green' : 'text-accent-red'}`}>
                       {result.analysis.riskLevel}
                     </span>
@@ -138,13 +139,26 @@ export default function ScannerPage() {
                   )}
                   <div>
                     <h3 className="text-lg font-bold text-white mb-1">
-                      {result.analysis.isPQC ? "Quantum-Safe Signature" : "Classical Vulnerability Detected"}
+                      {result.analysis.isPQC ? "Quantum-Safe Cryptographic Posture" : "Classical Cryptography Detected — HNDL Exposure"}
                     </h3>
                     <p className="text-sm text-zinc-400 leading-relaxed">
                       {result.analysis.message}
                     </p>
                   </div>
                 </div>
+
+                {result.analysis.pqcAlgorithms && result.analysis.pqcAlgorithms.length > 0 && (
+                  <div className="p-4 bg-accent-green/5 border border-accent-green/30">
+                    <div className="text-[10px] text-zinc-600 uppercase tracking-widest mb-2">Detected Post-Quantum Algorithms</div>
+                    <div className="flex flex-wrap gap-2">
+                      {result.analysis.pqcAlgorithms.map(algo => (
+                        <span key={algo} className="text-xs font-bold text-accent-green border border-accent-green/30 px-2 py-1 rounded">
+                          {algo}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-2 gap-4 mt-6">
                   <div className="p-4 bg-black border border-border-bright">
@@ -162,14 +176,27 @@ export default function ScannerPage() {
 
               {!result.analysis.isPQC && (
                 <div className="mt-8 p-6 bg-accent-blue/5 border border-accent-blue/30 text-center space-y-4">
-                  <h4 className="text-white font-bold">Fix this vulnerability.</h4>
+                  <h4 className="text-white font-bold">Fix this exposure.</h4>
                   <p className="text-sm text-zinc-400 max-w-lg mx-auto">
-                    {isSignedIn 
-                      ? "Use your dashboard to generate a Cryptographic Bill of Materials (CBOM) and let the Security AI provide exact migration configurations."
-                      : "Sign up to generate a complete Cryptographic Bill of Materials (CBOM) and let our AI Analyst write the exact migration configurations for your servers."}
+                    This domain is vulnerable to Harvest Now, Decrypt Later attacks. QuantumBlue's CCPM platform discovers every cryptographic asset across your infrastructure, prioritizes HNDL risk by data sensitivity, and orchestrates reversible migrations with one-click rollback safety nets.
                   </p>
-                  <Link href={isSignedIn ? "/dashboard" : "/sign-up"} className="inline-flex items-center gap-2 mt-2 px-6 py-3 bg-accent-blue text-black font-bold text-xs uppercase tracking-widest hover:bg-blue-400 transition-colors">
-                    {isSignedIn ? "Go to Dashboard" : "Start Free Trial"} <ArrowRight className="w-4 h-4" />
+                  <p className="text-xs text-zinc-500">
+                    The full platform adds: eBPF runtime discovery, automated Cryptographic Bill of Materials (CBOM), GitHub/GitLab shift-left blockers, DSPM integrations, and Proof of Migration for auditors.
+                  </p>
+                  <Link href="/sign-up" className="inline-flex items-center gap-2 mt-2 px-6 py-3 bg-accent-blue text-black font-bold text-xs uppercase tracking-widest hover:bg-blue-400 transition-colors">
+                    Start Free Trial <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              )}
+
+              {result.analysis.isPQC && (
+                <div className="mt-8 p-6 bg-accent-green/5 border border-accent-green/30 text-center space-y-3">
+                  <h4 className="text-white font-bold">This domain is quantum-safe.</h4>
+                  <p className="text-sm text-zinc-400">
+                    But is your entire infrastructure? The scanner checks one endpoint. QuantumBlue's eBPF runtime sensor and connectors discover the full Cryptographic Asset Graph across production, CI/CD, and cloud — then prioritize what to migrate first.
+                  </p>
+                  <Link href="/sign-up" className="inline-flex items-center gap-2 mt-2 px-6 py-3 bg-accent-green text-black font-bold text-xs uppercase tracking-widest hover:bg-green-400 transition-colors">
+                    Map Your Full Surface <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
               )}

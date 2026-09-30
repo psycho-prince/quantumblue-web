@@ -77,36 +77,41 @@ export default function OrgOverview() {
           <div className="glass p-6 border border-border-bright">
             <div className="flex items-center gap-3 mb-4">
               <ScanLine className="w-5 h-5 text-accent-blue" />
-              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">TOTAL_SCANS</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">SURFACE SCANS</span>
             </div>
             <p className="text-3xl font-bold">{stats.totalScans}</p>
+            <p className="text-[10px] text-zinc-600 mt-1">External attack surface scanned</p>
           </div>
           <div className="glass p-6 border border-border-bright">
             <div className="flex items-center gap-3 mb-4">
               <Activity className="w-5 h-5 text-accent-green" />
-              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">TOTAL_FINDINGS</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">ASSETS DISCOVERED</span>
             </div>
             <p className="text-3xl font-bold">{stats.totalFindings}</p>
+            <p className="text-[10px] text-zinc-600 mt-1">Cryptographic assets in inventory</p>
           </div>
           <div className="glass p-6 border border-border-bright">
             <div className="flex items-center gap-3 mb-4">
               <AlertTriangle className="w-5 h-5 text-red-400" />
-              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">QUANTUM_VULNERABLE</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">HNDL EXPOSED</span>
             </div>
             <p className="text-3xl font-bold text-red-400">{stats.findingsByLevel[0] ?? 0}</p>
+            <p className="text-[10px] text-zinc-600 mt-1">Assets vulnerable to Harvest Now, Decrypt Later</p>
           </div>
           <div className="glass p-6 border border-border-bright">
             <div className="flex items-center gap-3 mb-4">
               <TrendingUp className="w-5 h-5 text-yellow-400" />
-              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">UNKNOWN_CLASS</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">PRIORITY_1_RISK</span>
             </div>
             <p className="text-3xl font-bold text-yellow-400">{stats.unknownCount}</p>
+            <p className="text-[10px] text-zinc-600 mt-1">Assets awaiting risk classification</p>
           </div>
         </div>
 
         {/* Findings by NIST Level */}
         <div className="glass p-8 border border-border-bright">
-          <h3 className="text-lg font-bold mb-6">FINDINGS_BY_NIST_QUANTUM_SECURITY_LEVEL</h3>
+          <h3 className="text-lg font-bold mb-6">CRYPTO ASSETS BY NIST QUANTUM SECURITY LEVEL</h3>
+          <p className="text-xs text-zinc-600 mb-4 font-mono">Lower levels = higher HNDL exposure. Level 0 = classical (RSA/ECC) — migrate first.</p>
           <div className="space-y-3">
             {[0, 1, 2, 3, 4, 5].map((level) => {
               const count = stats.findingsByLevel[level] ?? 0;
@@ -142,7 +147,7 @@ export default function OrgOverview() {
         {/* Recent Scans */}
         <div className="glass p-8 border border-border-bright">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold">RECENT_SCANS</h3>
+            <h3 className="text-lg font-bold">RECENT_SURFACE_SCANS</h3>
             <Link href="/dashboard/scans" className="text-[10px] font-bold text-accent-blue uppercase tracking-widest hover:underline">
               VIEW_ALL →
             </Link>

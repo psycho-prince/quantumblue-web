@@ -27,7 +27,7 @@ export default async function ConnectorsPage() {
     <div className="p-8 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Connectors</h1>
       <p className="text-gray-400 mb-8">
-        Connect QuantumBlue to your external environments to automatically discover and map cryptographic assets.
+        Connect QuantumBlue to your environments for automated cryptographic asset discovery, shift-left guardrails, and risk data integration.
       </p>
 
       <div className="grid gap-6">

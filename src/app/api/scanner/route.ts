@@ -85,12 +85,28 @@ export async function POST(req: Request) {
 
     // Analyze PQC Readiness
     // Classical vulnerable algos: rsaEncryption, id-ecPublicKey, id-ecc, ecdsa-with-SHA256, etc.
-    const isPQC = certData.pubkeyAlgorithm.toLowerCase().includes('dilithium') || 
-                  certData.pubkeyAlgorithm.toLowerCase().includes('falcon') ||
-                  certData.pubkeyAlgorithm.toLowerCase().includes('sphincs') ||
-                  certData.pubkeyAlgorithm.toLowerCase().includes('ml-dsa');
-                  
-    const isVulnerable = !isPQC && (certData.pubkeyAlgorithm.includes('rsa') || certData.pubkeyAlgorithm.includes('ec'));
+    const pubkeyAlg = certData.pubkeyAlgorithm.toLowerCase();
+    const isPQC = pubkeyAlg.includes('dilithium') ||
+                  pubkeyAlg.includes('falcon') ||
+                  pubkeyAlg.includes('sphincs') ||
+                  pubkeyAlg.includes('ml-dsa') ||
+                  pubkeyAlg.includes('ml-kem') ||
+                  pubkeyAlg.includes('kyber') ||
+                  pubkeyAlg.includes('slh-dsa') ||
+                  pubkeyAlg.includes('crystals-') ||
+                  pubkeyAlg.includes('post-quantum') ||
+                  pubkeyAlg.includes('pqc');
+
+    const isVulnerable = !isPQC && (pubkeyAlg.includes('rsa') || pubkeyAlg.includes('ec'));
+
+    // Detect specific PQC algorithms for reporting
+    const pqcAlgorithms: string[] = [];
+    if (pubkeyAlg.includes('ml-dsa') || pubkeyAlg.includes('dilithium')) pqcAlgorithms.push('ML-DSA (FIPS 204)');
+    if (pubkeyAlg.includes('ml-kem') || pubkeyAlg.includes('kyber')) pqcAlgorithms.push('ML-KEM (FIPS 203)');
+    if (pubkeyAlg.includes('slh-dsa') || pubkeyAlg.includes('sphincs')) pqcAlgorithms.push('SLH-DSA (FIPS 205)');
+    if (pubkeyAlg.includes('falcon')) pqcAlgorithms.push('Falcon');
+    if (pubkeyAlg.includes('x25519')) pqcAlgorithms.push('X25519 (ECDH)');
+    if (pqcAlgorithms.length === 0 && isPQC) pqcAlgorithms.push('Post-Quantum Cryptography');
 
     return NextResponse.json({
       success: true,
@@ -100,10 +116,11 @@ export async function POST(req: Request) {
         isPQC,
         isVulnerable,
         riskLevel: isPQC ? 'SAFE' : 'CRITICAL',
-        message: isPQC 
-          ? "Quantum-Safe! This domain uses Post-Quantum Cryptography." 
+        message: isPQC
+          ? `Quantum-Safe! This domain uses Post-Quantum Cryptography. ${pqcAlgorithms.length > 0 ? 'Detected: ' + pqcAlgorithms.join(', ') + '.' : ''}`
           : "Vulnerable to 'Harvest Now, Decrypt Later'. Attackers can record this traffic today and decrypt it when a Cryptographically Relevant Quantum Computer (CRQC) becomes available.",
-        grade: isPQC ? 'A+' : 'F'
+        grade: isPQC ? 'A+' : 'F',
+        pqcAlgorithms
       }
     });
 

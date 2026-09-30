@@ -14,7 +14,7 @@ In this guide, we will walk through how to enable Post-Quantum Cryptography on N
 ## Step 1: Check your current vulnerability
 Before modifying your server, you need to verify if your current TLS certificates and key exchanges are vulnerable.
 
-> **[Run a Free PQC Risk Scan on your Domain](/scanner)** to instantly see your cryptographic grading.
+> **[Run a Free PQC Risk Scan on your Domain](/scanner)** to instantly see your cryptographic posture. This is the entry point to QuantumBlue's Continuous Cryptographic Posture Management (CCPM) platform — discover every asset, prioritize HNDL risk, block new debt at the source, and orchestrate reversible migrations.
 
 ## Step 2: Compile Nginx with OQS (Open Quantum Safe)
 Standard OpenSSL does not fully support ML-KEM hybrid modes out of the box yet. You will need to compile Nginx with the `liboqs` fork of OpenSSL (OQS-OpenSSL).
@@ -50,6 +50,6 @@ Restart Nginx:
 ```bash
 sudo systemctl restart nginx
 ```
-Run your domain through the [QuantumBlue PQC Scanner](/scanner) again. If configured correctly, your Grade will jump from an **F (Critical)** to an **A+ (Quantum-Safe)**.
+Run your domain through the [QuantumBlue External Attack Surface Scanner](/scanner) again. If configured correctly, your Grade will jump from an **F (Critical)** to an **A+ (Quantum-Safe)**.
 
-For a comprehensive infrastructure audit and Cryptographic Bill of Materials (CBOM), **[Start a QuantumBlue Free Trial](/sign-up)**.
+For a comprehensive infrastructure audit and Cryptographic Bill of Materials (CBOM), **[Start a QuantumBlue Free Trial](/sign-up)**. The full CCPM platform adds eBPF runtime discovery, shift-left CI/CD guardrails, DSPM integrations for HNDL prioritization, and automated rollback safety nets for your migration.
